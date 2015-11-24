@@ -15,10 +15,6 @@ homeCIController.controller('homeCtrl',['$scope', '$http', function($scope,$http
     $http.get("listewidget.json").success(function(data){
         $scope.listewidget = data;
     });
-
-    $http.get("colors.json").success(function(data){
-        $scope.colors = data;
-    });
     
     $scope.nomUtilisateur = "Louison";
     

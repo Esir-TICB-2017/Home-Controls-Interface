@@ -1,0 +1,21 @@
+<ul class="collapsible">
+    <li>
+      <div class="collapsible-header"><i class="material-icons">view_module</i>Liste des widgets</div>
+      <div class="collapsible-body">
+        <div class="row">
+        <ul>
+            <li ng-repeat="widget in listewidget">
+                
+                    <div class="col s2">
+                        <div class="card-panel {{widget.color}}" data-collapsible="accordion" data-drag="true" jqyoui-draggable> 
+                            <h5>{{widget.name}}</h5>
+                            <p>{{widget.zone}}</p>
+                        </div>
+                    </div>  
+                
+            </li>
+        </ul>
+    </div>
+      </div>
+    </li>
+  </ul>
