@@ -2,12 +2,22 @@
 
 //Controlleur angular pour la page d'accueil
 
-var homeCIController = angular.module('homeCIController',[]);
+var homeCIController = angular.module('homeCIController',['ngDragDrop']);
+
 
 homeCIController.controller('homeCtrl',['$scope', '$http', function($scope,$http){
+
     
     $http.get("phones.json").success(function(data){
         $scope.phones = data;
+    });
+
+    $http.get("listewidget.json").success(function(data){
+        $scope.listewidget = data;
+    });
+
+    $http.get("colors.json").success(function(data){
+        $scope.colors = data;
     });
     
     $scope.nomUtilisateur = "Louison";

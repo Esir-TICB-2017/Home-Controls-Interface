@@ -1,0 +1,34 @@
+[
+    {
+        "name" : "Lampe1",
+        "zone" : "Chambre",
+        "color" : "pink lighten-5"
+
+    }, 
+    {
+        "name" : "Lampe2",
+        "zone" : "Salon",
+        "color" : "pink lighten-4"
+       
+    },
+    {
+         "name" : "Télévision",
+        "zone" : "Salon",
+        "color" : "pink lighten-3"
+    },
+    {
+         "name" : "Cuillère",
+        "zone" : "Cuisine",
+        "color" : "pink lighten-2"
+    },
+    {
+         "name" : "Netatmo",
+        "zone" : "Salon",
+        "color" : "pink lighten-1"
+    },
+    {
+         "name" : "Volet1",
+        "zone" : "Chambre1",
+        "color" : "pink"
+    }
+]
