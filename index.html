@@ -1,0 +1,112 @@
+<! DOCTYPE HTML>
+
+<html lang="fr" ng-app="homeControlsInterfaceApp">
+<!-- On déclare dès le début le module app angular-->
+<head>
+    <meta charset="utf-8">
+    <title>Contrôles Maison - Accueil</title>
+    <!-- Ajout des frameworks-->
+    <link rel="stylesheet" href="bower_components/Materialize/bin/materialize.css"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="bower_components/Materialize/bin/materialize.js"></script>
+    <script src="bower_components/angular/angular.min.js"></script>
+    <!-- On pourra par la suite, selon nos besoins, ajouter ici d'autres frameworks comme Jquery-->
+    <!-- Ajout des fichiers JS que l'on à créer -->
+    <script src="js/app.js"></script>
+    <script src="js/controllers.js"></script>
+</head>
+    
+<body ng-controller="homeCtrl" class="blue-grey lighten-5">
+    <!-- Premiers essais pour structurer la page avec des blocs, uniquement adapté PC pour le moment -->
+    
+    <!-- Menu du haut -->
+    
+    <!-- Menus déroulants de la navbar -->
+    
+    <ul id="Notifications" class="dropdown-content"> 
+        <li><a href="#!"><span class="red-text">Important  <span class="new badge">2</span></span></a></li>
+        <li><a href="#!"><span class="yellow-text text-darken-2">News</span></a></li>
+    </ul>
+    
+    <ul id="User" class="dropdown-content">
+        <li><p class="teal-text text-lighten2 center">Paramètres</p></li>
+        <li><p class="teal-text text-lighten2 center" ng-click="changeUserName()">Changer de nom</p></li>
+        <li><a href="#!">Déconnexion</a></li>
+    </ul>
+    
+    <!-- Navbar en elle-même -->
+    <div class="navbar-fixed">
+    <nav class="blue-grey darken-3">
+        <div class="nav-wrapper">
+            <a href="#!" data-activates="mobileMenu" class="button-collapse" ><i class="material-icons">menu</i></a>
+            <a href="index.html" class="brand-logo center"><img src="Images/home.png" alt="logo" style="width : 60px;height : 60px;"></a>
+        <ul id="nav-mobile" class="left hide-on-med-and-down">
+            <li class="active"><a href="/">Home</a></li>
+            <li><a href="/scenarios">Scénarios</a></li>
+            <li><a href="/objets">Objets</a></li>
+        </ul>
+        <ul id="nav-mobile" class="right">
+            <li>
+                <a href="#!" class="dropdown-button" data-beloworigin="true" data-activates="Notifications">
+                    Notifications <i class="material-icons right">arrow_drop_down</i>
+                </a>
+            </li>
+            <li>
+                <a href="#!" class="dropdown-button" data-beloworigin="true" data-activates="User">
+                    <p><div class="chip"><img src="Images/loulou.png" alt="loulou">{{nomUtilisateur}}</div></p>
+                </a>
+            </li>
+        </ul>
+        <ul class="side-nav" id="mobileMenu">
+            <li><a href="/">Home</a></li>
+            <li><a href="/scenarios">Scénarios</a></li>
+            <li><a href="/objets">Objets</a></li>
+        </ul>
+        </div>
+    </nav>
+    </div>
+    
+    <!-- Contenu de la page -->
+    <div class="container">
+        <div class="valign-wrapper center-align">
+        <div class="row">
+            <div class="col s12">
+                <div class="card-panel light-blue accent-3"><p>12 : widget qui prend toute la page</p></div>
+            </div>
+            <div class="col s4">
+                <div class="card-panel white hoverable"> 4 : widget 1/3 page hoverable</div>
+            </div>
+            <div class="col s4">
+                <div class="card-panel white"> 
+                    <h5>{{phones[0].name}}</h5>
+                    <p>{{phones[0].snippet}}</p>
+                </div>
+            </div>
+            <div class="col s4">
+                <div class="card-panel white"> 4 : widget 1/3 page
+                </div>
+            </div>
+            <div class="col s4">
+                <div class="card light-blue accent-3">
+                    <p class="white-text"></br>Lumière 1 du salon</p>
+                    <img src="Images/icones/{{etatLampe}}" alt="icone lampe" ng-click="switchLampe()" style="height : 250px;width : 250px;">
+                </div>
+            </div>
+            
+            <div class="fixed-action-btn click-to-toggle" style="bottom : 50px; right : 50px;">
+                <a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
+            </div>
+        </div>
+        </div>
+    </div>
+    
+<!-- Initialisation des élements JQuery -->
+<script>
+    $( document ).ready(function(){});
+    $(".button-collapse").sideNav();
+</script>
+    
+</body>
+
+</html>
