@@ -6,6 +6,8 @@
     <meta charset="utf-8">
     <title>Contrôles Maison - Accueil</title>
     <!-- Ajout des frameworks-->
+
+   
     <link rel="stylesheet" href="bower_components/Materialize/bin/materialize.css"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
@@ -15,21 +17,24 @@
     <script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
     <script src="bower_components/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>-->
+    <script src="bower_components/Chart.js/Chart.min.js"></script>
+    <script src="bower_components/angular-chart.js/dist/angular-chart.js"></script>
+    <link rel="stylesheet" href="bower_components/angular-chart.js/dist/angular-chart.css">
     <!-- On pourra par la suite, selon nos besoins, ajouter ici d'autres frameworks comme Jquery-->
     <!-- Ajout des fichiers JS que l'on à créé -->
     <script src="js/app.js"></script>
     <script src="js/controllers.js"></script>
 </head>
     
-<body ng-controller="homeCtrl" class="blue-grey lighten-5">
+<body ng-controller="navbarCtrl" class="blue-grey lighten-5">
     <!-- Premiers essais pour structurer la page avec des blocs, uniquement adapté PC pour le moment -->
     
     <!-- Menu du haut -->
     
     <!-- Menus déroulants de la navbar -->
-    
     <ul id="Notifications" class="dropdown-content"> 
-        <li><a href="#!"><span class="red-text">Important  <span class="new badge" >2</span></span></a></li>
+        <li><a href="#!"><span class="red-text">Important  <span class="new badge">2</span></span></a></li>
         <li><a href="#!"><span class="yellow-text text-darken-2">News</span></a></li>
     </ul>
     
@@ -46,7 +51,7 @@
             <a href="#!" data-activates="mobileMenu" class="button-collapse" ><i class="material-icons">menu</i></a>
             <a href="index.html" class="brand-logo center"><img src="Images/home.png" alt="logo" style="width : 60px;height : 60px;"></a>
         <ul id="nav-mobile" class="left hide-on-med-and-down">
-            <li class="active"><a href="#/">Home</a></li>
+            <li class="active"><a href="#/home">Home</a></li>
             <li><a href="#/scenarios">Scénarios</a></li>
             <li><a href="#/objets">Objets</a></li>
         </ul>
@@ -63,22 +68,27 @@
             </li>
         </ul>
         <ul class="side-nav" id="mobileMenu">
-            <li><a href="#/">Home</a></li>
+            <li><a href="#/home">Home</a></li>
             <li><a href="#/scenarios">Scénarios</a></li>
             <li><a href="#/objets">Objets</a></li>
         </ul>
         </div>
     </nav>
     </div>
+<div class="chart-container">
+ <div class="col s2">
+    <div class="card-panel {{widget.color}}" data-collapsible="accordion" data-drag="true" jqyoui-draggable> 
+        <canvas id="line" class="chart chart-line" chart-data="data"
+            chart-labels="labels" chart-legend="true" chart-series="series" width="1046"
+            chart-click="onClick" >
+        </canvas> 
+    </div>
+</div>
+</div>
+
     
     <!-- Contenu de la page -->
-
-<div class="view-container">
     <div ng-view class="view-frame"></div>
-  </div>
-
-
-
    
     
 <!-- Initialisation des élements JQuery -->

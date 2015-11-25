@@ -4,13 +4,14 @@
 
 var homeControlsInterfaceApp = angular.module('homeControlsInterfaceApp', [
 	'ngRoute',
-	'homeCIController'
+	'homeCIController',
+	'chart.js'
 	]);
 
 homeControlsInterfaceApp.config(['$routeProvider',
 	function($routeProvider) {
 		$routeProvider.
-		when('/', {
+		when('/home', {
 			templateUrl: 'vues/home.html',
         	controller: 'homeCtrl'
 		}).
@@ -22,4 +23,5 @@ homeControlsInterfaceApp.config(['$routeProvider',
 			templateUrl: 'vues/scenarios.html',
         	controller: 'scenariosCtrl'
 		})
+		.otherwise({ redirectTo: '/' });
 	}]);
