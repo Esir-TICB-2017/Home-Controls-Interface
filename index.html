@@ -46,9 +46,9 @@
             <a href="#!" data-activates="mobileMenu" class="button-collapse" ><i class="material-icons">menu</i></a>
             <a href="index.html" class="brand-logo center"><img src="Images/home.png" alt="logo" style="width : 60px;height : 60px;"></a>
         <ul id="nav-mobile" class="left hide-on-med-and-down">
-            <li class="active"><a href="/">Home</a></li>
-            <li><a href="/scenarios">Scénarios</a></li>
-            <li><a href="/objets">Objets</a></li>
+            <li class="active"><a href="#/">Home</a></li>
+            <li><a href="#/scenarios">Scénarios</a></li>
+            <li><a href="#/objets">Objets</a></li>
         </ul>
         <ul id="nav-mobile" class="right">
             <li>
@@ -63,64 +63,23 @@
             </li>
         </ul>
         <ul class="side-nav" id="mobileMenu">
-            <li><a href="/">Home</a></li>
-            <li><a href="/scenarios">Scénarios</a></li>
-            <li><a href="/objets">Objets</a></li>
+            <li><a href="#/">Home</a></li>
+            <li><a href="#/scenarios">Scénarios</a></li>
+            <li><a href="#/objets">Objets</a></li>
         </ul>
         </div>
     </nav>
     </div>
     
     <!-- Contenu de la page -->
-    <ul class="collapsible">
-    <li>
-      <div class="collapsible-header"><i class="material-icons">view_module</i>Liste des widgets</div>
-      <div class="collapsible-body">
-        <div class="row">
-        <ul>
-            <li ng-repeat="widget in listewidget">
-                
-                    <div class="col s2">
-                        <div class="card-panel {{widget.color}}" data-collapsible="accordion" data-drag="true" jqyoui-draggable> 
-                            <h5>{{widget.name}}</h5>
-                            <p>{{widget.zone}}</p>
-                        </div>
-                    </div>  
-                
-            </li>
-        </ul>
-    </div>
-      </div>
-    </li>
-  </ul>
+
+<div class="view-container">
+    <div ng-view class="view-frame"></div>
+  </div>
 
 
 
-    <div class="container">
-        <div class="valign-wrapper center-align">
-        <div class="row">
-          
-        </div>
-        </div>
-    </div>
-
-<div class="card" id="widget-list" ng-show="showWidgets">
-    <span class="card-title activator grey-text text-darken-4">Liste des widgets</span>
-    <div class="row">
-        <ul>
-            <li ng-repeat="widget in listewidget">
-                
-                    <div class="col s2">
-                        <div class="card-panel {{widget.color}}"> 
-                            <h5>{{widget.name}}</h5>
-                            <p>{{widget.zone}}</p>
-                        </div>
-                    </div>  
-                
-            </li>
-        </ul>
-    </div>
-</div>
+   
     
 <!-- Initialisation des élements JQuery -->
 <script>

@@ -6,12 +6,6 @@ var homeCIController = angular.module('homeCIController',['ngDragDrop']);
 
 
 homeCIController.controller('homeCtrl',['$scope', '$http', function($scope,$http){
-
-    
-    $http.get("phones.json").success(function(data){
-        $scope.phones = data;
-    });
-
     $http.get("listewidget.json").success(function(data){
         $scope.listewidget = data;
     });
@@ -35,3 +29,11 @@ homeCIController.controller('homeCtrl',['$scope', '$http', function($scope,$http
          }
      }
 }]); 
+
+homeCIController.controller('scenariosCtrl',['$scope', '$http', function($scope,$http){
+
+    }]); 
+
+homeCIController.controller('objetsCtrl',['$scope', '$http', function($scope,$http){
+
+    }]); 
