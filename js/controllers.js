@@ -14,6 +14,8 @@ homeCIController.controller('navbarCtrl',['$scope', '$http', '$timeout', functio
     }]);  
 
 homeCIController.controller('homeCtrl',['$scope', '$http', function($scope,$http){
+
+    var activeMenu = $('#menu'); 
     
     $http.get("/listewidget.json").success(function(data){
         $scope.listewidget = data;
