@@ -18,10 +18,10 @@ homeCIController.controller('navbarCtrl',['$scope', '$http', '$timeout','$locati
     
     $scope.reload = function(lien){
         //Calcule de la valeur des variables utilisées pour montrer à l'utilisateur sur quel vue il est dans la navbar
-        if(lien == "pageActive"){ alert("yes");lien = $scope.pageActive;} else $scope.pageActive ="#" + lien;
-        if(lien == "/home") $scope.activeHome = "active"; else $scope.activeHome = "";
-        if(lien == "/scenarios") $scope.activeScenarios = "active" ; else $scope.activeScenarios = "";
-        if(lien == "/objets") $scope.activeObjets = "active" ; else $scope.activeObjets = "";
+        if(lien == "pageActive"){lien = $scope.pageActive} else $scope.pageActive = lien;
+        if(lien == "#/home") $scope.activeHome = "active"; else $scope.activeHome = "";
+        if(lien == "#/scenarios") $scope.activeScenarios = "active" ; else $scope.activeScenarios = "";
+        if(lien == "#/objets") $scope.activeObjets = "active" ; else $scope.activeObjets = "";
     }
     
 
