@@ -23,22 +23,13 @@ homeControlsInterfaceApp.config(['$routeProvider',
 			templateUrl: 'vues/scenarios.html',
         	controller: 'scenariosCtrl'
 		})
-		.when('login', {
+		.when('/login', {
 			templateUrl: 'login.html',
         	controller: 'loginCtrl'
 		})
-		.when('Register', {
+		.when('/register', {
 			templateUrl: 'register.html',
         	controller: 'registerCtrl'
 		})
 		.otherwise({ redirectTo: '/login' });
 	}]);
-
-homeControlsInterfaceApp.config(['ChartJsProvider', function (ChartJsProvider) {
-    // Configure all line charts
-    ChartJsProvider.setOptions('Line', {
-      datasetFill: true,
-      colours: ['#212121', '#90A4AE'],
-
-    });
-  }])
