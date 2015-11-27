@@ -25,6 +25,7 @@
     <!-- Ajout des fichiers JS que l'on à créé -->
     <script src="js/app.js"></script>
     <script src="js/controllers.js"></script>
+    <link rel="stylesheet" href="/css/style.css"/>
 </head>
     
 <body ng-controller="navbarCtrl" class="blue-grey lighten-5">
@@ -75,18 +76,37 @@
         </div>
     </nav>
     </div>
-<div class="chart-container">
- <div class="col s2">
-    <div class="card-panel {{widget.color}}" data-collapsible="accordion" data-drag="true" jqyoui-draggable> 
-        <canvas id="line" class="chart chart-line" chart-data="data"
-            chart-labels="labels" chart-legend="true" chart-series="series" width="1046"
-            chart-click="onClick" >
-        </canvas> 
-    </div>
-</div>
-</div>
+
 <div class="row">
-      <div class="col s6 m4">
+        <div class="col s12 m6 l12">
+            <div class="container">
+                <div class="card-panel" data-collapsible="accordion" data-drag="true" jqyoui-draggable> 
+<label>Single number:
+    <input type="text" name="input" ng-model="example.text"
+           ng-pattern="example.word" required ng-trim="false">
+  </label>
+
+                     </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12 m6 l12">
+            <div class="container">
+                <div class="card-panel" data-collapsible="accordion" data-drag="true" jqyoui-draggable> 
+                    <canvas id="line" class="chart chart-line" chart-data="data"
+                        chart-labels="labels" chart-legend="true" chart-series="series" width="1046"
+                        chart-click="onClick" >
+                    </canvas> 
+                </div>
+            </div>
+        </div>
+    </div>
+  
+
+<div class="row">
+      <div class="col s6 m6">
         <div class="card-panel red lighten-2"  data-collapsible="accordion" data-drag="true" jqyoui-draggable>
             <div class="row">
                 <div class="col s6">

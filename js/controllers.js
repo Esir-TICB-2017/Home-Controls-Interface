@@ -4,9 +4,14 @@
 
 var homeCIController = angular.module('homeCIController',['ngDragDrop']);
 
-homeCIController.controller('navbarCtrl',['$scope', '$http', function($scope,$http){
+homeCIController.controller('navbarCtrl',['$scope', '$http', '$timeout', function($scope,$http, $timeout){
 
  $scope.nomUtilisateur = "Louison";
+
+$scope.example = {
+        text: '12',
+        word: /^\s*\w*\s*$/
+      };
 
  $scope.changeUserName = function(){
         $scope.nomUtilisateur = prompt("Nouveau nom choisi : ");
@@ -21,6 +26,13 @@ homeCIController.controller('navbarCtrl',['$scope', '$http', function($scope,$ht
   $scope.onClick = function (points, evt) {
     console.log(points, evt);
   };
+
+  $timeout(function () {
+    $scope.data = [
+      [28, 48, 40, 19, 86, 27, 90],
+      [65, 59, 80, 81, 56, 55, 40]
+    ];
+  }, 3000);
 
     }]);  
 
@@ -46,6 +58,5 @@ homeCIController.controller('scenariosCtrl',['$scope', '$http', function($scope,
 homeCIController.controller('objetsCtrl',['$scope', '$http', function($scope,$http){
 
     $scope.titleView = "Vue objets";
-    }]); 
+    }]);
 
-angular.module('myModule', ['chart.js']);

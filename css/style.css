@@ -1,0 +1,10 @@
+video#bgvid { 
+
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: 30%;
+    height: 30%;
+    
+}
