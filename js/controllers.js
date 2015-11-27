@@ -4,14 +4,32 @@
 
 var homeCIController = angular.module('homeCIController',['ngDragDrop']);
 
-homeCIController.controller('navbarCtrl',['$scope', '$http', '$timeout', function($scope,$http, $timeout){
-
- $scope.nomUtilisateur = "Louison";
+homeCIController.controller('navbarCtrl',['$scope', '$http', '$timeout','$location', function($scope,$http, $timeout, $location){
+    
+    //Creation des variables fonction active
+    $scope.activeHome = "active";
+    $scope.activeScenarios = "";
+    $scope.activeObjets = "";
+    $scope.pageActive = "#" + $location.path();
+    
+    $scope.nomUtilisateur = "Louison";
+    
+    
+    
+    $scope.reload = function(lien){
+        //Calcule de la valeur des variables utilisées pour montrer à l'utilisateur sur quel vue il est dans la navbar
+        if(lien == "pageActive"){ alert("yes");lien = $scope.pageActive;} else $scope.pageActive ="#" + lien;
+        if(lien == "/home") $scope.activeHome = "active"; else $scope.activeHome = "";
+        if(lien == "/scenarios") $scope.activeScenarios = "active" ; else $scope.activeScenarios = "";
+        if(lien == "/objets") $scope.activeObjets = "active" ; else $scope.activeObjets = "";
+    }
+    
 
  $scope.changeUserName = function(){
         $scope.nomUtilisateur = prompt("Nouveau nom choisi : ");
           }
-    }]);  
+    }])
+;  
 
 homeCIController.controller('homeCtrl',['$scope', '$http', function($scope,$http){
     
