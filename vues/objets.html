@@ -1,22 +1,23 @@
-
-<h5>{{titleView}}</h5>
-
 <div class="row">
-	<div class="container">
-		<div class="col s3">
-			flkvndflkxclkvnxlvkndfvlknsdvlknfvldfnvlkdfnvlkdfnvldfknvdlfvdlfvndflvndflknvdflkvdflkvndlfkvndflkvfdklv
-		</div>
-		<div class="col s3">
-			flkvndflkxclkvnxlvkndfvlknsdvlknfvldfnvlkdfnvlkdfnvldfknvdlfvdlfvndflvndflknvdflkvdflkvndlfkvndflkvfdklv
-		</div>
+	<div class="col s3">
+		<ul class="collection">
+			<li class="collection-item" ng-repeat="objet in listeobjets" data-collapsible="accordion" data-drag="true" jqyoui-draggable data-jqyoui- placeholder="true">
+				<div class col="s9">
+      				<h5>{{objet.id}}</h5>
+                	<p>{{objet.type}}</p>
+            	</div>
+            	<div>
+            		<i src="">arrow_drop_down</i>
+            </li>
+    	</ul>
+	</div>
+	<div class="col s6">
 	</div>
 </div>
 
 
 <script>
     $( document ).ready(function(){
-
-
 
     });
 </script>

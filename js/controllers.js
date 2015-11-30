@@ -54,7 +54,10 @@ homeCIController.controller('scenariosCtrl',['$scope', '$http', function($scope,
 
 homeCIController.controller('objetsCtrl',['$scope', '$http', function($scope,$http){
 
-    $scope.titleView = "Vue objets";
+$http.get("/data/listeobjets.json").success(function(data){
+        $scope.listeobjets = data;
+          });
+
     }]);
 
 homeCIController.controller('loginCtrl',['$scope', '$http', function($scope,$http){
