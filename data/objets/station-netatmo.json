@@ -1,0 +1,13 @@
+[
+    {
+        "id" : "station-netatmo",
+        "nom" : "Station météo Netatmo",
+        "zone" : "cuisine",
+        "power-state" : "on",
+        "temperature-interieure" : "19",
+        "temperature-exterieure" : "12",
+        "humidite" : "85",
+        "pression-atmospherique" : "1098",
+        "connected" : "true"
+    } 
+]

@@ -1,0 +1,11 @@
+[
+    {
+        "id" : "lampe2",
+        "nom" : "Lampe 2",
+        "zone" : "salon",
+        "power-state" : "off",
+        "intensity" : "NULL",
+        "color-state" : "#FFFFFF",
+        "connected" : "true"
+    } 
+]

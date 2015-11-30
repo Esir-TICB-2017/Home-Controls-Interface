@@ -1,0 +1,11 @@
+[
+    {
+        "id" : "lampe4",
+        "nom" : "Lampe 4",
+        "zone" : "chambre",
+        "power-state" : "NULL",
+        "intensity" : "NULL",
+        "color-state" : "NULL",
+        "connected" : "false"
+    } 
+]

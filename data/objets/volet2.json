@@ -1,0 +1,11 @@
+[
+    {
+        "id" : "volet2",
+        "nom" : "Volet 2",
+        "zone" : "salon",
+        "power-state" : "on",
+        "position-state" : "low",
+        "postion-pourcentage" : "100",
+        "connected" : "true"
+    } 
+]

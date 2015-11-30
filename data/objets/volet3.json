@@ -1,0 +1,11 @@
+[
+    {
+        "id" : "volet3",
+        "nom" : "Volet 3",
+        "zone" : "chambre",
+        "power-state" : "off",
+        "position-state" : "low",
+        "postion-pourcentage" : "90",
+        "connected" : "true"
+    } 
+]

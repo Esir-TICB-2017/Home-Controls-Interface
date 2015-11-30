@@ -1,0 +1,11 @@
+[
+    {
+        "id" : "volet4",
+        "nom" : "Volet 4",
+        "zone" : "cuisine",
+        "power-state" : "on",
+        "position-state" : "high",
+        "postion-pourcentage" : "0",
+        "connected" : "false"
+    } 
+]

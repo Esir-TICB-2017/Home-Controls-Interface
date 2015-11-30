@@ -1,0 +1,11 @@
+[
+    {
+        "id" : "flower-power",
+        "nom" : "Arroseur intelligent Flower Power",
+        "zone" : "salon",
+        "power-state" : "on",
+        "spray-state" : "active",
+        "battery" : "22",
+        "connected" : "true"
+    } 
+]

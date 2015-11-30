@@ -1,0 +1,11 @@
+[
+    {
+        "id" : "okidokeys",
+        "nom" : "Serrure connecté Okidokeys",
+        "zone" : "couloir",
+        "power-state" : "on",
+        "lock-state" : "locked",
+        "battery" : "63",
+        "connected" : "true"
+    } 
+]

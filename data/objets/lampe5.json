@@ -1,0 +1,11 @@
+[
+    {
+        "id" : "lampe5",
+        "nom" : "Lampe 5",
+        "zone" : "couloir",
+        "power-state" : "on",
+        "intensity" : "100%",
+        "color-state" : "#FFFFFF",
+        "connected" : "true"
+    } 
+]
