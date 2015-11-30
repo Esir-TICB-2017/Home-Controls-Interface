@@ -29,45 +29,28 @@
 </head>
     
 <body ng-controller="navbarCtrl" class="blue-grey lighten-5">
-    <!-- Premiers essais pour structurer la page avec des blocs, uniquement adapté PC pour le moment -->
     
     <!-- Menu du haut -->
     
     <!-- Menus déroulants de la navbar -->
-    <ul id="Notifications" class="dropdown-content">
-        <li><a href="#!"> <span class="red-text">Important</span> <span class="new badge hide-on-small-only">2</span></a></li>
-        <li><a href="#!"><span class="yellow-text text-darken-2">News</span></a></li>
     <ul id="Notifications" class="dropdown-content"> 
-        <li><a href="{{pageActive}}"><span class="red-text">Important  <span class="new badge">2</span></span></a></li>
+        <li><a href="{{pageActive}}"><span class="red-text">Important</span> <span class="new badge hide-on-small-only">2</span></a></li>
         <li><a href="{{pageActive}}"><span class="yellow-text text-darken-2">News</span></a></li>
     </ul>
     
     <ul id="User" class="dropdown-content">
         <li><p class="teal-text text-lighten2 center">Paramètres</p></li>
         <li><p class="teal-text text-lighten2 center" ng-click="changeUserName()">Changer de nom</p></li>
-        <li><a href="#!">Déconnexion</a></li>
+        <li><a href="{{pageActive}}">Déconnexion</a></li>
     </ul>
     
     <!-- Navbar en elle-même -->
     <div class="navbar-fixed">
     <nav class="blue-grey darken-3">
         <div class="nav-wrapper">
-            <a href="#!" data-activates="mobileMenu" class="button-collapse" ><i class="material-icons">menu</i></a>
-            <a href="index.html" class="brand-logo center hide-on-med-and-down"><img src="Images/home.png" alt="logo" style="width : 60px; height : 60px;"></a>
-            <a href="index.html" class="brand-logo left hide-on-large-only"><img src="Images/home.png" alt="logo" style="margin-left : 50px; margin-top : 0px; width : 55px;height : 55px;"></a>
-        <ul id="nav-mobile" class="left hide-on-med-and-down">
-            <li><a href="#/home">Home</a></li>
-            <li><a href="#/scenarios">Scénarios</a></li>
-            <li><a href="#/objets">Objets</a></li>
-        </ul>
-        <ul id="nav-mobile" class="right">
-            <li>
-                <a href="#!" class="dropdown-button" data-beloworigin="true" data-activates="Notifications">
-                    Notifications <i class="material-icons right hide-on-small-only">arrow_drop_down</i>
-            <a ng-href="pageActive" data-activates="mobileMenu" class="button-collapse" ng-click="reload(pageActive)"><i class="material-icons">menu</i></a>
-            <a href="#/home" class="brand-logo center hide-on-med-and-down" ng-click="reload('/home')"><img src="Images/home.png" alt="logo" style="width : 60px;height : 60px;"></a>
             <a ng-href="pageActive" data-activates="mobileMenu" class="button-collapse" ng-click="reload('pageActive')"><i class="material-icons">menu</i></a>
-            <a href="#/home" class="brand-logo center hide-on-med-and-down" ng-click="reload('#/home')"><img src="Images/home.png" alt="logo" style="width : 60px;height : 60px;"></a>
+            <a href="#/home" class="brand-logo center hide-on-med-and-down"><img src="Images/home.png" alt="logo" style="width : 60px; height : 60px;"></a>
+            <a href="#/home" class="brand-logo left hide-on-large-only"><img src="Images/home.png" alt="logo" style="margin-left : 50px; margin-top : 0px; width : 55px;height : 55px;"></a>
         <ul id="nav-mobile" class="left hide-on-med-and-down">
             <li ng-class="activeHome"><a href="#/home" ng-click="reload('#/home')">Home</a></li>
             <li ng-class="activeScenarios"><a href="#/scenarios" ng-click="reload('#/scenarios')">Scénarios</a></li>
@@ -86,12 +69,6 @@
             </li>
         </ul>
         <ul class="side-nav" id="mobileMenu">
-            <li ><a href="#/home" ng-click="myVar='active'">Home</a></li>
-            <li><a href="#/scenarios">Scénarios</a></li>
-            <li><a href="#/objets">Objets</a></li>
-            <li ng-class="activeHome"><a href="#/home">Home</a></li>
-            <li ng-class="activeScenarios"><a href="#/scenarios">Scénarios</a></li>
-            <li ng-class="activeObjets"><a href="#/objets">Objets</a></li>
             <li ng-class="activeHome" ng-click="reload('#/home')"><a href="#/home">Home</a></li>
             <li ng-class="activeScenarios" ng-click="reload('#/scenarios')"><a href="#/scenarios">Scénarios</a></li>
             <li ng-class="activeObjets" ng-click="reload('#/objets')"><a href="#/objets">Objets</a></li>
@@ -108,7 +85,6 @@
 <script>
     $( document ).ready(function(){});
     $(".button-collapse").sideNav();
-    $('.collapsible').collapsible();
 </script>
     
 </body>

@@ -57,3 +57,13 @@ homeCIController.controller('objetsCtrl',['$scope', '$http', function($scope,$ht
     $scope.titleView = "Vue objets";
     }]);
 
+homeCIController.controller('loginCtrl',['$scope', '$http', function($scope,$http){
+
+    $scope.titleView = "Login";
+    }]);
+
+homeCIController.controller('registerCtrl',['$scope', '$http', function($scope,$http){
+
+    $scope.titleView = "S'enregistrer";
+    }]);
+
