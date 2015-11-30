@@ -34,7 +34,7 @@
     
     <!-- Menus déroulants de la navbar -->
     <ul id="Notifications" class="dropdown-content"> 
-        <li><a href="{{pageActive}}"><span class="red-text">Important</span> <span class="new badge hide-on-small-only">2</span></a></li>
+        <li><a href="{{pageActive}}"><span class="red-text">Important</span> <span class="new badge ">2</span></a></li>
         <li><a href="{{pageActive}}"><span class="yellow-text text-darken-2">News</span></a></li>
     </ul>
     
@@ -59,7 +59,7 @@
         <ul id="nav-mobile" class="right">
             <li>
                 <a href="{{pageActive}}" class="dropdown-button" data-beloworigin="true" data-activates="Notifications" ng-click="reload('pageActive')">
-                    Notifications <i class="material-icons right">arrow_drop_down</i>
+                 Notifications <i class="material-icons right" style="line-height: 2;">arrow_drop_down</i>
                 </a>
             </li>
             <li>
@@ -85,6 +85,9 @@
 <script>
     $( document ).ready(function(){});
     $(".button-collapse").sideNav();
+    $('.dropdown-button').dropdown({
+         constrain_width: false
+    });
 </script>
     
 </body>
