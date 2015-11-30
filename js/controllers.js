@@ -57,6 +57,9 @@ homeCIController.controller('objetsCtrl',['$scope', '$http', function($scope,$ht
 $http.get("/data/listeobjets.json").success(function(data){
         $scope.listeobjets = data;
           });
+$http.get("/data/listepieces.json").success(function(data){
+        $scope.listepieces = data;
+          });
 
     }]);
 

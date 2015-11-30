@@ -1,0 +1,26 @@
+[
+    {
+        "id" : "couloir",
+        "name" : "Couloir"
+    },
+    {
+        "id" : "chambre1",
+        "name" : "Chambre 1"
+    }, 
+    {
+        "id" : "chambre2",
+        "name" : "Chambre 2"
+    }, 
+    {
+        "id" : "cuisine",
+        "name" : "Cuisine"
+    },
+    {
+        "id" : "salon",
+        "name" : "Salon"
+    },
+    {
+        "id" : "garage",
+        "name" : "Garage"
+    }
+]
