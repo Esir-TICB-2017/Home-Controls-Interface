@@ -1,11 +1,14 @@
 <! DOCTYPE HTML>
 
 <html lang="fr" ng-app="homeControlsInterfaceApp">
-<!-- On déclare dès le début le module app angular-->
+<!-- Declaration of the Angular-app-module on the beginning 
+     Texts in views in French because it is a French student project
+     Function and variables in English to be understood by most people
+-->
 <head>
     <meta charset="utf-8">
-    <title>Contrôles Maison - Accueil</title>
-    <!-- Ajout des frameworks-->
+    <title>Contrôles de la maison</title>
+    <!-- Frameworks add-->
 
    
     <link rel="stylesheet" href="bower_components/Materialize/bin/materialize.css"/>
@@ -21,8 +24,7 @@
     <script src="bower_components/Chart.js/Chart.min.js"></script>
     <script src="bower_components/angular-chart.js/dist/angular-chart.js"></script>
     <link rel="stylesheet" href="bower_components/angular-chart.js/dist/angular-chart.css">
-    <!-- On pourra par la suite, selon nos besoins, ajouter ici d'autres frameworks comme Jquery-->
-    <!-- Ajout des fichiers JS que l'on à créé -->
+    <!-- Addition of our own JS files -->
     <script src="js/app.js"></script>
     <script src="js/controllers.js"></script>
     <link rel="stylesheet" href="/css/style.css"/>
@@ -30,25 +32,26 @@
     
 <body ng-controller="navbarCtrl" class="blue-grey lighten-5">
     
-    <!-- Menu du haut -->
+    <!-- Navbar on the top -->
     
-    <!-- Menus déroulants de la navbar -->
+    <!-- Dropdown contents used in the  navabr-->
     <ul id="Notifications" class="dropdown-content"> 
-        <li><a href="{{pageActive}}"><span class="red-text">Important</span> <span class="new badge ">2</span></a></li>
-        <li><a href="{{pageActive}}"><span class="yellow-text text-darken-2">News</span></a></li>
+        <li><a href="{{activePage}}"><span class="red-text">Important</span> <span class="new badge ">2</span></a></li>
+        <li><a href="{{activePage}}"><span class="yellow-text text-darken-2">News</span></a></li>
     </ul>
     
     <ul id="User" class="dropdown-content">
         <li><p class="teal-text text-lighten2 center">Paramètres</p></li>
         <li><p class="teal-text text-lighten2 center" ng-click="changeUserName()">Changer de nom</p></li>
-        <li><a href="{{pageActive}}">Déconnexion</a></li>
+        <li><a href="{{activePage}}">Déconnexion</a></li>
     </ul>
     
-    <!-- Navbar en elle-même -->
+    <!-- Navbar declaration -->
     <div class="navbar-fixed">
     <nav class="blue-grey darken-3">
+        
         <div class="nav-wrapper">
-            <a ng-href="pageActive" data-activates="mobileMenu" class="button-collapse" ng-click="reload('pageActive')"><i class="material-icons">menu</i></a>
+            <a ng-href="activePage" data-activates="mobileMenu" class="button-collapse" ng-click="reload('activePage')"><i class="material-icons">menu</i></a>
             <a href="#/home" class="brand-logo center hide-on-med-and-down"><img src="Images/home.png" alt="logo" style="width : 60px; height : 60px;"></a>
             <a href="#/home" class="brand-logo left hide-on-large-only"><img src="Images/home.png" alt="logo" style="margin-left : 50px; margin-top : 0px; width : 55px;height : 55px;"></a>
         <ul id="nav-mobile" class="left hide-on-med-and-down">
@@ -58,13 +61,13 @@
         </ul>
         <ul id="nav-mobile" class="right">
             <li>
-                <a href="{{pageActive}}" class="dropdown-button" data-beloworigin="true" data-activates="Notifications" ng-click="reload('pageActive')">
+                <a href="{{activePage}}" class="dropdown-button" data-beloworigin="true" data-activates="Notifications" ng-click="reload('activePage')">
                  Notifications <i class="material-icons right" style="line-height: 2;">arrow_drop_down</i>
                 </a>
             </li>
             <li>
-                <a href="{{pageActive}}" class="dropdown-button" data-beloworigin="true" data-activates="User" ng-click="reload('pageActive')">
-                    <p><div class="chip"><img src="Images/loulou.png" alt="loulou">{{nomUtilisateur}}</div></p>
+                <a href="{{activePage}}" class="dropdown-button" data-beloworigin="true" data-activates="User" ng-click="reload('activePage')">
+                    <p><div class="chip"><img src="Images/loulou.png" alt="loulou">{{userName}}</div></p>
                 </a>
             </li>
         </ul>
@@ -77,11 +80,12 @@
     </nav>
     </div>
     
-    <!-- Contenu de la page -->
+    <!-- Page's content -->
+
     <div ng-view class="view-frame"></div>
    
     
-<!-- Initialisation des élements JQuery -->
+<!-- JQuery effects initialisation-->
 <script>
     $( document ).ready(function(){});
     $(".button-collapse").sideNav();

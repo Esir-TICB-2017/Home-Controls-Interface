@@ -12,15 +12,15 @@ homeControlsInterfaceApp.config(['$routeProvider',
 	function($routeProvider) {
 		$routeProvider.
 		when('/home', {
-			templateUrl: 'vues/home.html',
+			templateUrl: 'view/home.html',
         	controller: 'homeCtrl'
 		}).
 		when('/objets', {
-			templateUrl: 'vues/objets.html',
-        	controller: 'objetsCtrl'
+			templateUrl: 'view/objects.html',
+        	controller: 'objectsCtrl'
 		}).
 		when('/scenarios', {
-			templateUrl: 'vues/scenarios.html',
+			templateUrl: 'view/scenarios.html',
         	controller: 'scenariosCtrl'
 		})
 		.when('/login', {
