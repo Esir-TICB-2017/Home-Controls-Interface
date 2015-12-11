@@ -63,9 +63,24 @@ $http.get("/data/listepieces.json").success(function(data){
 
     }]);
 
-homeCIController.controller('loginCtrl',['$scope', '$http', function($scope,$http){
+homeCIController.controller('loginCtrl',['$scope', '$http','$rootScope','AUTH_EVENTS','AuthenticationService', function($scope,$http,$rootScope,AUTH_EVENTS,AuthenticationService){
 
     $scope.titleView = "Login";
+    
+    //using tutorial on medium
+    $scope.credentials = {
+        username : '',
+        password : ''
+    };
+    
+    
+    $scope.login = function(credentials){
+        AuthenticationService.login(credentials).then(function(user){
+            $rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
+            $scope.setCurrentUser(user);
+        });
+    };
+    
     }]);
 
 homeCIController.controller('registerCtrl',['$scope', '$http', function($scope,$http){

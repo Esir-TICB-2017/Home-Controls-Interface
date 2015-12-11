@@ -1,17 +1,17 @@
 <div class="container">
 
     <div class="row">
-      <form class="col s4 offset-s4" method="POST" action='login.php?action=login'>
+      <form class="col s4 offset-s4" name='loginForm' ng-submit='login(credentials)' novalidate>
         
         <div class="row">
           <div class="input-field col s12 m6 l12">
-            <input id="email" name="email" type="email" class="validate" required>
-            <label for="email">Email</label>
+            <input id="username" name="username" type="email" class="validate" ng-model='credentials.username'required>
+            <label for="username">Email</label>
         </div>
       </div>
       <div class="row">
         <div class="input-field col s12 m6 l12">
-          <input id="password" name="password" type="password" class="validate" required>
+          <input id="password" name="password" type="password" class="validate" ng-model='credentials.password' required>
            <label for="password">Password</label>
         </div>
       </div>
@@ -19,7 +19,7 @@
           <div class="input-field col s12">
             <button class="btn waves-effect waves-light right blue-grey lighten-5" type="submit">
               Go !
-              <i class="material-icons">send</i>
+              <i class="material-icons right">send</i>
             </button>
           </div>
         </div>

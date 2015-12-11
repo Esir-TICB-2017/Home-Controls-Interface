@@ -24,7 +24,7 @@ homeControlsInterfaceApp.config(['$routeProvider',
         	controller: 'scenariosCtrl'
 		})
 		.when('/login', {
-			templateUrl: 'login.html',
+			templateUrl: 'view/login.html',
         	controller: 'loginCtrl'
 		})
 		.when('/register', {
@@ -33,3 +33,19 @@ homeControlsInterfaceApp.config(['$routeProvider',
 		})
 		.otherwise({ redirectTo: '/login' });
 	}]);
+
+homeControlsInterfaceApp.constant('AUTH_EVENTS',{
+  loginSuccess: 'auth-login-success',
+  loginFailed: 'auth-login-failed',
+  logoutSuccess: 'auth-logout-success',
+  sessionTimeout: 'auth-session-timeout',
+  notAuthenticated: 'auth-not-authenticated',
+  notAuthorized: 'auth-not-authorized'
+});
+
+homeControlsInterfaceApp.constant('USER_ROLES',{
+    all: '*',
+  admin: 'admin',
+  editor: 'editor',
+  guest: 'guest'
+})
