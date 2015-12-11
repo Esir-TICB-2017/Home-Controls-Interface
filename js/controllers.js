@@ -4,13 +4,16 @@
 
 var homeCIController = angular.module('homeCIController',['ngDragDrop']);
 
-homeCIController.controller('appCtrl',['$scope', '$http', '$timeout','$location',USER_ROLES, AuthenticationService, function($scope,$http, $timeout, $location,USER_ROLES, AuthenticationService){
+homeCIController.controller('appCtrl',['$scope', '$http', '$timeout','$location','USER_ROLES','AuthenticationService', function($scope,$http, $timeout, $location,USER_ROLES,AuthenticationService){
     
     //Creation of variables used to say to the navbar which page is active
     $scope.activeHome = "active";
     $scope.activeScenarios = "";
     $scope.activeObjets = "";
     $scope.activePage = "#" + $location.path();
+    
+    //Instantiate isLoginPage to check if angular needs or not to display the login-box
+    $scope.isLoginPage = false;
     
     $scope.reload = function(link){
         //Tests to define which page is active

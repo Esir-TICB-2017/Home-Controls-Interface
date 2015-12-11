@@ -28,6 +28,7 @@
     <script src="js/app.js"></script>
     <script src="js/controllers.js"></script>
     <script src="js/services.js"></script>
+    <script src="js/directives.js"></script>
     <link rel="stylesheet" href="/css/style.css"/>
 </head>
     
@@ -85,7 +86,8 @@
 
     <div ng-view class="view-frame"></div>
    
-    
+    <div login-dialog ng-if="!isLoginPage"></div>
+
 <!-- JQuery effects initialisation-->
 <script>
     $( document ).ready(function(){});
