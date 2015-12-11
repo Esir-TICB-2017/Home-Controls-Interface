@@ -1,6 +1,11 @@
-<div class="container">
+<head>
+  <link rel="stylesheet" href="/css/style.css"/>
+</head>
 
+<div class="row">
+  <form class="col l12 m12 s12" name="loginForm" ng-controller="loginCtrl" ng-submit="login(credentials)" novalidate>
     <div class="row">
+<<<<<<< Updated upstream:view/login.html
       <form class="col s4 offset-s4" name='loginForm' ng-submit='login(credentials)' novalidate>
         
         <div class="row">
@@ -27,3 +32,29 @@
     </form>
   </div>
 </div>
+=======
+      <div class="input-field col s12 m4 l4 offset-l4 offset-m7">
+        <label for="username">Username</label>
+        <input type="text" id="username" ng-model="credentials.username " autocorrect=off>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12 m4 l4 offset-l4 offset-m7">
+        <label for="password">Password</label>
+        <input type="password" id="password" ng-model="credentials.password">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s12 l2 push-l4 push-m8">
+        <p><a href="#/register" class="blue-grey-text darken-3">Create new account</a></p>
+      </div>
+      
+      <div class="input-field col s12 l2 push-l4 push-m8">
+        <button class="btn waves-effect waves-light blue-grey darken-3" type="submit" name="action">Submit
+          <i class="material-icons right">send</i>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+>>>>>>> Stashed changes:vues/login.html

@@ -7,8 +7,14 @@
 -->
 <head>
     <meta charset="utf-8">
+<<<<<<< Updated upstream
     <title>Contrôles de la maison</title>
     <!-- Frameworks add-->
+=======
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0"/>
+    <title>Contrôles Maison - Accueil</title>
+    <!-- Ajout des frameworks-->
+>>>>>>> Stashed changes
 
    
     <link rel="stylesheet" href="bower_components/Materialize/bin/materialize.css"/>
@@ -51,9 +57,14 @@
     <nav class="blue-grey darken-3">
         
         <div class="nav-wrapper">
+<<<<<<< Updated upstream
             <a ng-href="activePage" data-activates="mobileMenu" class="button-collapse" ng-click="reload('activePage')"><i class="material-icons">menu</i></a>
             <a href="#/home" class="brand-logo center hide-on-med-and-down"><img src="Images/home.png" alt="logo" style="width : 60px; height : 60px;"></a>
             <a href="#/home" class="brand-logo left hide-on-large-only"><img src="Images/home.png" alt="logo" style="margin-left : 50px; margin-top : 0px; width : 55px;height : 55px;"></a>
+=======
+            <a ng-href="pageActive" data-activates="mobileMenu" class="button-collapse" ng-click="reload('pageActive')"><i class="material-icons">menu</i></a>
+            <a href="#/home" class="brand-logo center hide-on-small-only"><img src="Images/home.png" alt="logo" style="width : 60px; height : 60px;"></a>
+>>>>>>> Stashed changes
         <ul id="nav-mobile" class="left hide-on-med-and-down">
             <li ng-class="activeHome"><a href="#/home" ng-click="reload('#/home')">Home</a></li>
             <li ng-class="activeScenarios"><a href="#/scenarios" ng-click="reload('#/scenarios')">Scénarios</a></li>
@@ -75,6 +86,7 @@
             <li ng-class="activeHome" ng-click="reload('#/home')"><a href="#/home">Home</a></li>
             <li ng-class="activeScenarios" ng-click="reload('#/scenarios')"><a href="#/scenarios">Scénarios</a></li>
             <li ng-class="activeObjets" ng-click="reload('#/objets')"><a href="#/objets">Objets</a></li>
+             <a href="#/home" class="brand-logo center"><img src="Images/home.png" alt="logo" style="width : 80px; height : 80px; margin-top: 25chvw;"></a>
         </ul>
         </div>
     </nav>
@@ -88,7 +100,12 @@
 <!-- JQuery effects initialisation-->
 <script>
     $( document ).ready(function(){});
-    $(".button-collapse").sideNav();
+    $('.button-collapse').sideNav({
+      menuWidth: 200, 
+      edge: 'left',
+      closeOnClick: true //Close sideNav after selection
+    }
+  );
     $('.dropdown-button').dropdown({
          constrain_width: false
     });
