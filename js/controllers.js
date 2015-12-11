@@ -1,33 +1,37 @@
 'use strict'
 
-//Controlleur angular pour la page d'accueil
+//Angular controller's for the home page
 
 var homeCIController = angular.module('homeCIController',['ngDragDrop']);
 
-homeCIController.controller('navbarCtrl',['$scope', '$http', '$timeout','$location', function($scope,$http, $timeout, $location){
+homeCIController.controller('appCtrl',['$scope', '$http', '$timeout','$location',USER_ROLES, AuthenticationService, function($scope,$http, $timeout, $location,USER_ROLES, AuthenticationService){
     
-    //Creation des variables fonction active
+    //Creation of variables used to say to the navbar which page is active
     $scope.activeHome = "active";
     $scope.activeScenarios = "";
     $scope.activeObjets = "";
     $scope.activePage = "#" + $location.path();
     
-    $scope.userName = "Louison";
-    
-    
-    
     $scope.reload = function(link){
-        //Calcule de la valeur des variables utilisées pour montrer à l'utilisateur sur quel vue il est dans la navbar
+        //Tests to define which page is active
         if(link == "activePage"){link = $scope.activePage} else $scope.activePage = link;
         if(link == "#/home") $scope.activeHome = "active"; else $scope.activeHome = "";
         if(link == "#/scenarios") $scope.activeScenarios = "active" ; else $scope.activeScenarios = "";
         if(link == "#/objets") $scope.activeObjets = "active" ; else $scope.activeObjets = "";
     }
     
-
- $scope.changeUserName = function(){
+    $scope.userName = "Louison" ;
+    $scope.changeUserName = function(){
         $scope.userName = prompt("Nouveau nom choisi : ");
-          }
+    }
+    
+    $scope.currentUser = null;
+    $scope.roles = USER_ROLES;
+    $scope.isAuthorized = AuthenticationService.isAuthorized;
+    $scope.setCurrentUser = function(user){
+        $scope.currentUser = user;
+    };
+ 
     }])
 ;  
 
