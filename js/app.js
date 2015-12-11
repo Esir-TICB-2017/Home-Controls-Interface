@@ -24,15 +24,11 @@ homeControlsInterfaceApp.config(['$routeProvider',
         	controller: 'scenariosCtrl'
 		})
 		.when('/login', {
-<<<<<<< Updated upstream
 			templateUrl: 'view/login.html',
-=======
-			templateUrl: 'vues/login.html',
->>>>>>> Stashed changes
         	controller: 'loginCtrl'
 		})
 		.when('/register', {
-			templateUrl: 'vues/register.html',
+			templateUrl: 'view/register.html',
         	controller: 'registerCtrl'
 		})
 		.otherwise({ redirectTo: '/login' });
