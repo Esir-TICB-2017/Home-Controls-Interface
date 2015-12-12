@@ -34,10 +34,6 @@ homeCIController.controller('navbarCtrl',['$scope', '$http', '$timeout','$locati
 homeCIController.controller('homeCtrl',['$scope', '$http', function($scope,$http){
 
     var activeMenu = $('#menu'); 
-    
-    $http.get("/listewidget.json").success(function(data){
-        $scope.listWidget = data;
-    });
 
     $scope.titleView = "Vue Home";
 
@@ -86,5 +82,7 @@ homeCIController.controller('loginCtrl',['$scope', '$http','$rootScope','AUTH_EV
 homeCIController.controller('registerCtrl',['$scope', '$http', function($scope,$http){
 
     $scope.titleView = "S'enregistrer";
+
+    
     }]);
 
