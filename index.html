@@ -26,12 +26,15 @@
     <script src="bower_components/angular-chart.js/dist/angular-chart.js"></script>
     <link rel="stylesheet" href="bower_components/angular-chart.js/dist/angular-chart.css">
     <!-- Addition of our own JS files -->
+    <script src="js/auth-service.js"></script>
     <script src="js/app.js"></script>
     <script src="js/controllers.js"></script>
-    <link rel="stylesheet" href="/css/style.css"/>
+    <script src="js/session.js"></script>
+    <script src="js/application-controller.js"></script>
+    <link rel="stylesheet" href="css/style.css"/>
 </head>
     
-<body ng-controller="navbarCtrl" class="blue-grey lighten-5">
+<body ng-controller="applicationController" class="blue-grey lighten-5">
     
     <!-- Navbar on the top -->
     
@@ -58,7 +61,13 @@
             <li ng-class="activeHome"><a href="#/home" ng-click="reload('#/home')">Home</a></li>
             <li ng-class="activeScenarios"><a href="#/scenarios" ng-click="reload('#/scenarios')">Scénarios</a></li>
             <li ng-class="activeObjets"><a href="#/objets" ng-click="reload('#/objets')">Objets</a></li>
+            <li><div ng-switch on="currentUser.role">
+  <div ng-switch-when="userRoles.admin">You're admin.</div>
+  <div ng-switch-when="userRoles.editor">You're editor.</div>
+  <div ng-switch-default>You're something else.</div>
+</div></li>
         </ul>
+        
         <ul id="nav-mobile" class="right">
             <li>
                 <a href="{{activePage}}" class="dropdown-button" data-beloworigin="true" data-activates="Notifications" ng-click="reload('activePage')">
@@ -67,7 +76,7 @@
             </li>
             <li>
                 <a href="{{activePage}}" class="dropdown-button" data-beloworigin="true" data-activates="User" ng-click="reload('activePage')">
-                    <p><div class="chip"><img src="Images/loulou.png" alt="loulou">{{userName}}</div></p>
+                    <p><div class="chip" ng-if="currentUser"><img src="Images/loulou.png" alt="loulou">{{currentUser[0].username}}</div></p>
                 </a>
             </li>
         </ul>
