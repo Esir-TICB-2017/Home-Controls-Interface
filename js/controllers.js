@@ -6,6 +6,12 @@ var homeCIController = angular.module('homeCIController',['ngDragDrop']);
 
 homeCIController.controller('appCtrl',['$scope', '$http', '$timeout','$location','USER_ROLES','AuthenticationService', function($scope,$http, $timeout, $location,USER_ROLES,AuthenticationService){
     
+    //Recovers the isLoginPage information used to display, or not, the login page if user is not authenticated
+    $scope.$on('isLoginPage',function(event, args){
+       if(args.isLoginPage == 'true'){$scope.isLoginPage = 'true'}
+        else{$scope.isLoginPage = null}
+    });
+    
     //Creation of variables used to say to the navbar which page is active
     $scope.activeHome = "active";
     $scope.activeScenarios = "";
@@ -23,28 +29,22 @@ homeCIController.controller('appCtrl',['$scope', '$http', '$timeout','$location'
         if(link == "#/objets") $scope.activeObjets = "active" ; else $scope.activeObjets = "";
     }
     
-    $scope.userName = "Louison" ;
-    $scope.changeUserName = function(){
-        $scope.userName = prompt("Nouveau nom choisi : ");
-    }
-    
     $scope.currentUser = null;
     $scope.roles = USER_ROLES;
     $scope.isAuthorized = AuthenticationService.isAuthorized;
     $scope.setCurrentUser = function(user){
         $scope.currentUser = user;
     };
- 
-    }])
-;  
+    
+    }]);  
 
 homeCIController.controller('homeCtrl',['$scope', '$http', function($scope,$http){
 
     var activeMenu = $('#menu'); 
-    
+    /*
     $http.get("/listewidget.json").success(function(data){
         $scope.listWidget = data;
-    });
+    });*/
 
     $scope.titleView = "Vue Home";
 

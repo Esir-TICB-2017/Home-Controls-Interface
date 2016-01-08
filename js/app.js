@@ -3,11 +3,11 @@
 // App module
 
 var homeControlsInterfaceApp = angular.module('homeControlsInterfaceApp', [
+    'homeControlsDirectives',
 	'ngRoute',
 	'homeCIController',
 	'chart.js',
-    'homeControlsServices',
-    'HomeControlsDirectives'
+    'homeControlsServices'    
 	]);
 
 homeControlsInterfaceApp.config(['$routeProvider','AUTH_EVENTS','USER_ROLES',
@@ -22,11 +22,17 @@ homeControlsInterfaceApp.config(['$routeProvider','AUTH_EVENTS','USER_ROLES',
 		}).
 		when('/objets', {
 			templateUrl: 'view/objects.html',
-        	controller: 'objectsCtrl'
+        	controller: 'objectsCtrl',
+            data : {
+               authorizedRoles : [USER_ROLES.all]
+            }
 		}).
 		when('/scenarios', {
 			templateUrl: 'view/scenarios.html',
-        	controller: 'scenariosCtrl'
+        	controller: 'scenariosCtrl',
+            data : {
+               authorizedRoles : [USER_ROLES.all]
+            }
 		})
 		.when('/login', {
 			templateUrl: 'view/login.html',
@@ -34,7 +40,10 @@ homeControlsInterfaceApp.config(['$routeProvider','AUTH_EVENTS','USER_ROLES',
 		})
 		.when('/register', {
 			templateUrl: 'register.html',
-        	controller: 'registerCtrl'
+        	controller: 'registerCtrl',
+            data : {
+               authorizedRoles : [USER_ROLES.all]
+            }
 		})
 		.otherwise({ redirectTo: '/login' });
 	}]);
@@ -48,17 +57,21 @@ homeControlsInterfaceApp.config(function ($httpProvider) {
 
 homeControlsInterfaceApp.run(['$rootScope','AUTH_EVENTS','AuthenticationService','$location',
                               function($rootScope,AUTH_EVENTS,AuthenticationService,$location){
+                
     $rootScope.$on('$routeChangeStart',function(event, next){
-        //Retrieve the next page authorized roles
-       // var authorizedRoles = next.data.authorizedRoles;
-    
-        //We update the isLoginPage
-        if(next.templateUrl=="view/login.html"){$rootScope.$broadcast.isLoginPage = "true";}
-        else{$rootScope.$broadcast.isLoginPage = "false";}
         
+        //We update the isLoginPage
+        if(next.templateUrl=="view/login.html"){$rootScope.$broadcast('isLoginPage', {isLoginPage : "true"})}
+        else{$rootScope.$broadcast('isLoginPage',{isLoginPage : "false"})}
+        
+        //Retrieve the next page authorized roles
+        var authorizedRoles = next.data.authorizedRoles;
+
         //We test user's authorization to access the page
         if(!AuthenticationService.isAuthorized(authorizedRoles)){
+            $rootScope.$broadcast('isLoginPage', {isLoginPage : "true"})
             event.preventDefault();
+            
             if(AuthenticationService.isAuthenticated()){
                 //user is authenticated but nos allowed to access the page
                 $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);

@@ -1,12 +1,14 @@
 <div class="container">
 
     <div class="row">
-      <form class="col s4 offset-s4" name='loginForm' ng-submit='login(credentials)' novalidate>
+        <iframe src="sink.html" name="sink" style="display : none"></iframe>
+        
+      <form class="col s4 offset-s4" name='loginForm' action="sink.html" target="sink" method="post" ng-controller="loginCtrl" ng-submit='login(credentials)' novalidate form-autofill-fix>
         
         <div class="row">
           <div class="input-field col s12 m6 l12">
-            <input id="username" name="username" type="email" class="validate" ng-model='credentials.username'required>
-            <label for="username">Email</label>
+            <input id="username" name="username" type="text" class="validate" ng-model='credentials.username'required>
+            <label for="username">Username</label>
         </div>
       </div>
       <div class="row">
@@ -17,7 +19,7 @@
       </div>
         <div class="row">
           <div class="input-field col s12">
-            <button class="btn waves-effect waves-light right blue-grey lighten-5" type="submit">
+            <button class="btn waves-effect waves-light right blue-grey darken-3" type="submit">
               Go !
               <i class="material-icons right">send</i>
             </button>
