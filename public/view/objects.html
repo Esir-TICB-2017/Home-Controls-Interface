@@ -1,0 +1,83 @@
+<div class="fixed-action-btn horizontal" style="bottom: 45px; right: 24px;">
+    <a class="btn-floating btn-large blue-grey darken-3">
+      <i class="large material-icons">add</i>
+    </a>
+    <ul>
+    <li><form ng-submit="addObject(obj)">
+     <input type="text" id="addObject" ng-model="obj.objectName" ng-if="showObjectInputLabel" placeholder="Object name : ">
+    </form>
+    </li>
+    <li><form ng-submit="addRoom(room)">
+     <input type="text" id="addRoom" ng-model="room.roomName" ng-if="showRoomInputLabel" placeholder="Room name : ">
+    </form>
+    </li>
+      <li> <div class="row" ng-init="showRoomInputLabel = false;">
+        <a class="ng-scope btn-floating btn-small waves-effect waves-light blue darken-3" ng-click="showRoomInputLabel = !showRoomInputLabel" ><i class="material-icons">business</i></a>
+    </div>
+    </li>
+      <li> <div class="row" ng-init="showObjectInputLabel = false;">
+        <a class="ng-scope btn-floating btn-small waves-effect waves-light deep-purple darken-3" ng-click="showObjectInputLabel = !showObjectInputLabel" ><i class="material-icons">settings_remote</i></a>
+    </div>
+    </li>
+    </ul>
+  </div>
+
+
+<div class="row">
+    <div class=" col s3">
+        <input type="text" ng-model="searchObjectValue" placeholder="Rechercher un objet">
+        <ul class="">
+            <li class="collection-item" ng-repeat="object in listObjects | filter:searchObjectValue">
+                <div class="row">
+                    <div class="col s6">
+                        <div>Objet : {{object.name}}</div>
+                    </div>
+                    <div class="col s6">
+                        <div class="row" ng-init="showInputLabel = false;">
+                            <a class="ng-scope btn-floating btn-small waves-effect waves-light cyan darken-3" ng-click="addToRoom(object)" ng-if="showInputLabel"><i class="material-icons">add</i></a>
+                            <a class="ng-scope btn-floating btn-small waves-effect waves-light red darken-3 " ng-click="deleteObject(object)" ng-if="showInputLabel"><i class="material-icons">delete</i></a>
+                            <a class="btn-floating btn waves-effect waves-light blue-grey darken-3 left right" ng-click="showInputLabel = !showInputLabel"><i class="material-icons">view_list</i></a>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="col s9">
+        <div class="row">
+            <div class="col s12">
+             <input type="text" ng-model="searchRoomValue" placeholder="Rechercher une pièce">
+            </div>
+            </div>
+
+          
+            <ul class="collapsible popout col s6" data-collapsible="accordion" ng-repeat="room in listRooms | filter:searchRoomValue">
+                <li class="card large">
+    <div class="card-image waves-effect waves-block waves-light">
+      <img class="activator" src="img/{{room.name}}.jpg">
+    </div>
+    <div class="card-content">
+      <span class="card-title activator grey-text text-darken-4">{{room.name}}<i class="material-icons right">more_vert</i></span>
+      <p><a href="#">This is a link</a></p>
+    </div>
+    <div class="card-reveal">
+      <span class="card-title grey-text text-darken-4">{{room.name}} objects :<i class="material-icons right">close</i></span>
+      <ul class="card small col s12" ng-repeat="object in listObjects">
+      <span class="card-title">{{object.name}}</span>
+      </ul>
+    </div>
+  </li>
+            </ul>
+        </div>
+    </div>
+    <script>
+    $( document ).ready(function(){
+$('.collapsible').collapsible({
+    accordion : true // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+    });
+$('#addRoom').hover(
+function() {
+    console.log("ici");
+}
+);
+    });
+    </script>

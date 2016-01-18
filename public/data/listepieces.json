@@ -1,0 +1,32 @@
+[
+    {
+        "id" : "couloir",
+        "name" : "Couloir",
+        "objets": []
+    },
+    {
+        "id" : "chambre1",
+        "name" : "Chambre 1",
+        "objets": []
+    }, 
+    {
+        "id" : "chambre2",
+        "name" : "Chambre 2",
+        "objets": []
+    }, 
+    {
+        "id" : "cuisine",
+        "name" : "Cuisine",
+        "objets": []
+    },
+    {
+        "id" : "salon",
+        "name" : "Salon",
+        "objets": []
+    },
+    {
+        "id" : "garage",
+        "name" : "Garage",
+        "objets": []
+    }
+]

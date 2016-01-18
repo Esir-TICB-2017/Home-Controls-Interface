@@ -1,0 +1,104 @@
+<!DOCTYPE HTML>
+<html lang="fr" ng-app="homeControlsInterfaceApp">
+    <!-- Declaration of the Angular-app-module on the beginning
+        Texts in views in French because it is a French student project
+        Function and variables in English to be understood by most people
+    -->
+    <head>
+        <meta name="viewport" charset="utf-8" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0">
+        <title>Contrôles de la maison</title>
+        <!-- Frameworks add-->
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css"/>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular-route.js"></script>
+        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>-->
+        <script src="//cdn.rawgit.com/auth0/angular-storage/master/dist/angular-storage.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
+        <script src="https://rawgit.com/elboman/angular-materialize/master/src/angular-materialize.js"></script>
+        <!-- Addition of our own JS files -->
+        <script type="text/javascript" src="js/app.js"></script>
+        <script type="text/javascript" src="js/auth-service.js"></script>
+        <script type="text/javascript" src="js/controllers.js"></script>
+        <script type="text/javascript" src="js/session.js"></script>
+        <script type="text/javascript" src="js/application-controller.js"></script>
+        <script type="text/javascript" src="js/auth-service.js"></script>
+        <script type="text/javascript" src="js/directives.js"></script>
+        <link rel="stylesheet" href="css/style.css"/>
+    </head>
+
+    <body ng-controller="applicationController" class="blue-grey lighten-5">
+
+        <!-- Navbar on the top -->
+
+        <!-- Dropdown contents used in the  navabr-->
+        <ul id="Notifications" class="dropdown-content">
+            <li><a href="{{activePage}}"><span class="red-text">Important</span> <span class="new badge ">2</span></a></li>
+            <li><a href="{{activePage}}"><span class="yellow-text text-darken-2">News</span></a></li>
+        </ul>
+
+        <ul id="User" class="dropdown-content">
+            <li><a class="teal-text text-lighten2">Paramètres</a></li>
+            <li><a ng-click="logout()">Déconnexion</a></li>
+        </ul>
+
+        <!-- Navbar declaration -->
+        <div class="navbar-fixed">
+            <nav class="blue-grey darken-3">
+
+                <div class="nav-wrapper">
+                    <a ng-href="activePage" data-activates="mobileMenu" class="button-collapse" ng-click="reload('activePage')"><i class="material-icons">menu</i></a>
+                    <a href="#/home" class="brand-logo center hide-on-small-only"><img src="img/home.png" alt="logo" style="width : 60px; height : 60px;"></a>
+                    <ul id="nav-mobile" class="left hide-on-med-and-down">
+                        <li ui-sref='home' ng-class="activeHome"><a href="#/home" ng-click="reload('#/home')">Home</a></li>
+                        <li ui-sref='scenarios' ng-class="activeScenarios"><a href="#/scenarios" ng-click="reload('#/scenarios')">Scénarios</a></li>
+                        <li ui-sref='objets' ng-class="activeObjets"><a href="#/objets" ng-click="reload('#/objets')">Objets</a></li>
+                        <li><div>{{currentRole}}</div></li>
+                    </ul>
+
+                    <ul id="nav-mobile" class="right">
+                        <li>
+                            <a class="dropdown-button" data-beloworigin="true" data-activates="Notifications">
+                            Notifications <i class="material-icons right" style="line-height: 2;">arrow_drop_down</i>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-button" data-beloworigin="true" data-activates="User"><div >Welcome, {{ currentUser.username }} ! <i class="material-icons right" style="line-height: 2;">arrow_drop_down</i></div></a>
+                        </li>
+
+                    </ul>
+                    <ul class="side-nav" id="mobileMenu">
+                        <li ng-class="activeHome" ng-click="reload('#/home')"><a href="#/home">Home</a></li>
+                        <li ng-class="activeScenarios" ng-click="reload('#/scenarios')"><a href="#/scenarios">Scénarios</a></li>
+                        <li ng-class="activeObjets" ng-click="reload('#/objets')"><a href="#/objets">Objets</a></li>
+                        <a href="#/home" class="brand-logo center"><img src="img/home.png" alt="logo" style="width : 80px; height : 80px; margin-top: 25chvw;"></a>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+
+        <!-- Page's content -->
+        <div ui-view></div>
+
+
+        <!-- JQuery effects initialisation-->
+        <script>
+            $(document).ready(function(){});
+            $('.button-collapse').sideNav({
+            menuWidth: 200,
+            edge: 'left',
+            closeOnClick: true //Close sideNav after selection
+            }
+        );
+            $('.dropdown-button').dropdown({
+                constrain_width: false
+            });
+        </script>
+
+    </body>
+</html>
