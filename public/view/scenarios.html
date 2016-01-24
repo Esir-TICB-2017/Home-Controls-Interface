@@ -1,1 +1,248 @@
-<h5>{{titleView}}</h5>
+
+<div class="container">
+    <div class ="row">
+        
+        <!-- Displays the scenario that already exists -->
+        <div id="scenariosOnScreen" ng-hide="isCreatingANewScenario" class="col s12">
+            <h5>{{titleView}}</h5>
+            
+            <!-- Scenarios to display-->
+            <div class="col s4" ng-repeat="scenario in scenarios | orderBy : '-orderProp'">
+                <div class="card blue-grey darken-1 hoverable">
+                    <div class="card-content white-text"  ng-click="switchScenarioActivation(scenario)">
+                        <span class="card-title">{{scenario.name}}</span>
+                        <u><br>Objets utilisés :</u><br><br>
+                        <div ng-repeat="object in scenario.objects">
+                                {{object.name}} - {{object.room}}<br>
+                        </div>
+                        <br><u>Conditions d'activation automatique :</u><br><br>
+                        <div ng-repeat="condition in scenario.conditions">
+                            {{condition.name}} {{condition.condition}}<br>
+                        </div>
+                    </div>
+                    <div class="card-action">
+                        <a ng-click="modifyScenario(scenario)">Modifier le scénario</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Button used to create a new scenario" -->
+            <div class="fixed-action-btn" style="bottom : 45px; right:90px;">
+                <a class="btn-floating btn-large waves-effect waves-light red" ng-click="startCreatingNewScenario()">
+                    <i class="material-icons">add</i>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Diplays the process to create a new scenario -->
+        <div id="userIsCreatingANewScenario" ng-show="isCreatingANewScenario" class="col s12">
+            
+            <!-- Another graphic choice possible : materialize modals -->
+            <h5>Création d'un nouveau scénario</h5>
+            
+            <ul class="collapsible collapsible-accordion" data-collapsible="accordion">
+                <li>
+                    <div id="firstStep" class="collapsible-header active white">Prémière étape : choix des informations clés</div>
+                    <div class="collapsible-body grey lighten-5">
+                        
+                        <div class="row" style="padding-left : 15px; padding-top : 10px;">
+                            <div class="col s10 input-field">
+                                <input id="scenarioName" type="text" class="validate" ng-model="newScenario.name">
+                                <label for="scenarioName">Nom du scénario</label>
+                            </div>
+                            
+                            <div class="input-field col s10">
+                                <select ng-model="newScenario.autorization">
+                                    <option value="" disabled selected>Qui peut voir le scénario ?</option>
+                                    <option value="Seulement moi">Seulement moi</option>
+                                    <option value="Toute la famille">Toute la famille</option>
+                                    <option value="Ceux qui ont un compte administrateur">Ceux qui ont un compte administrateur</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col s10">
+                                    <input id="onTop" type="checkbox" ckecked="newScenario.onTop" ng-model="newScenario.onTop">
+                                    <label for="onTop"><span class="black-text">Maintenir en haut de la page Scénario</span></label>
+                            </div>
+                            <p>
+                            <button class="btn right" ng-click="validateStep1()">Valider </button>
+                            <span class="grey-text text-lighten-5"><br>Permet de corriger le bug ! </span>
+                            </p>
+                        </div>
+                        
+                    </div>
+                </li>
+                <li>
+                    <div id="secondStep" class="collapsible-header white">Deuxième étape : objets à inclure</div>
+                    <div class="collapsible-body grey lighten-5 col s12">
+                        <div class="row">
+                            <!-- Displaying the objects available -->
+                            <div class="col s4" id="objects" style="border-right : 1px solid black;">
+                                <h5>Objets disponibles</h5>
+                                
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix">search</i>
+                                    <input id="query" type="text" ng-model="objectFilterByText">
+                                    <label for="query">Chercher par nom ou pièce</label>
+                                </div>      
+                                
+                                <!-- Divider to separate title and searching options from the objects-->
+                                <div class="divider"></div>
+                                
+                                <div class="col s12" ng-repeat="object in objectsAvailable | filter: objectFilterByText | orderBy : 'idObject' ">
+                                    <div class="card blue-grey darken-1">
+                                        <div class="card-content white-text">
+                                            <span class="card-title">{{object.name}} - {{object.room}}</span>
+                                        </div>
+                                        <div class="card-action">
+                                            <a ng-click="addObjectToScenario(object)">Ajouter au scénario</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="col s8" id="objetcsAdded">
+                                <div class="col s12">
+                                    <h5>Objets dans le scénario</h5>
+                                </div>
+                                
+                                <div class="col s6" ng-repeat="object in newScenario.objects">
+                                    <div class="card blue-grey darken-1">
+                                        <div class="card-content white-text">
+                                            <div class="card-content white-text">
+                                            <span class="card-title">{{object.name}} - {{object.room}}</span>
+                                        </div>
+                                        <div class="card-action">
+                                            <a ng-click="deleteObjectFromScenario(object)">Retirer</a>
+                                            <a ng-click="modifyObjectsParameter(object)"><i class="material-icons right">settings</i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                            
+                        <!-- Modals scructure -->
+                            <div class="modal modal-fixed-footer" id="modalObject">
+                                <div class="modal-content">
+                                    <h4>{{objectForModal.name}}</h4>
+                                    <p><b>Voici les informations connues sur l'objet</b> <br><br>
+                                    L'objet est dans la pièce : {{objectForModal.room}}<br>
+                                    L'objet est de type : {{objectForModal.type}}<br>
+                                    <br><br>
+                                        <label class="teal-text text-lighten-2"for="modalObjectText">Changer le nom :</label>
+                                        <input id="modalObjectText" type="text" ng-model="objectForModal.name">
+                                    </p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn-flat right" ng-click="validateObjectsModification()">Valider</button>
+                                </div>
+                            </div>
+                            
+                    </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header white">Troisième étape : conditions de déclenchement</div>
+                    <div class="collapsible-body grey lighten-5 col s12">
+                        <div class="row">
+                            <!-- Displaying the objects available -->
+                            <div class="col s4" id="sensors" style="border-right : 1px solid black;">
+                                <h5>Objets disponibles</h5>
+                                
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix">search</i>
+                                    <input id="querySensor" type="text" ng-model="sensorFilterByText">
+                                    <label for="querySensor">Chercher par nom ou pièce</label>
+                                </div>      
+                                
+                                <!-- Divider to separate title and searching options from the objects-->
+                                <div class="divider"></div>
+                                
+                                <div class="col s12" ng-repeat="sensors in sensorsAvailable | filter: sensorFilterByText">
+                                    <div class="card blue-grey darken-1">
+                                        <div class="card-content white-text">
+                                            <span class="card-title">{{sensors.name}} - {{sensors.room}}</span>
+                                        </div>
+                                        <div class="card-action">
+                                            <a ng-click="addSensorToConditions(sensors)">Ajouter au scénario</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="col s8" >
+                                <h5>Conditions de lancement du scénario</h5>
+                                <p>Info : un clique sur un scénario dans la liste des scénarios permet de l'activer/désactiver. Cependant vous pouvez créer des conditions qui l'active automatiquement.</p>
+                                
+                                <!-- Here we deal with the conditions -->
+                                <div class="divider" style="margin-bottom : 12px;"></div>
+                                <p style="margin-top : 3px; margin-bottom : 3px;padding-top:3px;padding-bottom:3px;">Capteurs séléctionnés</p>
+                                <div ng-repeat="sensors in newScenario.sensors" class="chip">
+                                    {{sensors.name}} - {{sensors.room}}
+                                    <i class="material-icons" ng-click="removeSensorFromConditions(sensors)">close</i>
+                                </div>
+                                
+                                <div class="divider" style="margin-bottom : 12px;margin-top : 12px;"></div>
+                                <p style="margin-top : 3px; margin-bottom : 3px;padding-top:3px;padding-bottom:3px;">Conditions</p>
+                                
+                                <div class="col s12" ng-repeat="sensor in newScenario.sensorsListForConditions | orderBy : 'idSensor' ">
+                                    <div class="col s4">
+                                    <input id="{{sensor.idSensor}}" type="checkbox" checked="sensor.checked" ng-model="sensor.checked">
+                                    <label for="{{sensor.idSensor}}" class="black-text">{{sensor.name}}</label>
+                                    </div>
+                                    <input type="texte" placeholder="Condition (<,>,<=,>=,=)" ng-model="sensor.condition" style="margin-bottom: 10px;">
+                                    <button class="btn" ng-click="saveCondition(sensor)" style="margin-left: 10px;margin-bottom : 10px;">OK<i class="material-icons right">send</i></button>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="collapsible-header white">Récapitulatif</div>
+                    <div class="collapsible-body grey lighten-5">
+                        <p>
+                            <u>Nom du scénario :</u> {{newScenario.name}}<br>
+                            <u>Membres autorisées à le voir et l'utiliser :</u> {{newScenario.autorization}}<br>
+                            <input id="onTop" type="checkbox"  ng-checked="newScenario.onTop">
+                            <label for="onTop"><span class="black-text">Maintenir en haut de la page Scénario</span></label>
+                            <br>
+                            <br>
+                            <u>Liste des objets : </u>
+                            <span ng-repeat="object in newScenario.objects"><br>{{object.name}} - {{object.room}}</span>
+                            <br><br><u>Conditions de déclenchement :</u><br>Manuelle<br>
+<span ng-repeat="condition in newScenario.conditions"><br>{{condition.name}} {{condition.condition}}</span>
+
+                            <button class="btn right" ng-click="saveNewScenario()">Enregistrer le scénario<i class="material-icons right">done</i> </button>
+                            <span class="grey-text text-lighten-5"><br>Permet de corriger le bug ! </span>
+                        </p>
+
+                        
+                    </div>
+                </li>
+            
+            </ul>
+            
+            <div class="fixed-action-btn" style="bottom : 45px; right:25px;">
+                <a class="waves-effect waves-light btn" ng-click="stopCreatingNewScenario(true)">
+                    <i class="material-icons left">not_interested</i> Cancel
+                </a>
+            </div>
+        
+        </div>
+        
+    </div>
+</div>
+
+<!-- Activate the jquery effect used for the collapsible elements -->
+
+<script>
+$(document).ready(function(){
+    $('.modal-trigger').leanModal();
+    $('select').material_select();
+    $('.collapsible').collapsible({
+      accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+    });
+  });
+</script>
