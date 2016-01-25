@@ -1,6 +1,7 @@
 'use strict'
 //Controlleur angular pour la page d'accueil
 var homeCIController = angular.module('homeCIController', []);
+
 homeCIController.controller('homeCtrl', ['$scope', '$http','$state', function($scope, $http, $state) {
     var objectList = {};
     var activeMenu = $('#menu');
@@ -14,7 +15,7 @@ homeCIController.controller('homeCtrl', ['$scope', '$http','$state', function($s
     });
 }]);
 
-homeCIController.controller('scenariosCtrl', ['$scope', '$http','newScenario','$state', function($scope, $http,$state, newScenario) {
+homeCIController.controller('scenariosCtrl', ['$scope', '$http','$state','newScenario', function($scope, $http,$state,newScenario) {
     //Properties of the scenarios already created
     $scope.scenarios = [];
     

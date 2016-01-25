@@ -1,13 +1,8 @@
 'use strict'
 
-//Reste à faire : 
-// Function deleteObject : reinitilisation des fonctions choisies d'un objet
+var homeCIService = angular.module('homeCIService',[]);
 
-var HomeControlsInterfaceServices = angular.module('HomeControlsInterfaceServices',[]);
-
-
-HomeControlsInterfaceServices.service('newScenario', function(){
-    
+homeCIService.service('newScenario',function(){
     //Properties
     
     //New scenario we will work with
@@ -231,5 +226,5 @@ HomeControlsInterfaceServices.service('newScenario', function(){
         }
         return copy;
     };
-    
+
 });
