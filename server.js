@@ -391,7 +391,7 @@ apiRoutes.post('/authenticate', function(req, res) {
     });
 });
 //route middleware to verify a token
-/*apiRoutes.use(function(req, res, next) {
+apiRoutes.use(function(req, res, next) {
     // check header or url parameters or post parameters for token
     var token = req.body.token || req.query.token || req.headers['x-access-token'];
     // decode token
@@ -418,7 +418,7 @@ apiRoutes.post('/authenticate', function(req, res) {
             message: 'No token provided.'
         });
     }
-});*/
+});
 function isAuthenticated(req, res, next) {
     if (req.user.authenticated) return next();
     // IF A USER ISN'T LOGGED IN, THEN REDIRECT THEM SOMEWHERE

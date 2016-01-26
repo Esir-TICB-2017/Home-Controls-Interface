@@ -316,6 +316,8 @@ homeCIController.controller('scenariosCtrl', ['$scope', '$http','$state','newSce
     
 }]);
 homeCIController.controller('objectsCtrl', ['$scope', '$http', function($scope, $http, $state) {
+
+ 
     var objectList = {};
     var roomList = {};
     $scope.obj = {

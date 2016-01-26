@@ -27,17 +27,21 @@
     <div class=" col s3">
         <input type="text" ng-model="searchObjectValue" placeholder="Rechercher un objet">
         <ul class="">
-            <li class="collection-item" ng-repeat="object in listObjects | filter:searchObjectValue">
+            <li class="card grey lighten-3" ng-repeat="object in listObjects | filter:searchObjectValue">
                 <div class="row">
-                    <div class="col s6">
-                        <div>Objet : {{object.name}}</div>
+                    <div class="col s12">
+                        <h5>{{object.name}} <img class="responsive-img right" src="img/icons/lampe.png" width="40" height="40"></img></h5>
                     </div>
+                    
+                    </div>
+                    <div class="row">
                     <div class="col s6">
                         <div class="row" ng-init="showInputLabel = false;">
-                            <a class="ng-scope btn-floating btn-small waves-effect waves-light cyan darken-3" ng-click="addToRoom(object)" ng-if="showInputLabel"><i class="material-icons">add</i></a>
+                            <a class="btn-floating btn waves-effect waves-light blue-grey darken-3 left left" ng-click="showInputLabel = !showInputLabel"><i class="material-icons">view_list</i></a>
+                            <a class="ng-scope btn-floating btn-small waves-effect waves-light cyan darken-3" ng-click="clickToOpen()" ng-if="showInputLabel"><i class="material-icons">add</i></a>
                             <a class="ng-scope btn-floating btn-small waves-effect waves-light red darken-3 " ng-click="deleteObject(object)" ng-if="showInputLabel"><i class="material-icons">delete</i></a>
-                            <a class="btn-floating btn waves-effect waves-light blue-grey darken-3 left right" ng-click="showInputLabel = !showInputLabel"><i class="material-icons">view_list</i></a>
                         </div>
+                    </div>
                     </div>
                 </li>
             </ul>
@@ -51,13 +55,14 @@
 
           
             <ul class="collapsible popout col s6" data-collapsible="accordion" ng-repeat="room in listRooms | filter:searchRoomValue">
-                <li class="card large">
+                <li class="card medium">
     <div class="card-image waves-effect waves-block waves-light">
       <img class="activator" src="img/{{room.name}}.jpg">
     </div>
     <div class="card-content">
       <span class="card-title activator grey-text text-darken-4">{{room.name}}<i class="material-icons right">more_vert</i></span>
-      <p><a href="#">This is a link</a></p>
+      <p>Température de la pièce : 19°C</p>
+      <p>Consommation de la pièce : 180Wh</p>
     </div>
     <div class="card-reveal">
       <span class="card-title grey-text text-darken-4">{{room.name}} objects :<i class="material-icons right">close</i></span>

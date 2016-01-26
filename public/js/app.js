@@ -1,5 +1,9 @@
 // App module
+<<<<<<< Updated upstream
 var homeControlsInterfaceApp = angular.module('homeControlsInterfaceApp', ['homeCIController', 'applicationController', 'homeControlsDirectives','angular-storage','homeControlsServices','ui.router', 'ui.materialize','homeCIService']);
+=======
+var homeControlsInterfaceApp = angular.module('homeControlsInterfaceApp', ['homeCIController', 'applicationController', 'homeControlsDirectives','angular-storage','homeControlsServices','ui.router']);
+>>>>>>> Stashed changes
 
 homeControlsInterfaceApp.config(['$stateProvider','$httpProvider', '$urlRouterProvider', function($stateProvider, $httpProvider, $urlRouterProvider) {
     
@@ -37,6 +41,11 @@ homeControlsInterfaceApp.config(['$stateProvider','$httpProvider', '$urlRouterPr
         url: '/register',
         templateUrl: 'view/register.html',
         controller: 'registerCtrl'
+    })
+    .state('modal', {
+        url: '/modal1',
+        templateUrl: 'view/addObjectPopup.html',
+        controller: 'scenariosCtrl',
     })
 
      $httpProvider.interceptors.push('APIInterceptor');
