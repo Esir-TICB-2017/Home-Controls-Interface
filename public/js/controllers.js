@@ -31,9 +31,12 @@ homeCIController.controller('scenariosCtrl', ['$scope', '$http','$state','newSce
         }
         
     };
+    
     //Properties to create a new scenario
     $scope.isCreatingANewScenario = false;
     $scope.titleView = "Vue scénarios";
+    $scope.showAddObjectsMenu = false;
+    $scope.showAddSensorMenu = false;
     
     $scope.rooms = [
         {
@@ -163,6 +166,11 @@ homeCIController.controller('scenariosCtrl', ['$scope', '$http','$state','newSce
         newScenario.addObject(object);
         $scope.newScenario = newScenario.getScenario();
         $scope.objectsAvailable = newScenario.deleteObjectInATable($scope.objectsAvailable,object);
+        
+        //Hide the list of objects on small screens
+        if($scope.showAddObjectsMenu){
+            $scope.showAddObjectsMenu = false;
+        }
     
     };
     
@@ -193,6 +201,11 @@ homeCIController.controller('scenariosCtrl', ['$scope', '$http','$state','newSce
         $scope.newScenario = newScenario.getScenario();
         
         $scope.sensorsAvailable = newScenario.deleteObjectInATable($scope.sensorsAvailable,sensor);
+        
+        //Hide the list of sensors on small screens
+        if($scope.showAddSensorMenu){
+            $scope.showAddSensorMenu = false;
+        }
     };
     
     //Function linked to the X button on the sensors selected in the "troisieme etape : conditions de declenchement/capteurs séléctionnés"
@@ -290,6 +303,15 @@ homeCIController.controller('scenariosCtrl', ['$scope', '$http','$state','newSce
         if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
         }
         return copy;
+    };
+    
+    //Functions used to make the creation's scenario tool responsive
+    $scope.showAddSensorMenuOnSmall = function(){
+        $scope.showAddSensorMenu = true;
+    };
+    
+    $scope.showAddObjectsMenuOnSmall = function(){
+        $scope.showAddObjectsMenu = true;
     };
     
 }]);

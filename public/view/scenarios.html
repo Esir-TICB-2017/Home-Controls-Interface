@@ -7,7 +7,7 @@
             <h5>{{titleView}}</h5>
             
             <!-- Scenarios to display-->
-            <div class="col s4" ng-repeat="scenario in scenarios | orderBy : '-orderProp'">
+            <div class="col s12 m6 l4" ng-repeat="scenario in scenarios | orderBy : '-orderProp'">
                 <div class="card blue-grey darken-1 hoverable">
                     <div class="card-content white-text"  ng-click="switchScenarioActivation(scenario)">
                         <span class="card-title">{{scenario.name}}</span>
@@ -27,7 +27,7 @@
             </div>
             
             <!-- Button used to create a new scenario" -->
-            <div class="fixed-action-btn" style="bottom : 45px; right:90px;">
+            <div class="fixed-action-btn" style="bottom : 45px; right:40px;">
                 <a class="btn-floating btn-large waves-effect waves-light red" ng-click="startCreatingNewScenario()">
                     <i class="material-icons">add</i>
                 </a>
@@ -35,7 +35,7 @@
         </div>
         
         <!-- Diplays the process to create a new scenario -->
-        <div id="userIsCreatingANewScenario" ng-show="isCreatingANewScenario" class="col s12">
+        <div id="userIsCreatingANewScenario" ng-show="isCreatingANewScenario" class="col s12 m12 l12">
             
             <!-- Another graphic choice possible : materialize modals -->
             <h5>Création d'un nouveau scénario</h5>
@@ -65,7 +65,7 @@
                                     <label for="onTop"><span class="black-text">Maintenir en haut de la page Scénario</span></label>
                             </div>
                             <p>
-                            <button class="btn right" ng-click="validateStep1()">Valider </button>
+                            <button class="btn right" ng-click="validateStep1()" style="margin-top : 10px;">Valider </button>
                             <span class="grey-text text-lighten-5"><br>Permet de corriger le bug ! </span>
                             </p>
                         </div>
@@ -77,8 +77,33 @@
                     <div class="collapsible-body grey lighten-5 col s12">
                         <div class="row">
                             <!-- Displaying the objects available -->
-                            <div class="col s4" id="objects" style="border-right : 1px solid black;">
+                            <div class="col m6 l4 hide-on-small-only" id="objects" style="border-right : 1px solid black;">
                                 <h5>Objets disponibles</h5>
+                                
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix">search</i>
+                                    <input id="query" type="text" ng-model="objectFilterByText">
+                                    <label for="query">Chercher par nom ou pièce</label>
+                                </div>      
+                                
+                                <!-- Divider to separate title and searching options from the objects-->
+                                <div class="divider"></div>
+                                
+                                <div class="col s12" ng-repeat="object in objectsAvailable | filter: objectFilterByText | orderBy : 'idObject' ">
+                                    <div class="card blue-grey darken-1">
+                                        <div class="card-content white-text">
+                                            <span class="card-title">{{object.name}} - {{object.room}}</span>
+                                        </div>
+                                        <div class="card-action">
+                                            <a ng-click="addObjectToScenario(object)">Ajouter au scénario</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                                
+                                <!-- Displays the objects available on small screens when the Ajouter button is clicked -->
+                            <div class="col s12" id="objects" ng-show="showAddObjectsMenu">
+                                <h5>Objets disponibles <i class="material-icons right" ng-click="showAddObjectsMenu = false;">close</i></h5> 
                                 
                                 <div class="input-field col s12">
                                     <i class="material-icons prefix">search</i>
@@ -101,12 +126,13 @@
                                 </div>
                                 
                             </div>
-                            <div class="col s8" id="objetcsAdded">
+                                
+                            <div class="col s12 m6 l8" id="objetcsAdded" ng-hide="showAddObjectsMenu">
                                 <div class="col s12">
-                                    <h5>Objets dans le scénario</h5>
+                                    <h5>Objets dans le scénario</h5><button class="btn red hide-on-med-and-up" ng-click="showAddObjectsMenuOnSmall()">Ajouter</button>
                                 </div>
                                 
-                                <div class="col s6" ng-repeat="object in newScenario.objects">
+                                <div class="col s12 m12 l6" ng-repeat="object in newScenario.objects">
                                     <div class="card blue-grey darken-1">
                                         <div class="card-content white-text">
                                             <div class="card-content white-text">
@@ -146,9 +172,34 @@
                     <div class="collapsible-header white">Troisième étape : conditions de déclenchement</div>
                     <div class="collapsible-body grey lighten-5 col s12">
                         <div class="row">
-                            <!-- Displaying the objects available -->
-                            <div class="col s4" id="sensors" style="border-right : 1px solid black;">
+                            <!-- Displays the objects available -->
+                            <div class="col m6 l4 hide-on-small-only" id="sensors" style="border-right : 1px solid black;">
                                 <h5>Objets disponibles</h5>
+                                
+                                <div class="input-field col s12">
+                                    <i class="material-icons prefix">search</i>
+                                    <input id="querySensor" type="text" ng-model="sensorFilterByText">
+                                    <label for="querySensor">Chercher par nom ou pièce</label>
+                                </div>      
+                                
+                                <!-- Divider to separate title and searching options from the objects-->
+                                <div class="divider"></div>
+                                
+                                <div class="col s12" ng-repeat="sensors in sensorsAvailable | filter: sensorFilterByText">
+                                    <div class="card blue-grey darken-1">
+                                        <div class="card-content white-text">
+                                            <span class="card-title">{{sensors.name}} - {{sensors.room}}</span>
+                                        </div>
+                                        <div class="card-action">
+                                            <a ng-click="addSensorToConditions(sensors)">Ajouter au scénario</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Displays the objects available on small screens when the Ajouter button is clicked-->
+                            <div class="col s12" id="sensors" ng-show="showAddSensorMenu">
+                                <h5>Objets disponibles <i class="material-icons right" ng-click="showAddSensorMenu = false;">close</i></h5>
                                 
                                 <div class="input-field col s12">
                                     <i class="material-icons prefix">search</i>
@@ -171,13 +222,15 @@
                                 </div>
                                 
                             </div>
-                            <div class="col s8" >
+                            
+                            
+                            <div class="col s12 m6 l8" ng-hide="showAddSensorMenu">
                                 <h5>Conditions de lancement du scénario</h5>
                                 <p>Info : un clique sur un scénario dans la liste des scénarios permet de l'activer/désactiver. Cependant vous pouvez créer des conditions qui l'active automatiquement.</p>
                                 
                                 <!-- Here we deal with the conditions -->
                                 <div class="divider" style="margin-bottom : 12px;"></div>
-                                <p style="margin-top : 3px; margin-bottom : 3px;padding-top:3px;padding-bottom:3px;">Capteurs séléctionnés</p>
+                                <p style="margin-top : 3px; margin-bottom : 3px;padding-top:3px;padding-bottom:3px;">Capteurs séléctionnés</p><button class="btn red hide-on-med-and-up" ng-click="showAddSensorMenuOnSmall()" style="margin-left : 25px;margin-bottom : 10px;">Ajouter</button>
                                 <div ng-repeat="sensors in newScenario.sensors" class="chip">
                                     {{sensors.name}} - {{sensors.room}}
                                     <i class="material-icons" ng-click="removeSensorFromConditions(sensors)">close</i>
@@ -191,8 +244,9 @@
                                     <input id="{{sensor.idSensor}}" type="checkbox" checked="sensor.checked" ng-model="sensor.checked">
                                     <label for="{{sensor.idSensor}}" class="black-text">{{sensor.name}}</label>
                                     </div>
-                                    <input type="texte" placeholder="Condition (<,>,<=,>=,=)" ng-model="sensor.condition" style="margin-bottom: 10px;">
-                                    <button class="btn" ng-click="saveCondition(sensor)" style="margin-left: 10px;margin-bottom : 10px;">OK<i class="material-icons right">send</i></button>
+                                    <input class="left" type="texte" placeholder="Condition (<,>,<=,>=,=)" ng-model="sensor.condition" style="margin-bottom: 10px;">
+                                    <div class="hide-on-large-only"><br><br></div>
+                                    <button class="btn right" ng-click="saveCondition(sensor)" style="margin-left: 10px;margin-bottom : 10px;">OK<i class="material-icons right">send</i></button>
                                 </div>
                                 
                             </div>
@@ -224,11 +278,16 @@
             
             </ul>
             
-            <div class="fixed-action-btn" style="bottom : 45px; right:25px;">
+            <!--Button to stop scenario's creation on computer--> 
+            <div class="fixed-action-btn hide-on-med-and-down" style="bottom : 45px; right:25px;">
                 <a class="waves-effect waves-light btn" ng-click="stopCreatingNewScenario(true)">
                     <i class="material-icons left">not_interested</i> Cancel
                 </a>
             </div>
+            <!--Button to stop scenario's creation on tablet and phone-->
+            <button class="btn right hide-on-large-only" ng-click="stopCreatingNewScenario(true)">
+                    <i class="material-icons left">not_interested</i> Cancel
+            </button>
         
         </div>
         
