@@ -4,6 +4,7 @@
 var applicationController = angular.module('applicationController', []);
 applicationController.controller('applicationController', function($scope, $location, $rootScope, $state, UserService) {
     //Creation des variables fonction active
+    var main = this;
     $scope.activeHome = "active";
     $scope.activeScenarios = "";
     $scope.activeObjets = "";
@@ -41,19 +42,17 @@ applicationController.controller('applicationController', function($scope, $loca
         if (event.keyCode == 37) {}
     });
 
-    function logout() {
-        LoginService.logout().then(function(response) {
-            main.currentUser = UserService.setCurrentUser(null);
-            $state.go('login');
-        }, function(error) {
-            console.log(error);
-        });
+    $scope.logout = function() {
+        main.currentUser = UserService.setCurrentUser(null);
+        location.reload();
     }
     $rootScope.$on('authorized', function() {
-        UserService.currentUser = UserService.getCurrentUser();
+        main.currentUser = UserService.getCurrentUser();
     });
     $rootScope.$on('unauthorized', function() {
-        UserService.currentUser = UserService.setCurrentUser(null);
+        main.currentUser = UserService.setCurrentUser(null);
         $state.go('login');
     });
+    main.currentUser = UserService.getCurrentUser();
+    
 })

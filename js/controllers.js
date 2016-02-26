@@ -9,7 +9,7 @@ homeCIController.controller('homeCtrl', ['$scope', '$http','$state', function($s
     $('.collapsible').collapsible({
         accordion: false
     });
-    $http.get('/api/getObjects').success(function(data) {
+    $http.get('/getObjects').success(function(data) {
         objectList = data;
         $scope.listObjects = data;
     });
@@ -326,11 +326,11 @@ homeCIController.controller('objectsCtrl', ['$scope', '$http', function($scope, 
     $scope.room = {
         roomName: ''
     };
-    $http.get('/api/getObjects').success(function(data) {
+    $http.get('/getObjects').success(function(data) {
         objectList = data;
         $scope.listObjects = data;
     });
-    $http.get('/api/getRooms').success(function(data) {
+    $http.get('/getRooms').success(function(data) {
         roomList = data;
         $scope.listRooms = data;
     });
@@ -341,7 +341,7 @@ homeCIController.controller('objectsCtrl', ['$scope', '$http', function($scope, 
         var data = "name=" + obj.objectName;
         $http({
             method: 'POST',
-            url: '/api/setObject',
+            url: '/setObject',
             data: data,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -353,7 +353,7 @@ homeCIController.controller('objectsCtrl', ['$scope', '$http', function($scope, 
             $scope.codeStatus = response.data;
             object = response;
             Materialize.toast('Objet créé !', 4000);
-            $http.get('/api/getObjects').success(function(data) {
+            $http.get('/getObjects').success(function(data) {
         objectList = data;
         $scope.listObjects = data;
     });
@@ -369,7 +369,7 @@ homeCIController.controller('objectsCtrl', ['$scope', '$http', function($scope, 
         var data = "name=" + room.roomName;
         $http({
             method: 'POST',
-            url: '/api/setRoom',
+            url: '/setRoom',
             data: data,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -381,7 +381,7 @@ homeCIController.controller('objectsCtrl', ['$scope', '$http', function($scope, 
             $scope.codeStatus = response.data;
             object = response;
             Materialize.toast('Room created !', 4000);
-            $http.get('/api/getRooms').success(function(data) {
+            $http.get('/getRooms').success(function(data) {
         roomList = data;
         $scope.listRooms = data;
     });
@@ -397,7 +397,7 @@ homeCIController.controller('objectsCtrl', ['$scope', '$http', function($scope, 
         console.log(data);
         $http({
             method: 'DELETE',
-            url: '/api/deleteObject',
+            url: '/deleteObject',
             data: data,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -409,7 +409,7 @@ homeCIController.controller('objectsCtrl', ['$scope', '$http', function($scope, 
             $scope.codeStatus = response.data;
             obj = response;
             Materialize.toast('Object deleted !', 4000);
-            $http.get('/api/getObjects').success(function(data) {
+            $http.get('/getObjects').success(function(data) {
         objectList = data;
         $scope.listObjects = data;
     });
@@ -425,7 +425,7 @@ homeCIController.controller('objectsCtrl', ['$scope', '$http', function($scope, 
         console.log(data);
         $http({
             method: 'DELETE',
-            url: '/api/deleteRoom',
+            url: '/deleteRoom',
             data: data,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -437,7 +437,7 @@ homeCIController.controller('objectsCtrl', ['$scope', '$http', function($scope, 
             $scope.codeStatus = response.data;
             object = response;
             Materialize.toast('Room deleted !', 4000);
-            $http.get('/api/getRooms').success(function(data) {
+            $http.get('/getRooms').success(function(data) {
             roomList = data;
             $scope.listRooms = data;
             });
@@ -453,7 +453,7 @@ homeCIController.controller('objectsCtrl', ['$scope', '$http', function($scope, 
         var data = "objectId=" + objectId;
         $http({
             method: 'POST',
-            url: '/api/getOneObject',
+            url: '/getOneObject',
             data: data,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -477,7 +477,7 @@ homeCIController.controller('objectsCtrl', ['$scope', '$http', function($scope, 
         var objectId = object._id;
         var roomId = $http({
             method: 'PUT',
-            url: '/api/addObjectToRoom',
+            url: '/addObjectToRoom',
             data: data,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -498,7 +498,7 @@ homeCIController.controller('objectsCtrl', ['$scope', '$http', function($scope, 
         var objectId = object._id;
         var roomId = $http({
             method: 'DELETE',
-            url: '/api/deleteObjectFromRoom',
+            url: '/deleteObjectFromRoom',
             data: data,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -519,19 +519,41 @@ homeCIController.controller('loginCtrl', function($scope, $http, $rootScope, $lo
         username: '',
         password: ''
     };
-    $scope.login = function(credentials) {
-        LoginService.login(credentials).then(function(response) {
-            Materialize.toast(response.message, 4000);
-            if (response.success) {
-                console.log("Auth réussie");
-                credentials.access_token = response.token;
-                UserService.setCurrentUser(credentials);
+    $scope.login = function(loginID) {
+        var user = {
+            username: loginID.username,
+            password: loginID.password,
+            access_token: null
+        }
+        var data = $.param({
+            username: loginID.username,
+            password: loginID.password
+        });
+        $http({
+            method: 'POST',
+            url: '/login',
+            data: data,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            data: data
+        }).
+        success(function(data, status, headers, config) {
+            if (data.success) {
+                console.log("welcome");
+                user.access_token = data.token;
+                UserService.setCurrentUser(user);
+                console.log(UserService.getCurrentUser().username);
+                $rootScope.username = UserService.getCurrentUser().username;
                 $rootScope.$broadcast('authorized');
                 $state.go('home');
             } else {
-                console.log("No Auth");
-                $rootScope.$broadcast('unauthorized');
+                console.log('Error: Invalid user or password');
             }
+        }).
+        error(function(data, status, headers, config) {
+            console.log('Network Error');
+            // Handle login errors here
         });
     }
 });

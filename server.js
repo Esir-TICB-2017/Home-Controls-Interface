@@ -2,8 +2,9 @@
 // BASE SETUP ==========================================================
 // =====================================================================
 // call the packages we need
-var express = require('express'); // Node Framework
-var app = express(); // Launch Express
+var express = require('express');
+var app = express();
+var http = require('http').Server(app);
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
 var mongoose = require('mongoose');
@@ -12,10 +13,15 @@ var config = require('./config'); // get our config file
 var User = require('./app/models/user'); // get our mongoose model
 var Room = require('./app/models/room');
 var Object = require('./app/models/object');
+app.use('/bower_components', express.static(__dirname + '/bower_components')); //supplies folder
+app.use('/js', express.static(__dirname + '/js'));
+app.use('/publicViews', express.static(__dirname + '/publicViews'));
+app.use('/img', express.static(__dirname + '/img'));
+app.use('/css', express.static(__dirname + '/css'));
 // =====================================================================
 // configuration =======================================================
 // =====================================================================
-var port = process.env.PORT || 8080; // Port du serveur
+var port = process.env.PORT || 1337; // Port du serveur
 //-----Permet de vérifier la connexion à la base de données------
 mongoose.connection.on('open', function(ref) {
     console.log('Connected to mongo server.');
@@ -28,7 +34,6 @@ mongoose.connect(config.database); // Connexion à la base de données (URI dans
 //----------------------------------------------------------------
 app.set('superSecret', config.secret); //secret variable
 app.use(morgan('dev')); // permet d'afficher les requêtes dans la console
-app.use(express.static(__dirname + '/public'));
 // use body parser so we can get info from POST and/or URL parameters
 app.use(bodyParser.urlencoded({
     extended: false
@@ -41,14 +46,86 @@ app.use(bodyParser.json());
 // ---------------------------------------------------------
 // get an instance of the router for api routes
 // ---------------------------------------------------------
-var apiRoutes = express.Router();
+
 /*
 Route to get all objects in database (http://localhost:8080/api/getObjects)
 No parameters in
 Return all the objects in database (Json format)
  */
 
-apiRoutes.get('/getObjects', function(req, res, next) {
+app.post('/login', function(req, res) {
+    // find the user
+    User.findOne({ //On cherche l'utilisateur en utilisant mongoose
+        username: req.body.username
+    }, function(err, user) {
+        if (err) throw err;
+        //On regarde si l'utilisateur existe
+        if (!user) {
+            res.json({
+                success: false,
+                message: 'Authentication failed. User not found.'
+            });
+        } else if (user) {
+            // Si l'utilisateur existe, on check son mot de passe
+            if (user.password != req.body.password) {
+                res.json({
+                    success: false,
+                    message: 'Authentication failed. Wrong password.'
+                });
+            } else {
+                // Si on a trouvé l'utilisateur et que son mot de passe est correct : 
+                // on créé un token
+                var token = jwt.sign(user, app.get('superSecret'), {
+                    expiresInMinutes: 10 // Expire dans 24h
+                });
+                console.log('here is the token' + token);
+                // return the information including token as JSON
+                res.json({
+                    user: user,
+                    success: true,
+                    message: 'Logged ! ' + 'hello ' + req.body.username,
+                    token: token
+                });
+            }
+        }
+    });
+});
+
+app.all('/', function(req, res, next) {
+    res.sendFile('index.html', {
+        root: __dirname
+    });
+});
+
+app.use(function(req, res, next) {
+    // check header or url parameters or post parameters for token
+    var token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers.authorization;
+    // decode token
+    if (token) {
+        // verifies secret and checks exp
+        jwt.verify(token, app.get('superSecret'), function(err, decoded) {
+            if (err) {
+                return res.json({
+                    success: false,
+                    message: 'Failed to authenticate token.'
+                });
+            } else {
+                // if everything is good, save to request for use in other routes
+                req.decoded = decoded;
+                next();
+            }
+        });
+    } else {
+        // if there is no token
+        // return an error
+        return res.status(401).send({
+            success: false,
+            message: 'No token provided.'
+        });
+    }
+});
+
+app.get('/getObjects', function(req, res, next) {
         //retrieve all Rooms from Monogo
         mongoose.model('Object').find({}, function(err, objects) {
             if (err) {
@@ -65,7 +142,7 @@ apiRoutes.get('/getObjects', function(req, res, next) {
     })
 
 
-apiRoutes.get('/getObjects', function(req, res, next) {
+app.get('/getObjects', function(req, res, next) {
         //retrieve all Rooms from Monogo
         mongoose.model('Object').find({}, function(err, objects) {
             if (err) {
@@ -85,7 +162,7 @@ Route to get one object in database (http://localhost:8080/api/getOneObject/:id)
 parameter = ':id' : find the object with its id 
 Return the object querried (Json format)
 */
-apiRoutes.get('/getOneObject/:id', function(req, res, next) {
+app.get('/getOneObject/:id', function(req, res, next) {
         console.log(req.params.id);
         var objectId = req.params.id;
         mongoose.model('Object').find({
@@ -109,7 +186,7 @@ parameter = 'name' : create an new object with its name
 Return an error if the object already exist in database
 Return the object created (Json format)
  */
-apiRoutes.post('/setObject', function(req, res) {
+app.post('/setObject', function(req, res) {
     console.log(req.body);
     var query = {
         name: req.body.name
@@ -141,7 +218,7 @@ parameter = 'id' : object id
 Return an error if the object is not in database
 Return a Json with the deleted object and a console message
  */
-apiRoutes.delete('/deleteObject', function(req, res) {
+app.delete('/deleteObject', function(req, res) {
     var objectId = req.body.objectId;
     //find blob by ID
     mongoose.model('Object').findById(objectId, function(err, object) {
@@ -174,7 +251,7 @@ Route to get all rooms in database (http://localhost:8080/api/getRoom)
 No parameters in
 Return all the rooms in database (Json format)
  */
-apiRoutes.get('/getRooms', function(req, res, next) {
+app.get('/getRooms', function(req, res, next) {
     //retrieve all Rooms from Monogo
     mongoose.model('Room').find({}, function(err, rooms) {
         if (err) {
@@ -194,7 +271,7 @@ Route to get one room in database (http://localhost:8080/api/getOneRoom/:id)
 parameter = ':id' : find the room with its id 
 Return the room querried (Json format)
 */
-apiRoutes.get('/getOneRoom/:id', function(req, res, next) {
+app.get('/getOneRoom/:id', function(req, res, next) {
     var roomId = req.params.id;
     mongoose.model('Room').find({
         _id: roomId
@@ -217,7 +294,7 @@ parameter = 'name' : create an new room with its name
 Return an error if the room already exist in database
 Return the room created (Json format)
  */
-apiRoutes.post('/setRoom', function(req, res) {
+app.post('/setRoom', function(req, res) {
     var query = {
         name: req.body.name
     };
@@ -249,7 +326,7 @@ Return a Json with the deleted room and a console message
 
 !!!!TODO : Verify Delete room object reference if the deleted room is referenced in the object
  */
-apiRoutes.delete('/deleteRoom', function(req, res) {
+app.delete('/deleteRoom', function(req, res) {
     var roomId = req.body.roomId;
     //find blob by ID
     mongoose.model('Room').findById(roomId, function(err, room) {
@@ -280,7 +357,7 @@ apiRoutes.delete('/deleteRoom', function(req, res) {
 });
 
 
-apiRoutes.post('/deleteRoomFromObject', function(req, res) {
+app.post('/deleteRoomFromObject', function(req, res) {
     var roomId = req.body.roomId;
     var objectId = req.body.objectId;
 
@@ -315,7 +392,7 @@ apiRoutes.post('/deleteRoomFromObject', function(req, res) {
     
 });
 
-apiRoutes.put('/addObjectToRoom', function(req, res) {
+app.put('/addObjectToRoom', function(req, res) {
     var objectId = req.body.objectId;
     var roomId = req.body.roomId;
     Room.findOne({
@@ -353,72 +430,11 @@ apiRoutes.put('/addObjectToRoom', function(req, res) {
     });
 });
 
-apiRoutes.post('/authenticate', function(req, res) {
-    // find the user
-    User.findOne({ //On cherche l'utilisateur en utilisant mongoose
-        username: req.body.username
-    }, function(err, user) {
-        if (err) throw err;
-        //On regarde si l'utilisateur existe
-        if (!user) {
-            res.json({
-                success: false,
-                message: 'Authentication failed. User not found.'
-            });
-        } else if (user) {
-            // Si l'utilisateur existe, on check son mot de passe
-            if (user.password != req.body.password) {
-                res.json({
-                    success: false,
-                    message: 'Authentication failed. Wrong password.'
-                });
-            } else {
-                // Si on a trouvé l'utilisateur et que son mot de passe est correct : 
-                // on créé un token
-                var token = jwt.sign(user, app.get('superSecret'), {
-                    expiresInMinutes: 1440 // Expire dans 24h
-                });
-                console.log('here is the token' + token);
-                // return the information including token as JSON
-                res.json({
-                    user: user,
-                    success: true,
-                    message: 'Logged ! ' + 'hello ' + req.body.username,
-                    token: token
-                });
-            }
-        }
-    });
-});
+
 //route middleware to verify a token
-apiRoutes.use(function(req, res, next) {
-    // check header or url parameters or post parameters for token
-    var token = req.body.token || req.query.token || req.headers['x-access-token'];
-    // decode token
-    if (token) {
-        // verifies secret and checks exp
-        jwt.verify(token, app.get('superSecret'), function(err, decoded) {
-            if (err) {
-                return res.json({
-                    success: false,
-                    message: 'Failed to authenticate token.'
-                });
-            } else {
-                // if everything is good, save to request for use in other routes
-                req.decoded = decoded;
-                console.log("-------!!!!!! TOUT EST ICI !!!!!-------")
-                next();
-            }
-        });
-    } else {
-        // if there is no token
-        // return an error
-        return res.status(403).send({
-            success: false,
-            message: 'No token provided.'
-        });
-    }
-});
+
+app.use('/views', express.static(__dirname + '/views'));
+
 function isAuthenticated(req, res, next) {
     if (req.user.authenticated) return next();
     // IF A USER ISN'T LOGGED IN, THEN REDIRECT THEM SOMEWHERE
@@ -460,35 +476,26 @@ app.post('/signin', function(req, res) {
     });
 });
 // route to show a random message (GET http://localhost:8080/api/)
-apiRoutes.get('/', function(req, res) {
+app.get('/', function(req, res) {
     res.json({
         message: 'Welcome to the coolest API on earth!'
     });
 });
-apiRoutes.get('view/login.html', function(req, res) {
+app.get('view/login.html', function(req, res) {
     res.json({
         message: 'Welcome to the coolest API on earth!'
     });
 });
 // route to return all users (GET http://localhost:8080/api/users)
-apiRoutes.get('/users', function(req, res) {
+app.get('/users', function(req, res) {
     User.find({}, function(err, users) {
         res.json(users);
     });
 });
-apiRoutes.post('/uploadjson/listepieces.json', function(req, res) {
+app.post('/uploadjson/listepieces.json', function(req, res) {
     console.log(req.body);
 });
-// apply the routes to our application with the prefix /api
-app.use('/api', apiRoutes);
-// =====================================================================
-// application =========================================================
-// =====================================================================
-//app.get('*', function(req, res) {
-//res.sendfile(__dirname + '/public/index.html'); // On ne charge que la page d'index car c'est une single-view application
-//});
-// =====================================================================
-// start the server ====================================================
-// =====================================================================
-app.listen(port);
-console.log('Magic happens on port ' + port);
+
+http.listen(1337, function() {
+    console.log('OK');
+});

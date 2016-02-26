@@ -9,7 +9,7 @@ homeControlsInterfaceApp.config(['$stateProvider','$httpProvider', '$urlRouterPr
     $stateProvider
     .state('home', {
         url: '/home',
-        templateUrl: 'view/home.html',
+        templateUrl: 'views/home.html',
         controller: 'homeCtrl',
         children: [
             {
@@ -21,27 +21,27 @@ homeControlsInterfaceApp.config(['$stateProvider','$httpProvider', '$urlRouterPr
     })
     .state('objets', {
         url: '/objets',
-        templateUrl: 'view/objects.html',
+        templateUrl: 'views/objects.html',
         controller: 'objectsCtrl',
     })
     .state('scenarios', {
         url: '/scenarios',
-        templateUrl: 'view/scenarios.html',
+        templateUrl: 'views/scenarios.html',
         controller: 'scenariosCtrl',
     })
     .state('login', {
         url: '/login',
-        templateUrl: 'view/login.html',
+        templateUrl: 'publicViews/login.html',
         controller: 'loginCtrl',
     })
     .state('register', {
         url: '/register',
-        templateUrl: 'view/register.html',
+        templateUrl: 'views/register.html',
         controller: 'registerCtrl'
     })
     .state('modal', {
         url: '/modal1',
-        templateUrl: 'view/addObjectPopup.html',
+        templateUrl: 'views/addObjectPopup.html',
         controller: 'scenariosCtrl',
     })
 
