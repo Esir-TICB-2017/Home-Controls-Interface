@@ -482,12 +482,14 @@ app.post('/saveScenario', function(req, res) {
         onTop : req.body.onTop,
         orderProp : req.body.orderProp,
         autorization : req.body.autorization,
-        objects : req.body.objects,
-        sensors : req.body.sensors,
-        conditions : req.body.sensors,
         active : req.body.active,
-        sensorsListForConditions : req.body.sensorsListForConditions
+        objects : req.body.objects
     });
+    
+    if(req.body.conditions != ''){
+        myObj.conditions = req.body.conditions;
+    }
+    
     Scenario.findOneAndUpdate(query, myObj, {
         upsert: true
     }, function(err, doc) {
@@ -505,6 +507,19 @@ app.post('/saveScenario', function(req, res) {
         }
     });
 });
+
+app.post('/addObjectToScenario', function(req,res){
+    //To do
+});
+
+app.post('/addSensorToScenario', function(req,res){
+    //To do
+});
+
+app.post('/addSensorListForConditionsToScenario', function(req,res){
+    //To do
+});
+
 
 //route middleware to verify a token
 

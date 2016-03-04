@@ -8,24 +8,15 @@ module.exports = mongoose.model('Scenario', new Schema({
     onTop : Boolean,
     orderProp : Number,
     autorization : String,
-    objects: [{
-    	object : { 
-    		type : mongoose.Schema.Types.ObjectId,
-    		ref : 'Object'
-    	}
-    }],
+    objects: [{ type : mongoose.Schema.Types.ObjectId, ref : 'Object'}],
     sensors : [{
-        sensor : {
             type : mongoose.Schema.Types.ObjectId,
-            name : String
-        }
+            ref : 'Sensor'
     }],
     conditions : [String],
     active : Boolean,
     sensorsListForConditions : [{
-        sensor : {
             type : mongoose.Schema.Types.ObjectId,
-            name : String
-        }
+            ref : 'Sensor'
     }]
 }));

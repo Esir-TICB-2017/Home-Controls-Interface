@@ -243,7 +243,7 @@ homeCIController.controller('scenariosCtrl', ['$scope', '$http','$state','newSce
                 str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
                 return str.join("&");
             },
-            data: {name: obj.name, onTop: obj.onTop, orderProp : obj.orderProp, autorization : obj.autorization, objects : obj.objects, sensors : obj.sensors, conditions : obj.conditions, active : obj.active, sensorsListForConditions : obj.sensorsListForConditions}
+            data: {name: obj.name, onTop: obj.onTop, orderProp : obj.orderProp, autorization : obj.autorization, conditions : obj.conditions, active : obj.active}
         }).
         success(function(response){
             console.log(response);
@@ -256,6 +256,10 @@ homeCIController.controller('scenariosCtrl', ['$scope', '$http','$state','newSce
         error(function(response){
             $scope.codeStatus = response || "Request failed";
         });
+        
+        //Add objects, sensors and sensorListForConditions associated to the Scenario in the DB
+        //Faire un post sur /addObjectToScenario et /addSensorToScenario et /addSensorListForConditionsToScenario
+        
     };
     
     $scope.modifyScenario = function(scenario){
