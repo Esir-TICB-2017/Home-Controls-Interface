@@ -58,22 +58,10 @@ homeCIService.service('newScenario',function(){
         }
     };
     
-    //Move all objects selected in a tab (actually the objectsAvailable tab)
-    this.moveSelectedObjectsToTable = function(table){
-        for(var i=0;i< scenario.objects.length;i++){
-            table.push(scenario.objects[i]);
-        }
-    };
-    
-    //Move all selected sensors in a tab (actually the sensorsAvailable tab)
-    this.moveSelectedSensorsToTable = function(table){
-        for(var j=0; j<scenario.sensors.length; j++){
-                table.push(scenario.sensors[j]);
-        }
-    };
-    
     this.addObject = function(object){
-        scenario.objects.push(object);
+        if(scenario.objects.indexOf(object) == -1){
+            scenario.objects.push(object);
+        }
     };
     
     this.deleteObject = function(object){
@@ -86,7 +74,6 @@ homeCIService.service('newScenario',function(){
     };
     
     this.modifyObjectsParameter = function(object){
-        Materialize.toast("Modified Object id : "+object.idObject,2000);
         for(var i=0;i < scenario.objects.length;i++){
             if(object.idObject == scenario.objects[i].idObject){
                 scenario.objects[i].name = object.name;
@@ -96,12 +83,14 @@ homeCIService.service('newScenario',function(){
     };
     
     this.addSensor = function(sensor){
-        scenario.sensors.push(sensor);
-        this.generateSensorsList();
+        if(scenario.sensors.indexOf(sensor) == -1){
+            scenario.sensors.push(sensor);
+            this.generateSensorsList();
+        }
     };
     
     this.removeSensor = function(sensor){
-        //New variable that is a copy of the first-one
+        //New temporary variable
         var newNewScenarioConditionTable = [];
         
         //update the conditions table and remove conditions linked to the sensor removed
@@ -146,6 +135,7 @@ homeCIService.service('newScenario',function(){
         }
     };
     
+    // A tester
     this.saveCondition = function(sensor){
         //Create a new occurency of the sensor selected, to permit the user to create multiple conditions for a sensor
         if(sensor.checked & sensor.condition != ""){
@@ -155,7 +145,7 @@ homeCIService.service('newScenario',function(){
                 checked: false,
                 condition: "",
                 idObject: sensor.idObject,
-                idSensor: scenario.sensorsListForConditions.length + 1
+                idSensor: scenario.sensorsListForConditions.length + 1 // a corriger, peut planter
             }
             scenario.sensorsListForConditions.push(newSensor);
             
