@@ -6,6 +6,10 @@ homeCIController.controller('homeCtrl', ['$scope', '$http','$state', function($s
     var objectList = {};
     var activeMenu = $('#menu');
     $scope.titleView = 'Vue Home';
+    
+    
+    
+    
     $('.collapsible').collapsible({
         accordion: false
     });
@@ -322,9 +326,9 @@ homeCIController.controller('scenariosCtrl', ['$scope', '$http','$state','newSce
     };
     
 }]);
-homeCIController.controller('objectsCtrl', ['$scope', '$http', function($scope, $http, $state) {
 
- 
+homeCIController.controller('objectsCtrl', ['UserService','$scope', '$http', function(UserService, $scope, $http, $state) {
+
     var objectList = {};
     var roomList = {};
     $scope.obj = {
@@ -530,6 +534,7 @@ homeCIController.controller('loginCtrl', function($scope, $http, $rootScope, $lo
         var user = {
             username: loginID.username,
             password: loginID.password,
+            isAuthenticated : false,
             access_token: null
         }
         var data = $.param({
@@ -542,13 +547,15 @@ homeCIController.controller('loginCtrl', function($scope, $http, $rootScope, $lo
             data: data,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            data: data
+            }
         }).
         success(function(data, status, headers, config) {
             if (data.success) {
+                //The user is now logged in
                 console.log("welcome");
+                //Save the token in the user variable
                 user.access_token = data.token;
+                user.isAuthenticated = true;
                 UserService.setCurrentUser(user);
                 console.log(UserService.getCurrentUser().username);
                 $rootScope.username = UserService.getCurrentUser().username;

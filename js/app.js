@@ -5,6 +5,8 @@ var homeControlsInterfaceApp = angular.module('homeControlsInterfaceApp', ['home
 homeControlsInterfaceApp.config(['$stateProvider','$httpProvider', '$urlRouterProvider', function($stateProvider, $httpProvider, $urlRouterProvider) {
     
     $urlRouterProvider.otherwise('/login');
+    
+    $httpProvider.interceptors.push('APIInterceptor');
 
     $stateProvider
     .state('home', {
@@ -45,5 +47,23 @@ homeControlsInterfaceApp.config(['$stateProvider','$httpProvider', '$urlRouterPr
         controller: 'scenariosCtrl',
     })
 
-     $httpProvider.interceptors.push('APIInterceptor');
+     
 }]);
+
+homeControlsInterfaceApp.run(function($state, $rootScope, UserService,$location){
+    $rootScope.$on('$stateChangeStart', function(event, next){
+        var user = UserService.getCurrentUser();
+       
+        currentUrl = $location.path();
+        
+        if(!UserService.isAuthenticated() && (currentUrl!="/login")){
+            console.log("dans le if");
+            
+            $location.path("/login");
+            }
+        else{
+            console.log("dans le else");
+        }
+        
+    });
+});

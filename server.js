@@ -78,7 +78,7 @@ app.post('/login', function(req, res) {
                 // Si on a trouvé l'utilisateur et que son mot de passe est correct : 
                 // on créé un token
                 var token = jwt.sign(user, app.get('superSecret'), {
-                    expiresInMinutes: 10 // Expire dans 24h
+                    expiresInMinutes: 1 // Expire dans 24h
                 });
                 console.log('here is the token' + token);
                 // return the information including token as JSON
@@ -102,6 +102,7 @@ app.all('/', function(req, res, next) {
 app.use(function(req, res, next) {
     // check header or url parameters or post parameters for token
     var token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers.authorization;
+    
     // decode token
     if (token) {
         // verifies secret and checks exp
@@ -507,9 +508,10 @@ app.post('/saveScenario', function(req, res) {
         }
     });
 });
-
+/*
 app.post('/addObjectToScenario', function(req,res){
-    //To do
+    let objectId = req.body.id;
+    let scenarioId = req.body.scenarioId;
 });
 
 app.post('/addSensorToScenario', function(req,res){
@@ -519,7 +521,7 @@ app.post('/addSensorToScenario', function(req,res){
 app.post('/addSensorListForConditionsToScenario', function(req,res){
     //To do
 });
-
+*/
 
 //route middleware to verify a token
 
