@@ -13,6 +13,8 @@ var config = require('./config'); // get our config file
 var User = require('./app/models/user'); // get our mongoose model
 var Room = require('./app/models/room');
 var Object = require('./app/models/object');
+var Sensor = require('./app/models/sensor');
+var Scenario = require('./app/models/scenario');
 app.use('/bower_components', express.static(__dirname + '/bower_components')); //supplies folder
 app.use('/js', express.static(__dirname + '/js'));
 app.use('/publicViews', express.static(__dirname + '/publicViews'));
@@ -76,7 +78,7 @@ app.post('/login', function(req, res) {
                 // Si on a trouvé l'utilisateur et que son mot de passe est correct : 
                 // on créé un token
                 var token = jwt.sign(user, app.get('superSecret'), {
-                    expiresInMinutes: 10 // Expire dans 24h
+                    expiresInMinutes: 1 // Expire dans 24h
                 });
                 console.log('here is the token' + token);
                 // return the information including token as JSON
@@ -100,6 +102,7 @@ app.all('/', function(req, res, next) {
 app.use(function(req, res, next) {
     // check header or url parameters or post parameters for token
     var token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers.authorization;
+    
     // decode token
     if (token) {
         // verifies secret and checks exp
@@ -124,23 +127,6 @@ app.use(function(req, res, next) {
         });
     }
 });
-
-app.get('/getObjects', function(req, res, next) {
-        //retrieve all Rooms from Monogo
-        mongoose.model('Object').find({}, function(err, objects) {
-            if (err) {
-                return console.error(err);
-            } else {
-                //respond to both HTML and JSON. JSON responses require 'Accept: application/json;' in the Request Header
-                res.format({
-                    json: function() {
-                        res.json(objects);
-                    }
-                });
-            }
-        });
-    })
-
 
 app.get('/getObjects', function(req, res, next) {
         //retrieve all Rooms from Monogo
@@ -430,6 +416,112 @@ app.put('/addObjectToRoom', function(req, res) {
     });
 });
 
+
+/*
+Route to get one room in database (http://localhost:1337/getSensors) 
+Return the sensors querried (Json format)
+*/
+app.get('/getSensors', function(req,res,next){
+    //retrieve all Sensors from Mongo
+    mongoose.model('Sensor').find({}, function(err, objects){
+        if(err){
+            return console.error(err);
+        }
+        else{
+            //respond to both HTML and JSON. JSON responses requires 'Accept : application/json;' in the request header
+            res.format({
+                json : function(){
+                    res.json(objects);
+                }
+            });
+        }
+    });
+})
+
+/*
+Route to get one room in database (http://localhost:1337/getScenario) 
+Return the sensors querried (Json format)
+*/
+app.get('/getScenarios', function(req,res,next){
+    //retrieve all Scenarios from Mongo
+    mongoose.model('Scenario').find({}, function(err, objects){
+        if(err){
+            return console.error(err);
+        }
+        else{
+            //respond to both HTML and JSON. JSON responses requires 'Accept : application/json;' in the request header
+            res.format({
+                json : function(){
+                    res.json(objects);
+                }
+            });
+        }
+    });
+})
+/*
+Route to add scenario in database (http://localhost:1337/saveScenario)
+parameter = 
+'name' : create an new room with its name
+'onTop' : used to display the scenario 
+'orderProp' : number used to display the scenario in the right order
+'autorization' : criteria that is used to know who can use and modify the scenario
+'objects' : objects controlled by the scenario and their parameters
+'sensors' : sensors selected to create conditions for auto-launching
+'conditions' : conditions for auto-lauching
+'active' : boolean
+'sensorsListForConditions' : a list of the conditions used by the interface
+Return an error if the room already exist in database
+Return the room created (Json format)
+ */
+app.post('/saveScenario', function(req, res) {
+    var query = {
+        name: req.body.name
+    };
+    
+    var myObj = new Scenario({
+        name: req.body.name,
+        onTop : req.body.onTop,
+        orderProp : req.body.orderProp,
+        autorization : req.body.autorization,
+        active : req.body.active,
+        objects : req.body.objects
+    });
+    
+    if(req.body.conditions != ''){
+        myObj.conditions = req.body.conditions;
+    }
+    
+    Scenario.findOneAndUpdate(query, myObj, {
+        upsert: true
+    }, function(err, doc) {
+        if (err) {
+            return res.send(500, {
+                error: err
+            });
+        } else {
+            res.format({
+                //JSON response will show the newly created blob
+                json: function() {
+                    res.json(myObj);
+                }
+            });
+        }
+    });
+});
+/*
+app.post('/addObjectToScenario', function(req,res){
+    let objectId = req.body.id;
+    let scenarioId = req.body.scenarioId;
+});
+
+app.post('/addSensorToScenario', function(req,res){
+    //To do
+});
+
+app.post('/addSensorListForConditionsToScenario', function(req,res){
+    //To do
+});
+*/
 
 //route middleware to verify a token
 

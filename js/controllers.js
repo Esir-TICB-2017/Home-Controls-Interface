@@ -6,6 +6,10 @@ homeCIController.controller('homeCtrl', ['$scope', '$http','$state', function($s
     var objectList = {};
     var activeMenu = $('#menu');
     $scope.titleView = 'Vue Home';
+    
+    
+    
+    
     $('.collapsible').collapsible({
         accordion: false
     });
@@ -16,8 +20,12 @@ homeCIController.controller('homeCtrl', ['$scope', '$http','$state', function($s
 }]);
 
 homeCIController.controller('scenariosCtrl', ['$scope', '$http','$state','newScenario', function($scope, $http,$state,newScenario) {
-    //Properties of the scenarios already created
-    $scope.scenarios = [];
+    //Properties of the scenario already created
+    
+    //First : download scenarios already created
+    $http.get('/getScenarios').success(function(data){
+        $scope.scenarios = data;
+    });
     
     $scope.switchScenarioActivation = function(scenario){
         //To write
@@ -38,42 +46,10 @@ homeCIController.controller('scenariosCtrl', ['$scope', '$http','$state','newSce
     $scope.showAddObjectsMenu = false;
     $scope.showAddSensorMenu = false;
     
-    $scope.rooms = [
-        {
-            name: "salon",
-            id:"1"
-        },
-        {
-            name:"salle de bain",
-            id:"2"
-        }
-    ];
-    $scope.objectsAvailable = [
-        {
-            name:"Interrupteur 1",
-            room:"Salon",
-            type:"actionneur",
-            idObject:1
-        },
-        {
-            name:"Interrupteur 2",
-            room:"Salle de bain",
-            type:"actionneur",
-            idObject:2
-        },
-        {
-            name:"Station netatmo",
-            room:"Salle de bain",
-            type:"capteur",
-            idObject:3
-        },
-        {
-            name:"Sèche serviettes",
-            room:"Salle de bain",
-            type:"actionneur",
-            idObject:4
-        }
-    ];
+    $scope.rooms = [];
+    $scope.objectsAvailable = [];
+    $scope.sensorsAvailable = [];
+    /*
     $scope.sensorsAvailable=[
         {
             name:"Station netatmo",
@@ -109,6 +85,8 @@ homeCIController.controller('scenariosCtrl', ['$scope', '$http','$state','newSce
         }
         
     ];
+    */
+    
     $scope.newScenario = newScenario.getScenario(); 
     
     $scope.objectForModal = {};
@@ -117,6 +95,17 @@ homeCIController.controller('scenariosCtrl', ['$scope', '$http','$state','newSce
     $scope.startCreatingNewScenario = function(){
         Materialize.toast('Création d\'un nouveau scenario',2000);
         $scope.isCreatingANewScenario = true;
+        
+        //Download the rooms, objects and sensors available
+        $http.get('/getRooms').success(function(data){
+            $scope.rooms = data;
+        });
+        $http.get('/getObjects').success(function(data){
+            $scope.objectsAvailable = data;
+        });
+        $http.get('/getSensors').success(function(data){
+            $scope.sensorsAvailable = data;
+        });
         
         //Initialize the service newScenario
         newScenario.initNewScenario();
@@ -135,11 +124,9 @@ homeCIController.controller('scenariosCtrl', ['$scope', '$http','$state','newSce
         }
         
         $scope.isCreatingANewScenario = false;
-        initNewScenarioVar();
         
-        //Uncheck and empty the conditions of all sensors selected during the creation process
-        newScenario.reinitSensorsAvailableTable($scope.sensorsAvailable);
-
+        newScenario.initNewScenario();
+        $scope.newScenario = newScenario.getScenario();
     };
     
     $scope.validateStep1 = function(){
@@ -148,18 +135,6 @@ homeCIController.controller('scenariosCtrl', ['$scope', '$http','$state','newSce
         newScenario.setOnTop($scope.newScenario.onTop);
         angular.element(document.querySelector('#secondStep')).click();
     };
-    
-    
-    function initNewScenarioVar(){
-        //Put back all the objects selected in the objectsAvailable tab
-        newScenario.moveSelectedObjectsToTable($scope.objectsAvailable);
-        
-        //Put back all the sensors selected in the sensorsAvailable tab
-        newScenario.moveSelectedSensorsToTable($scope.sensorsAvailable);
-        
-        newScenario.initNewScenario();
-        $scope.newScenario = newScenario.getScenario();
-    }
     
     $scope.addObjectToScenario = function(object){
 
@@ -185,7 +160,6 @@ homeCIController.controller('scenariosCtrl', ['$scope', '$http','$state','newSce
     };
     
     $scope.validateObjectsModification = function(){
-        //Functions for data-saving to add
         $('#modalObject').closeModal();
         newScenario.modifyObjectsParameter($scope.objectForModal);
         $scope.objectForModal = {};
@@ -240,19 +214,56 @@ homeCIController.controller('scenariosCtrl', ['$scope', '$http','$state','newSce
     $scope.saveNewScenario = function(){
         
         if($scope.modifyingScenario == false){
-            $scope.scenarios.push(newScenario.saveScenario($scope.modifyingScenario));
+            let scenarioJustCreated = newScenario.saveScenario(false);
             $scope.stopCreatingNewScenario(false);
+            
             //Add the new scenario in the DB
+            saveScenarioInDB(scenarioJustCreated);
         }
         else{
             for(var i=0;i < $scope.scenarios.length;i++){
                 if($scope.scenarios[i].id == $scope.newScenario.id){
-                    $scope.scenarios[i] = newScenario.saveScenario($scope.modifyingScenario) ;
+                    let scenarioJustCreated = newScenario.saveScenario(true) ;
                     $scope.stopCreatingNewScenario(false);
                     $scope.modifyingScenario = false;
+                    
+                    //Add the new scenario in the DB
+                    saveScenarioInDB(scenarioJustCreated);
                 }
             }
         }
+    };
+    
+    let saveScenarioInDB = function(obj){
+        var object = {};
+        
+        $http({
+            method : 'post',
+            url : '/saveScenario',
+            headers : {'Content-type': 'application/x-www-form-urlencoded' },
+            transformRequest: function(obj) {
+                var str = [];
+                for(var p in obj)
+                str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+                return str.join("&");
+            },
+            data: {name: obj.name, onTop: obj.onTop, orderProp : obj.orderProp, autorization : obj.autorization, conditions : obj.conditions, active : obj.active}
+        }).
+        success(function(response){
+            console.log(response);
+            $scope.codeStatus = response.data;
+            object = response;
+            $http.get('/getScenarios').success(function(data){
+                $scope.scenarios = data;
+            });
+        }).
+        error(function(response){
+            $scope.codeStatus = response || "Request failed";
+        });
+        
+        //Add objects, sensors and sensorListForConditions associated to the Scenario in the DB
+        //Faire un post sur /addObjectToScenario et /addSensorToScenario et /addSensorListForConditionsToScenario
+        
     };
     
     $scope.modifyScenario = function(scenario){
@@ -315,9 +326,9 @@ homeCIController.controller('scenariosCtrl', ['$scope', '$http','$state','newSce
     };
     
 }]);
-homeCIController.controller('objectsCtrl', ['$scope', '$http', function($scope, $http, $state) {
 
- 
+homeCIController.controller('objectsCtrl', ['UserService','$scope', '$http', function(UserService, $scope, $http, $state) {
+
     var objectList = {};
     var roomList = {};
     $scope.obj = {
@@ -346,7 +357,7 @@ homeCIController.controller('objectsCtrl', ['$scope', '$http', function($scope, 
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            data: data
+            data: data //Pourquoi l'avoir mis deux fois ?
         }).
         success(function(response) {
             console.log(response);
@@ -523,6 +534,7 @@ homeCIController.controller('loginCtrl', function($scope, $http, $rootScope, $lo
         var user = {
             username: loginID.username,
             password: loginID.password,
+            isAuthenticated : false,
             access_token: null
         }
         var data = $.param({
@@ -535,13 +547,15 @@ homeCIController.controller('loginCtrl', function($scope, $http, $rootScope, $lo
             data: data,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            data: data
+            }
         }).
         success(function(data, status, headers, config) {
             if (data.success) {
+                //The user is now logged in
                 console.log("welcome");
+                //Save the token in the user variable
                 user.access_token = data.token;
+                user.isAuthenticated = true;
                 UserService.setCurrentUser(user);
                 console.log(UserService.getCurrentUser().username);
                 $rootScope.username = UserService.getCurrentUser().username;

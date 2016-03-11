@@ -3,6 +3,9 @@
 //Controlleur angular pour la page d'accueil
 var applicationController = angular.module('applicationController', []);
 applicationController.controller('applicationController', function($scope, $location, $rootScope, $state, UserService) {
+    //Broadcast the username of the user if he has been connected the last time he was on the application 
+    if(UserService.getCurrentUser()){$rootScope.username = UserService.getCurrentUser().username;}
+    
     //Creation des variables fonction active
     var main = this;
     $scope.activeHome = "active";

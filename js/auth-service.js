@@ -1,5 +1,12 @@
 var homeControlsServices = angular.module('homeControlsServices', []);
 homeControlsServices.service('UserService', function(store) {
+    
+    /*User Architecture :
+    User {
+        name : String,
+        password : String,
+        access_token : String
+    }*/
     var service = this,
         currentUser = null;
     service.setCurrentUser = function(user) {
@@ -12,6 +19,15 @@ homeControlsServices.service('UserService', function(store) {
             currentUser = store.get('user');
         }
         return currentUser;
+    };
+    
+    service.isAuthenticated = function(){
+        //A modifier ! Doit appeler le serveur pour vérifier qu'il est bien authentifié
+        if(currentUser){
+            return currentUser.isAuthenticated;
+        }
+        else{return false;}
+        
     };
 })
 homeControlsServices.service('APIInterceptor', function($rootScope, UserService) {
