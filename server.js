@@ -20,6 +20,80 @@ app.use('/js', express.static(__dirname + '/js'));
 app.use('/publicViews', express.static(__dirname + '/publicViews'));
 app.use('/img', express.static(__dirname + '/img'));
 app.use('/css', express.static(__dirname + '/css'));
+
+//=====================================================================
+// Partie Mathieu et Dann
+//ajout d'xmlhttprequest
+  var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+  var xmlHttpGet = new XMLHttpRequest();
+  var xmlHttpPut = new XMLHttpRequest();
+  //ajout d'url 
+  var url = require('url');
+  //ajout de fs gestion de fichier
+  var fs = require("fs");
+  //indique qu'on va utiliser le fichier dans celui-ci
+  eval(fs.readFileSync(__dirname + '/fonction.js')+'');
+  //ajoute les modules KNX
+  KnxHelper = require('./src/KnxHelper.js');
+  KnxConnectionTunneling = require('./src/KnxConnectionTunneling.js');
+  exports.KnxHelper = KnxHelper;
+  exports.KnxConnectionTunneling = KnxConnectionTunneling;
+  //crée les variables de connexion à la plaque KNX
+  var KnxConnectionTunneling = require('knx.js').KnxConnectionTunneling;
+  var connection = new KnxConnectionTunneling('192.168.1.119', 3671, '192.168.1.104', 13671);
+
+//Appel http des fonction KNX
+  //lampes
+    //ON---------------------------------
+    app.get('/onspot', function(req,res){
+        console.log('get /onpost');
+      res.send(setknx("0/1/1",true,500));
+    });
+    app.get('/onledint', function(req,res){
+      res.send(setknx("1/0/1",true,500));
+    });
+    app.get('/onext', function(req,res){
+      res.send(setknx("1/0/2",true,500));
+    });
+    app.get('/onledext', function(req,res){
+      res.send(setknx("1/0/3",true,500));
+    });
+    //OFF----------------------------------
+      app.get('/offspot', function(req,res){
+          console.log('get /onpost');
+      res.send(setknx("0/1/1",false,500));
+    });
+    app.get('/offledint', function(req,res){
+      res.send(setknx("1/0/1",false,500));
+    });
+    app.get('/offext', function(req,res){
+      res.send(setknx("1/0/2",false,500));
+    });
+    app.get('/offledext', function(req,res){
+      res.send(setknx("1/0/3",false,500));
+    });
+  //prises
+    //ON---------------------------------
+    app.get('/onspot', function(req,res){
+      res.send(setknx("2/0/0",true,500));
+    });
+    app.get('/onledint', function(req,res){
+      res.send(setknx("2/0/1",true,500));
+    });
+    app.get('/onext', function(req,res){
+      res.send(setknx("2/0/2",true,500));
+    });
+    //OFF----------------------------------
+      app.get('/offspot', function(req,res){
+      res.send(setknx("2/0/0",false,500));
+    });
+    app.get('/offledint', function(req,res){
+      res.send(setknx("2/0/1",false,500));
+    });
+    app.get('/offext', function(req,res){
+      res.send(setknx("2/0/2",false,500));
+    });
+
 // =====================================================================
 // configuration =======================================================
 // =====================================================================
@@ -78,7 +152,7 @@ app.post('/login', function(req, res) {
                 // Si on a trouvé l'utilisateur et que son mot de passe est correct : 
                 // on créé un token
                 var token = jwt.sign(user, app.get('superSecret'), {
-                    expiresInMinutes: 1 // Expire dans 24h
+                    expiresIn: 3600 // Expire dans 24h
                 });
                 console.log('here is the token' + token);
                 // return the information including token as JSON

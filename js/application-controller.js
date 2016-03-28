@@ -2,7 +2,7 @@
 'use strict'
 //Controlleur angular pour la page d'accueil
 var applicationController = angular.module('applicationController', []);
-applicationController.controller('applicationController', function($scope, $location, $rootScope, $state, UserService) {
+applicationController.controller('applicationController', function($scope, $location, $rootScope, $state, UserService, USER_ROLES) {
     //Broadcast the username of the user if he has been connected the last time he was on the application 
     if(UserService.getCurrentUser()){$rootScope.username = UserService.getCurrentUser().username;}
     
@@ -12,18 +12,10 @@ applicationController.controller('applicationController', function($scope, $loca
     $scope.activeScenarios = "";
     $scope.activeObjets = "";
     $scope.activePage = "#" + $location.path();
-    document.addEventListener('keydown', function(event) {
-        if (event.keyCode == 37) {
-            console.log(UserService.getCurrentUser());
-        }
-    });
-    this.topDirections = ['left', 'up'];
-    this.bottomDirections = ['down', 'right'];
-    this.isOpen = false;
-    this.availableModes = ['md-fling', 'md-scale'];
-    this.selectedMode = 'md-fling';
-    this.availableDirections = ['up', 'down', 'left', 'right'];
-    this.selectedDirection = 'up';
+    $scope.isAuthorized = UserService.isAuthorized;
+    
+    $scope.userRole = USER_ROLES;
+    
     /**
      * This function is used to switch highlighted tabs in the navbar on click
      * @param  {Link of the tab}
@@ -41,9 +33,6 @@ applicationController.controller('applicationController', function($scope, $loca
         if (link == "#/objets") $scope.activeObjets = "active";
         else $scope.activeObjets = "";
     }
-    document.addEventListener('keydown', function(event) {
-        if (event.keyCode == 37) {}
-    });
 
     $scope.logout = function() {
         main.currentUser = UserService.setCurrentUser(null);

@@ -1,34 +1,47 @@
 var homeControlsServices = angular.module('homeControlsServices', []);
-homeControlsServices.service('UserService', function(store) {
+homeControlsServices.service('UserService', function( USER_ROLES) {
     
     /*User Architecture :
     User {
         name : String,
         password : String,
+        role : String,
         access_token : String
     }*/
-    var service = this,
+    var service = {},
         currentUser = null;
     service.setCurrentUser = function(user) {
         currentUser = user;
-        store.set('user', user);
+        //Temporaire, à retirer quand il sera implementé dans le backend
+        if(currentUser){user.role = USER_ROLES.child;}
+       // store.set('user', user);
         return currentUser;
     };
     service.getCurrentUser = function() {
         if (!currentUser) {
-            currentUser = store.get('user');
+           // currentUser = store.get('user');
         }
         return currentUser;
     };
     
     service.isAuthenticated = function(){
-        //A modifier ! Doit appeler le serveur pour vérifier qu'il est bien authentifié
         if(currentUser){
             return currentUser.isAuthenticated;
         }
         else{return false;}
         
     };
+    
+    service.isAuthorized = function(authorizedRoles){
+        service.setCurrentUser(currentUser);
+        //if the var is not a table we convert it to a table
+        if(!angular.isArray(authorizedRoles)){
+            authorizedRoles = [authorizedRoles];
+        }
+        return(service.isAuthenticated() && (authorizedRoles.indexOf(currentUser.role) !== -1));    
+    };
+    
+    return service;
 })
 homeControlsServices.service('APIInterceptor', function($rootScope, UserService) {
     var service = this;

@@ -1,3 +1,4 @@
+<div ng-if="isAuthorized(authorizedRoles)">
 <div class="fixed-action-btn horizontal" style="bottom: 45px; right: 24px;">
     <a class="btn-floating btn-large blue-grey darken-3">
       <i class="large material-icons">add</i>
@@ -30,7 +31,7 @@
             <li class="card grey lighten-3" ng-repeat="object in listObjects | filter:searchObjectValue">
                 <div class="row">
                     <div class="col s12">
-                        <h5>{{object.name}} <img class="responsive-img right" src="img/icons/lampe.png" width="40" height="40"></img></h5>
+                        <h5>{{object.name}} <img class="responsive-img right" src="img/icons/lampe.png" width="40" height="40"></h5>
                     </div>
                     
                     </div>
@@ -74,6 +75,7 @@
             </ul>
         </div>
     </div>
+</div>
     <script>
     $( document ).ready(function(){
 $('.collapsible').collapsible({

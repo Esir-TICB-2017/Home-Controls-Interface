@@ -2,12 +2,20 @@
 //Controlleur angular pour la page d'accueil
 var homeCIController = angular.module('homeCIController', []);
 
-homeCIController.controller('homeCtrl', ['$scope', '$http','$state', function($scope, $http, $state) {
+homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http','$state', function(UserService,$scope, $http, $state) {
     var objectList = {};
     var activeMenu = $('#menu');
     $scope.titleView = 'Vue Home';
     
+    $scope.isAuthorized = UserService.isAuthorized;
     
+    $scope.allumerLampe = function(){
+        $http.get('/onspot');
+    }
+    
+    $scope.eteindreLampe = function(){
+        $http.get('/offspot');
+    }
     
     
     $('.collapsible').collapsible({
@@ -19,8 +27,8 @@ homeCIController.controller('homeCtrl', ['$scope', '$http','$state', function($s
     });
 }]);
 
-homeCIController.controller('scenariosCtrl', ['$scope', '$http','$state','newScenario', function($scope, $http,$state,newScenario) {
-    //Properties of the scenario already created
+homeCIController.controller('scenariosCtrl', ['UserService', '$scope', '$http','$state','newScenario', function(UserService, $scope, $http,$state,newScenario) {
+    $scope.isAuthorized = UserService.isAuthorized;
     
     //First : download scenarios already created
     $http.get('/getScenarios').success(function(data){
@@ -327,10 +335,13 @@ homeCIController.controller('scenariosCtrl', ['$scope', '$http','$state','newSce
     
 }]);
 
-homeCIController.controller('objectsCtrl', ['UserService','$scope', '$http', function(UserService, $scope, $http, $state) {
+homeCIController.controller('objectsCtrl', ['UserService','$scope', '$http', '$state', function(UserService, $scope, $http, $state) {
 
     var objectList = {};
     var roomList = {};
+    $scope.isAuthorized = UserService.isAuthorized;
+    console.log($scope.authorizedRoles);
+    
     $scope.obj = {
         objectName: ''
     };
