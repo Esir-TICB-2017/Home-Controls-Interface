@@ -29,7 +29,7 @@ homeControlsInterfaceApp.config(['$stateProvider','$httpProvider', '$urlRouterPr
         templateUrl: 'views/objects.html',
         controller: 'objectsCtrl',
         data : {
-            authorizedRoles : [USER_ROLES.parents, USER_ROLES.child,USER_ROLES.guest]
+            authorizedRoles : [USER_ROLES.parents, USER_ROLES.child, USER_ROLES.guest]
         }
     })
     .state('scenarios', {
@@ -86,8 +86,11 @@ homeControlsInterfaceApp.run(function($state, $rootScope, UserService,$location,
                 console.log("user is not logged in");
             }
         }
+        if(UserService.isAuthenticated()){
+            $rootScope.$broadcast(AUTH_EVENTS.loginSucces);
+        }
         
-        console.log("app.js/run/stateChangeStart, nextDataAuthorizedRoles : " + next.data.authorizedRoles);
+        $rootScope.$broadcast(next.data.authorizedRoles);
     });
 });
 

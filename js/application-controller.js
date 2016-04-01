@@ -2,7 +2,7 @@
 'use strict'
 //Controlleur angular pour la page d'accueil
 var applicationController = angular.module('applicationController', []);
-applicationController.controller('applicationController', function($scope, $location, $rootScope, $state, UserService, USER_ROLES) {
+applicationController.controller('applicationController', function($scope, $location, $rootScope, $state, UserService, USER_ROLES, AUTH_EVENTS) {
     //Broadcast the username of the user if he has been connected the last time he was on the application 
     if(UserService.getCurrentUser()){$rootScope.username = UserService.getCurrentUser().username;}
     
@@ -15,6 +15,21 @@ applicationController.controller('applicationController', function($scope, $loca
     $scope.isAuthorized = UserService.isAuthorized;
     
     $scope.userRole = USER_ROLES;
+    
+    $scope.currentUser = null;
+    $scope.canAccessAdmin = null;
+    
+    if(UserService.getCurrentUser()){$scope.currentUser = UserService.getCurrentUser();}
+    
+    $scope.setCurrentUser = function(user){
+        $scope.currentUser = user;
+    }
+    
+    $rootScope.$on(AUTH_EVENTS.loginSucces,function(){
+        $scope.currentUser = UserService.getCurrentUser();
+        
+        $scope.canAccessAdmin = ($scope.currentUser.role == $scope.userRole.parents)? true : false ;
+    });
     
     /**
      * This function is used to switch highlighted tabs in the navbar on click

@@ -13,7 +13,7 @@ homeControlsServices.service('UserService', function( USER_ROLES) {
     service.setCurrentUser = function(user) {
         currentUser = user;
         //Temporaire, à retirer quand il sera implementé dans le backend
-        if(currentUser){user.role = USER_ROLES.child;}
+        if(currentUser){user.role = USER_ROLES.parents;}
        // store.set('user', user);
         return currentUser;
     };
@@ -43,6 +43,7 @@ homeControlsServices.service('UserService', function( USER_ROLES) {
     
     return service;
 })
+
 homeControlsServices.service('APIInterceptor', function($rootScope, UserService) {
     var service = this;
     service.request = function(config) {
@@ -60,6 +61,7 @@ homeControlsServices.service('APIInterceptor', function($rootScope, UserService)
         return response;
     };
 })
+
 homeControlsServices.service('LoginService', function($http) {
     var service = this;
     service.login = function(credentials) {

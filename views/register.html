@@ -1,3 +1,6 @@
+<div ng-if="!isAuthorized(authorizedRoles)"><h2>Vous n'êtes pas autorisé à accéder à cette page</h2></div>
+
+<div ng-if="isAuthorized(authorizedRoles)">
 <div class="container">
 
     <div class="row">
@@ -25,7 +28,6 @@
                 </div>
             </div>
             <button type="submit" class="btn waves-effect waves-light blue-grey darken-3" ng-click="createUser()">Register <i class="material-icons right">send</i></button>
-        </div>
     </form>
 </div>
 </div>
