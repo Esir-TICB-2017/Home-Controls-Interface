@@ -1,5 +1,5 @@
 // App module
-var homeControlsInterfaceApp = angular.module('homeControlsInterfaceApp', ['homeCIController', 'applicationController', 'homeControlsDirectives','angular-storage','homeControlsServices','ui.router', 'ui.materialize','homeCIService']);
+var homeControlsInterfaceApp = angular.module('homeControlsInterfaceApp', ['homeCIController', 'applicationController', 'homeControlsDirectives','angular-storage','ui.router', 'ui.materialize','homeCIService']);
 
 
 homeControlsInterfaceApp.config(['$stateProvider','$httpProvider', '$urlRouterProvider','USER_ROLES', function($stateProvider, $httpProvider, $urlRouterProvider, USER_ROLES) {

@@ -1,37 +1,33 @@
 'use strict'
-//Controlleur angular pour la page d'accueil
 var homeCIController = angular.module('homeCIController', []);
 
 homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http','$state', function(UserService,$scope, $http, $state) {
+    
     var objectList = {};
     var activeMenu = $('#menu');
-    $scope.titleView = 'Vue Home';
+    $scope.titleView = 'Home';
     
+    //Recover the function used to check whether the user is authorized to access this page
     $scope.isAuthorized = UserService.isAuthorized;
-    
-    $scope.allumerLampe = function(){
-        $http.get('/onspot');
-    }
-    
-    $scope.eteindreLampe = function(){
-        $http.get('/offspot');
-    }
-    
     
     $('.collapsible').collapsible({
         accordion: false
     });
+    
+    //Recover the objects in the home and put them in a list in the widget
     $http.get('/getObjects').success(function(data) {
         objectList = data;
         $scope.listObjects = data;
     });
+    
 }]);
 
 homeCIController.controller('scenariosCtrl', ['UserService', '$scope', '$http','$state','newScenario', function(UserService, $scope, $http,$state,newScenario) {
     $scope.isAuthorized = UserService.isAuthorized;
     
+    //If logged in, recover the user
     if(UserService.getCurrentUser()){$scope.currentUser = UserService.getCurrentUser()};
-    
+    //Recover the list of roles who can access this page
     $scope.authorizedRoles =  $state.current.data.authorizedRoles;
     
     if($scope.isAuthorized($scope.authorizedRoles)){
@@ -42,7 +38,7 @@ homeCIController.controller('scenariosCtrl', ['UserService', '$scope', '$http','
         });
 
         $scope.switchScenarioActivation = function(scenario){
-            //To write
+            //To complete with a back-end implementation
             if(scenario.active){
                 Materialize.toast(scenario.name + " desactivé !",2000);
                 scenario.active = false;
@@ -51,55 +47,17 @@ homeCIController.controller('scenariosCtrl', ['UserService', '$scope', '$http','
                 Materialize.toast(scenario.name + " activé !",2000);
                 scenario.active = true;
             }
-
         };
 
         //Properties to create a new scenario
         $scope.isCreatingANewScenario = false;
-        $scope.titleView = "Vue scénarios";
+        $scope.titleView = "Scénarios";
         $scope.showAddObjectsMenu = false;
         $scope.showAddSensorMenu = false;
 
         $scope.rooms = [];
         $scope.objectsAvailable = [];
         $scope.sensorsAvailable = [];
-        /*
-        $scope.sensorsAvailable=[
-            {
-                name:"Station netatmo",
-                room:"Salle de bain",
-                type:"capteur",
-                idObject : 1,
-                functions : [
-                    {
-                        name: "CO2",
-                        value: 300,
-                        checked : false,
-                        condition: "",
-                        idObject:1,
-                        idSensor:1
-                    },
-                    {
-                        name: "Humidité",
-                        value: 50,
-                        checked : false,
-                        condition: "",
-                        idObject:1,
-                        idSensor:2
-                    },
-                    {
-                        name: "Température",
-                        value: 21,
-                        checked : false,
-                        condition: "",
-                        idObject:1,
-                        idSensor:3
-                    }
-                ]
-            }
-
-        ];
-        */
 
         $scope.newScenario = newScenario.getScenario(); 
 
@@ -344,151 +302,171 @@ homeCIController.controller('scenariosCtrl', ['UserService', '$scope', '$http','
 }]);
 
 homeCIController.controller('objectsCtrl', ['UserService','$scope', '$http', '$state','USER_ROLES', function(UserService, $scope, $http, $state, USER_ROLES) {
-
-    var objectList = {};
-    var roomList = {};
     
     //Verify the user autorization to access the datas
     $scope.isAuthorized = UserService.isAuthorized;
-    
     if(UserService.getCurrentUser()){$scope.currentUser = UserService.getCurrentUser()};
-    
     $scope.authorizedRoles =  $state.current.data.authorizedRoles;
-    console.log($scope.isAuthorized($scope.authorizedRoles));
-    console.log($scope.currentUser.role);
     
+    //Variables containing objects and rooms that are in the home
+    var objectList = {};
+    var roomList = {};
     
-    $scope.obj = {
-        objectName: ''
-    };
-    $scope.room = {
-        roomName: ''
-    };
+    $scope.obj = {objectName: ''};
+    $scope.room = {roomName: '' };
+    
+    //Recover objects and rooms that are in the home from the server
     $http.get('/getObjects').success(function(data) {
         objectList = data;
         $scope.listObjects = data;
     });
+    
     $http.get('/getRooms').success(function(data) {
         roomList = data;
         $scope.listRooms = data;
     });
 
+    //Functions called from the interface, used to deliver interactions to the user
+    
+    //Add an object in the DB and update the list of objects on the interface
     $scope.addObject = function(obj) {
-        var object = {};
         
+        //Prepare the data to send
         var data = "name=" + obj.objectName;
+        
+        //Send the request to the server
         $http({
             method: 'POST',
             url: '/setObject',
             data: data,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            data: data //Pourquoi l'avoir mis deux fois ?
+            }
         }).
         success(function(response) {
+        //Deal with the responses from the server
             console.log(response);
             $scope.codeStatus = response.data;
-            object = response;
+            
             Materialize.toast('Objet créé !', 4000);
+            
+            //Update the list of objects on the interface to be sure that it correspond to the objects stored server-side
             $http.get('/getObjects').success(function(data) {
-        objectList = data;
-        $scope.listObjects = data;
-    });
+                objectList = data;
+                $scope.listObjects = data;
+            });
         }).
         error(function(response) {
+        //If an error occur, save it in the scope and display in the console
             $scope.codeStatus = response || "Request failed";
+            console.log($scope.codeStatus);
         });
-    }
+    };
 
+    //Add a room in the database and update the list of rooms on the interface
     $scope.addRoom = function(room) {
-        var object = {};
         
         var data = "name=" + room.roomName;
+        
+        //Send a post request to the server to send the name of the new room
         $http({
             method: 'POST',
             url: '/setRoom',
             data: data,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            data: data
+            }
         }).
         success(function(response) {
+        //If everything has gone well, tells it to the user and update the list of rooms
             console.log(response);
             $scope.codeStatus = response.data;
-            object = response;
+            
             Materialize.toast('Room created !', 4000);
+            
             $http.get('/getRooms').success(function(data) {
-        roomList = data;
-        $scope.listRooms = data;
-    });
+                roomList = data;
+                $scope.listRooms = data;
+            });
         }).
         error(function(response) {
+        //If an error occur, save it in the scope and display in the console
             $scope.codeStatus = response || "Request failed";
+            console.log($scope.codeStatus);
         });
     }
 
+    //Delete an object in the DB
     $scope.deleteObject = function(object) {
-        var obj = {};
+        
         var data = "objectId=" + object._id;
-        console.log(data);
+        
+        //Send the request to the server
         $http({
             method: 'DELETE',
             url: '/deleteObject',
             data: data,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            data: data
+            }
         }).
         success(function(response) {
+        //If everything has gone well, save the object in the interface and 
             console.log(response);
+            
             $scope.codeStatus = response.data;
-            obj = response;
+            
             Materialize.toast('Object deleted !', 4000);
+            
+            //Update the list of objects
             $http.get('/getObjects').success(function(data) {
-        objectList = data;
-        $scope.listObjects = data;
-    });
+                objectList = data;
+                $scope.listObjects = data;
+            });
         }).
         error(function(response) {
+        //If an error happens, save the status code and write it in the console
             $scope.codeStatus = response || "Request failed";
+            console.log($scope.codeStatus);
         });
-    }
+    };
 
+    //Delete a room in the DB
     $scope.deleteRoom = function(room) {
-        var object = {};
         var data = "roomId=" + room._id;
-        console.log(data);
+        
+        //Send the request Delete to the server
         $http({
             method: 'DELETE',
             url: '/deleteRoom',
             data: data,
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            data: data
+            }
         }).
         success(function(response) {
             console.log(response);
             $scope.codeStatus = response.data;
-            object = response;
             Materialize.toast('Room deleted !', 4000);
+            
+            //Update the list of rooms
             $http.get('/getRooms').success(function(data) {
-            roomList = data;
-            $scope.listRooms = data;
+                roomList = data;
+                $scope.listRooms = data;
             });
         }).
         error(function(response) {
+        //If an error happens, save the status code and write it in the console
             $scope.codeStatus = response || "Request failed";
+            console.log($scope.codeStatus);
         });
     }
 
-
+    //Download only one object
     function getOneObject(objectId) {
-        var object = {};
+        
         var data = "objectId=" + objectId;
+        
         $http({
             method: 'POST',
             url: '/getOneObject',
@@ -500,20 +478,22 @@ homeCIController.controller('objectsCtrl', ['UserService','$scope', '$http', '$s
         success(function(response) {
             console.log(response);
             $scope.codeStatus = response.data;
-            object = response;
-            return object;
+
+            return response;
         }).
         error(function(response) {
             $scope.codeStatus = response || "Request failed";
         });
     };
+    
+    //Add an object in a room, in the DB
     $scope.addToRoom = function(object) {
-        console.log();
+        
         var roomId = roomList[0]._id;
         var objectId = object._id;
         var data = "objectId=" + objectId + "&roomId=" + roomId;
-        var objectId = object._id;
-        var roomId = $http({
+       
+        $http({
             method: 'PUT',
             url: '/addObjectToRoom',
             data: data,
@@ -529,12 +509,14 @@ homeCIController.controller('objectsCtrl', ['UserService','$scope', '$http', '$s
         });
         return false;
     };
+    
+    //Delete an object from a room, in the DB
     $scope.deleteFromRoom = function(object) {
         var roomId = roomList[0]._id;
         var objectId = object._id;
         var data = "objectId=" + objectId + "&roomId=" + roomId;
-        var objectId = object._id;
-        var roomId = $http({
+        
+        $http({
             method: 'DELETE',
             url: '/deleteObjectFromRoom',
             data: data,
@@ -548,26 +530,37 @@ homeCIController.controller('objectsCtrl', ['UserService','$scope', '$http', '$s
         error(function(response) {
             $scope.codeStatus = response || "Request failed";
         });
+        
         return false;
     };
 }]);
+
 homeCIController.controller('loginCtrl', function($scope, $http, $rootScope, $location, $state, LoginService, UserService) {
+    
     $scope.titleView = 'Login';
     $scope.credentials = {
         username: '',
         password: ''
     };
+    
+    //Functions used by the view
     $scope.login = function(loginID) {
+        
+        //Create the user object which will be send to the server
         var user = {
             username: loginID.username,
             password: loginID.password,
             isAuthenticated : false,
             access_token: null
         }
+        
+        //Create the data that will be send to the server
         var data = $.param({
             username: loginID.username,
             password: loginID.password
         });
+        
+        //Send th request to the server
         $http({
             method: 'POST',
             url: '/login',
@@ -579,14 +572,18 @@ homeCIController.controller('loginCtrl', function($scope, $http, $rootScope, $lo
         success(function(data, status, headers, config) {
             if (data.success) {
                 //The user is now logged in
-                console.log("welcome");
-                //Save the token in the user variable
+                
+                //Save the token in the user object
                 user.access_token = data.token;
                 user.isAuthenticated = true;
+                
                 UserService.setCurrentUser(user);
-                console.log(UserService.getCurrentUser().username);
+                
                 $rootScope.username = UserService.getCurrentUser().username;
+                
                 $rootScope.$broadcast('authorized');
+                
+                //Redirect to the home view automatically
                 $state.go('home');
             } else {
                 console.log('Error: Invalid user or password');
@@ -598,6 +595,7 @@ homeCIController.controller('loginCtrl', function($scope, $http, $rootScope, $lo
         });
     }
 });
+
 homeCIController.controller('registerCtrl', ['$scope', '$http', function($scope, $http) {
     $scope.titleView = 'S\'enregistrer';
 }]);

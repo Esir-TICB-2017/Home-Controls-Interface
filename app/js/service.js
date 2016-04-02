@@ -218,3 +218,101 @@ homeCIService.service('newScenario',function(){
     };
 
 });
+
+homeCIService.service('UserService', function( USER_ROLES) {
+    
+    /*User Architecture :
+    User {
+        name : String,
+        password : String,
+        role : String,
+        access_token : String,
+        isAuthenticated : boolean
+    }*/
+    
+    var service = this;
+    var currentUser = null;
+    
+    service.setCurrentUser = function(user) {
+        currentUser = user;
+        
+        //Temporaire, à retirer quand il sera implementé dans le backend
+        if(currentUser){user.role = USER_ROLES.parents;}
+        
+        // store.set('user', user); -> Bug for the moment
+        
+        return currentUser;
+    };
+    
+    service.getCurrentUser = function() {
+        if (!currentUser) {
+           // currentUser = store.get('user'); -> Bug for the moment
+        }
+        return currentUser;
+    };
+    
+    service.isAuthenticated = function(){
+        if(currentUser){
+            return currentUser.isAuthenticated;
+        }
+        else{return false;}
+        
+    };
+    
+    service.isAuthorized = function(authorizedRoles){
+        service.setCurrentUser(currentUser);
+        //if the var authorizedRoles is not a table we convert it to a table
+        if(!angular.isArray(authorizedRoles)){
+            authorizedRoles = [authorizedRoles];
+        }
+        
+        return(service.isAuthenticated() && (authorizedRoles.indexOf(currentUser.role) !== -1));    
+    };
+    
+    return service;
+});
+
+homeCIService.service('APIInterceptor', function($rootScope, UserService) {
+    
+    var service = this;
+    
+    //Put the access_token in the header of a communication with the server when the user is logged in and have an access_token
+    service.request = function(config) {
+        //Recover the user and his access_token
+        var currentUser = UserService.getCurrentUser();
+        var access_token = currentUser ? currentUser.access_token : null;
+        
+        //If the user has an access_token, put the access_token in the header of the communication
+        if (access_token) {
+            config.headers.authorization = access_token;
+        }
+        //Return the config which is what will be send to the server
+        return config;
+    };
+    
+    //Catch the different kind of HTML response we may receive
+    service.responseError = function(response) {
+        if (response.status === 401) {
+            $rootScope.$broadcast('unauthorized');
+        }
+        return response;
+    };
+    
+});
+
+homeCIService.service('LoginService', function($http) {
+    var service = this;
+    
+    //Connect this angular application with the server sending a post request
+    service.login = function(credentials) {
+        return $http.post('/api/authenticate', credentials).success(function(data) {}).error(function(data) {
+            console.log('Error: ' + data);
+        }
+    )};
+    
+    //Log the user out
+    service.logout = function() {
+        //TODO : a function that delete the token server-side
+        
+    };
+});
