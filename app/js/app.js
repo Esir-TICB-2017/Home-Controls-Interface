@@ -4,10 +4,13 @@ var homeControlsInterfaceApp = angular.module('homeControlsInterfaceApp', ['home
 
 homeControlsInterfaceApp.config(['$stateProvider','$httpProvider', '$urlRouterProvider','USER_ROLES', function($stateProvider, $httpProvider, $urlRouterProvider, USER_ROLES) {
     
+    //redirect the user to /login if he try to reach an unvalid address
     $urlRouterProvider.otherwise('/login');
     
+    //Push the interceptor in the application
     $httpProvider.interceptors.push('APIInterceptor');
 
+    
     $stateProvider
     .state('home', {
         url: '/home',
@@ -62,6 +65,7 @@ homeControlsInterfaceApp.config(['$stateProvider','$httpProvider', '$urlRouterPr
      
 }]);
 
+//Function called on each route change
 homeControlsInterfaceApp.run(function($state, $rootScope, UserService,$location, AUTH_EVENTS){
     $rootScope.$on('$stateChangeStart', function(event, next){
         var user = UserService.getCurrentUser();
