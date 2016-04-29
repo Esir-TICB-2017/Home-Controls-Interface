@@ -1,60 +1,146 @@
-# Angular Storage
+# angular-storage [![Build Status](https://secure.travis-ci.org/auth0/angular-storage.svg?branch=master)](https://travis-ci.org/auth0/angular-storage)
 
-### Status
-| Branch        | Status         |
-| ------------- |:-------------:|
-| master        | [![Build Status](https://travis-ci.org/Aspera/angular-storage.png?branch=master)](https://travis-ci.org/Aspera/angular-storage) |
+A Storage done right for AngularJS.
 
-A service to handle storing data in the browser. It supports:
+## Key Features
 
-* Cookies
-* HTML5 localStorage
-* HTML5 webStorage
+* Uses **`localStorage` or `sessionStorage` by default but if it's not available, it uses `ngCookies`**.
+* Lets you **save JS Objects**
+* If **you save a `Number`, you get a `Number`**, not a String
+* Uses a **caching system** so that if you already have a value, it won't get it from the store again.
 
-Supported browsers:
+## Installing it
 
-* Chrome
-* Firefox
-* Safari
-* IE 7+ (7 only supports cookies)
+You have several options:
 
-## Installation
+````bash
+bower install a0-angular-storage
+````
 
-The best way is to use bower to manage the process:
+````bash
+npm install angular-storage
+````
 
-```bash
-bower install --save angular-storage
-```
+````html
+<script type="text/javascript" src="https://cdn.rawgit.com/auth0/angular-storage/master/dist/angular-storage.js"></script>
+````
 
-## Usage
+## Using it
 
-Reference the file in your index.html (or where you include angular.js) after you include angular.js
+````js
+angular.module('app', ['angular-storage'])
+.controller('Controller', function(store) {
+  var myObj = {
+    name: 'mgonto'
+  };
 
-```html
-<script src="path/to/angular.js"></script>
-<script src="path/to/bower_components/angular-storage/angular-storage.js"></script>
-```
+  store.set('obj', myObj);
 
-Include the module as a dependency in your `angular.module`
+  var myNewObject = store.get('obj');
 
-```javascript
-angular.module('yourApp', ['angular-storage']);
-```
+  angular.equals(myNewObject, myObj); // return true
 
-Finally, start using it:
+  store.remove('obj');
 
-```javascript
-angular.module('yourApp').controller('YourCtrl', function( asStorage, $scope ) {
-  asStorage.set('key', 'value');
-  $scope.data = asStorage.get('key');
+  store.set('number', 2);
+
+  typeof(store.get('number')) === 'number'
+});
+````
+
+## Namespaced Storages
+
+You can also create namespaced storages if you want
+
+````js
+angular.module('app', ['angular-storage'])
+.factory('Auth0Store', function(store) {
+  return store.getNamespacedStore('auth0');
+})
+.controller('Controller', function(Auth0Store) {
+
+  var myObj = {
+    name: 'mgonto'
+  };
+
+  // This will be saved in localStorage as auth0.obj
+  Auth0Store.set('obj', myObj);
+
+  // This will look for auth0.obj
+  var myNewObject = Auth0Store.get('obj');
+
+  angular.equals(myNewObject, myObj); // return true
+});
+````
+
+## Changing storage type
+
+```js
+angular.module('app', ['angular-storage'])
+  .config(function(storeProvider) {
+    // Store defaults to localStorage but we can set sessionStorage or cookieStorage.
+    storeProvider.setStore('sessionStorage');
+  })
+  .controller('Controller', function(store) {
+
+  var myObj = {
+    name: 'mgonto'
+  };
+
+  // This will be saved in sessionStorage as obj
+  store.set('obj', myObj);
+
+  // This will look for obj in sessionStorage
+  var myNewObject = store.get('obj');
+
+  angular.equals(myNewObject, myObj); // return true
 });
 ```
 
 
-## Future Plans
+## API
 
-* Max-age support needs to be added.
-* Path: Support for this woud depend on window.location.pathname being mocked out as well.
-* Domain: Similiar to path but with window.location.{host|hostname|origin}
-* Secure: Similiar to path but with window.location.protocol
-* Http-only: Not sure how to mock this out since JS wouldn't have access to the cookie. That could probably be the test
+### storeProvider.setStore(storageName)
+
+Sets the underlying store for the `store` service. It can be `localStorage`, `sessionStorage` or `cookieStorage`. Defaults to `localStorage`
+
+### store.set(name, value)
+
+Sets a new `value` to the storage with the key `name`. It can be any object.
+
+### store.get(name)
+
+Returns the saved `value` with they key `name`. If you saved an object, you get an object.
+
+### store.remove(name)
+
+Deletes the saved `value` with the key `name`
+
+### store.getNamespacedStore(namespace, delimiter)
+
+Returns a new `store` service that will use the `namespace` and `delimiter` when saving and getting values like the following `namespace[delimiter]key`. For example `auth0.object` considering `auth0` as `namespace` and `.` as a `delimiter`
+
+## Usages
+
+This library is used in [auth0-angular](https://github.com/auth0/auth0-angular)
+
+## Contributing
+
+Just clone the repo, run `npm install`, `bower install` and then `gulp` to work :).
+
+## Issue Reporting
+
+If you have found a bug or if you have a feature request, please report them at this repository issues section. Please do not report security vulnerabilities on the public GitHub issue tracker. The [Responsible Disclosure Program](https://auth0.com/whitehat) details the procedure for disclosing security issues.
+
+## Author
+
+[Auth0](auth0.com)
+
+## License
+
+This project is licensed under the MIT license. See the [LICENSE](LICENSE) file for more info.
+
+
+
+
+

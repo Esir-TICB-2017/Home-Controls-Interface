@@ -23,14 +23,14 @@ homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http','$stat
 }]);
 
 homeCIController.controller('scenariosCtrl', ['UserService', '$scope', '$http','$state','newScenario', function(UserService, $scope, $http,$state,newScenario) {
-    $scope.isAuthorized = UserService.isAuthorized;
     
+    $scope.isAuthorized = UserService.isAuthorized;
     //If logged in, recover the user
     if(UserService.getCurrentUser()){$scope.currentUser = UserService.getCurrentUser()};
     //Recover the list of roles who can access this page
     $scope.authorizedRoles =  $state.current.data.authorizedRoles;
     
-    if($scope.isAuthorized($scope.authorizedRoles)){
+    $scope.userIsAuthorized = $scope.isAuthorized($scope.authorizedRoles);
     
         //First : download scenarios already created
         $http.get('/getScenarios').success(function(data){
@@ -296,8 +296,6 @@ homeCIController.controller('scenariosCtrl', ['UserService', '$scope', '$http','
         $scope.showAddObjectsMenuOnSmall = function(){
             $scope.showAddObjectsMenu = true;
         };
-        
-    }
     
 }]);
 
@@ -598,4 +596,27 @@ homeCIController.controller('loginCtrl', function($scope, $http, $rootScope, $lo
 
 homeCIController.controller('registerCtrl', ['$scope', '$http', function($scope, $http) {
     $scope.titleView = 'S\'enregistrer';
+}]);
+
+homeCIController.controller('administrationCtrl', ['$scope', '$http', 'UserService', '$state', '$anchorScroll','USER_ROLES', function($scope, $http, UserService, $state, $anchorScroll, USER_ROLES){
+    
+    $scope.isAuthorized = UserService.isAuthorized;
+    //If logged in, recover the user
+    if(UserService.getCurrentUser()){$scope.currentUser = UserService.getCurrentUser()};
+    //Recover the list of roles who can access this page
+    $scope.authorizedRoles =  $state.current.data.authorizedRoles;
+    
+    $scope.userIsAuthorized = $scope.isAuthorized($scope.authorizedRoles);
+    
+    $scope.USER_ROLES = USER_ROLES;
+    
+    $scope.users; //To be downloaded in the DB
+    
+    $scope.tab = "profil"
+    
+    $scope.goto = function(hash){
+        $scope.tab = hash;
+    };
+    
+    
 }]);

@@ -19,7 +19,7 @@
         <script src="bower_components/jquery.ui.touch-punch.min.js"></script>
         <script src="bower_components/angular-route/angular-route.min.js"></script>
         <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>-->
-        <script src="bower_components/angular-storage/dist/angular-storage.min.js"></script>
+        <script type="text/javascript" src="bower_components/angular-storage/dist/angular-storage.min.js"></script>
         <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
         <script src="bower_components/angular-materialize/src/angular-materialize.js"></script>
         <!-- Addition of our own JS files -->
@@ -45,7 +45,7 @@
 
         <ul id="User" class="dropdown-content">
             <li><a class="teal-text text-lighten2">Paramètres</a></li>
-            <li ng-if="canAccessAdmin"><a class="teal-text text-lighten2">Administration</a></li>
+            <li ng-if="canAccessAdmin" ui-sref="administration"><a href="#/administration" class="teal-text text-lighten2">Administration</a></li>
             <li><a ng-click="logout()">Déconnexion</a></li>
         </ul>
 

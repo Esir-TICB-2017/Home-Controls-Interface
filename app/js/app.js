@@ -1,5 +1,5 @@
 // App module
-var homeControlsInterfaceApp = angular.module('homeControlsInterfaceApp', ['homeCIController', 'applicationController', 'homeControlsDirectives','angular-storage','ui.router', 'ui.materialize','homeCIService']);
+var homeControlsInterfaceApp = angular.module('homeControlsInterfaceApp', ['homeCIController', 'applicationController', 'homeControlsDirectives','ui.router', 'ui.materialize','homeCIService', 'angular-storage']);
 
 
 homeControlsInterfaceApp.config(['$stateProvider','$httpProvider', '$urlRouterProvider','USER_ROLES', function($stateProvider, $httpProvider, $urlRouterProvider, USER_ROLES) {
@@ -35,11 +35,11 @@ homeControlsInterfaceApp.config(['$stateProvider','$httpProvider', '$urlRouterPr
             authorizedRoles : [USER_ROLES.parents, USER_ROLES.child, USER_ROLES.guest]
         }
     })
-    .state('scenarios', {
+    .state('scenarios',{
         url: '/scenarios',
         templateUrl: 'views/scenarios.html',
         controller: 'scenariosCtrl',
-        data : {
+        data: {
             authorizedRoles : [USER_ROLES.parents, USER_ROLES.guest]
         }
     })
@@ -61,6 +61,14 @@ homeControlsInterfaceApp.config(['$stateProvider','$httpProvider', '$urlRouterPr
         templateUrl: 'views/addObjectPopup.html',
         controller: 'scenariosCtrl',
     })
+    .state('administration',{
+        url : '/administration',
+        templateUrl : 'views/administration.html',
+        controller : 'administrationCtrl',
+        data : {
+            authorizedRoles : [USER_ROLES.parents]
+        }
+    })
 
      
 }]);
@@ -73,6 +81,7 @@ homeControlsInterfaceApp.run(function($state, $rootScope, UserService,$location,
         var authorizedRoles = next.data.authorizedRoles;
         
         if(!UserService.isAuthenticated() && (currentUrl!="/login")){
+            event.preventDefault;
             $location.path("/login");
             console.log('pas authentifié ou pas sur la bonne page');
             }

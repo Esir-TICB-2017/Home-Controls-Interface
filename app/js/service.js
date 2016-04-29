@@ -219,7 +219,7 @@ homeCIService.service('newScenario',function(){
 
 });
 
-homeCIService.service('UserService', function( USER_ROLES) {
+homeCIService.service('UserService', ['USER_ROLES', 'store', function(USER_ROLES, store) {
     
     /*User Architecture :
     User {
@@ -239,14 +239,14 @@ homeCIService.service('UserService', function( USER_ROLES) {
         //Temporaire, à retirer quand il sera implementé dans le backend
         if(currentUser){user.role = USER_ROLES.parents;}
         
-        // store.set('user', user); -> Bug for the moment
+        store.set('user', user);
         
         return currentUser;
     };
     
     service.getCurrentUser = function() {
         if (!currentUser) {
-           // currentUser = store.get('user'); -> Bug for the moment
+            currentUser = store.get('user');
         }
         return currentUser;
     };
@@ -270,7 +270,7 @@ homeCIService.service('UserService', function( USER_ROLES) {
     };
     
     return service;
-});
+}]);
 
 homeCIService.service('APIInterceptor', function($rootScope, UserService) {
     
