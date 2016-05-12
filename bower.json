@@ -1,19 +1,42 @@
 {
-  "name": "home-control-interface",
-  "description": "A student project with the goal of creating a responsive, ergonomic and complete human interface to control the house",
+  "name": "home_control",
+  "description": "complete front-end and backend to control IoT in a personnal house",
   "version": "0.0.1",
-  "homepage": "https://github.com/Esir-TICB-2017/Home-Controls-Interface",
+  "homepage": "index.html",
   "license": "MIT",
-  "private": false,
   "dependencies": {
     "angular": "1.4.x",
     "angular-mocks": "1.4.x",
     "jquery": "~2.1.1",
     "bootstrap": "~3.1.1",
     "angular-route": "1.4.x",
-    "materialize" : "0.97.6",
-    "jquery-ui" : "1.11.4",
-    "angular-storage" : "1.4.x",
-    "angular-materialize" : "0.0.1"
-  }
+    "materialize": "0.97.6",
+    "jquery-ui": "1.11.4",
+    "angular-storage": "1.4.x",
+    "angular-materialize": "0.0.1"
+  },
+  "authors": [
+    "esir_2017_ticb"
+  ],
+  "main": "index.html",
+  "moduleType": [
+    "node"
+  ],
+  "keywords": [
+    "home",
+    "automation",
+    "KNX",
+    "frontend",
+    "backend",
+    "javascript",
+    "node",
+    "nooles"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
 }

@@ -1,37 +1,41 @@
 {
-  "version": "0.0.0",
-  "private": true,
-  "name": "angular-phonecat",
-  "description": "A tutorial application for AngularJS",
-  "repository": "https://github.com/angular/angular-phonecat",
-  "license": "MIT",
+  "name": "home_control",
+  "version": "1.0.0",
+  "description": "complete front-end and backend to control IoT in a personnal house",
+  "main": "server.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
   "devDependencies": {
-    "karma": "^0.12.16",
-    "karma-chrome-launcher": "^0.1.4",
-    "karma-firefox-launcher": "^0.1.3",
-    "karma-jasmine": "~0.1.0",
-    "protractor": "^2.1.0",
-    "http-server": "^0.6.1",
-    "tmp": "0.0.23",
-    "bower": "^1.3.1",
-    "shelljs": "^0.2.6"
+    "body-parser": "^1.15.1",
+    "express": "^4.13.4",
+    "express-session": "^1.13.0",
+    "mongoose": "^4.4.16",
+    "morgan": "^1.7.0",
+    "socket.io": "^1.4.6"
   },
   "scripts": {
-    "postinstall": "bower install",
-
-    "prestart": "npm install",
-    "start": "http-server -a 0.0.0.0 -p 8000",
-
-    "pretest": "npm install",
-    "test": "node node_modules/karma/bin/karma start test/karma.conf.js",
-    "test-single-run": "node node_modules/karma/bin/karma start test/karma.conf.js  --single-run",
-
-    "preupdate-webdriver": "npm install",
-    "update-webdriver": "webdriver-manager update",
-
-    "preprotractor": "npm run update-webdriver",
-    "protractor": "protractor test/protractor-conf.js",
-
-    "update-index-async": "node -e \"require('shelljs/global'); sed('-i', /\\/\\/@@NG_LOADER_START@@[\\s\\S]*\\/\\/@@NG_LOADER_END@@/, '//@@NG_LOADER_START@@\\n' + cat('bower_components/angular-loader/angular-loader.min.js') + '\\n//@@NG_LOADER_END@@', 'app/index-async.html');\""
-  }
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Esir-TICB-2017/Home-Controls-Interface.git"
+  },
+  "keywords": [
+    "home",
+    "automation",
+    "node",
+    "javascript",
+    "KNX",
+    "angular",
+    "nooles"
+  ],
+  "author": "esir_2017_ticb",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Esir-TICB-2017/Home-Controls-Interface/issues"
+  },
+  "homepage": "https://github.com/Esir-TICB-2017/Home-Controls-Interface#readme"
 }

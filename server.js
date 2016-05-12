@@ -17,7 +17,6 @@ var Object = require('./app/models/object');
 var Sensor = require('./app/models/sensor');
 var Scenario = require('./app/models/scenario');
 var session = require('express-session');
-var request = require("request");
 app.use('/bower_components', express.static(__dirname + '/bower_components')); //supplies folder
 app.use('/js', express.static(__dirname + '/app/js'));
 app.use('/publicViews', express.static(__dirname + '/app/publicViews'));
