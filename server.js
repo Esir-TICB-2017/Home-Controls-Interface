@@ -604,6 +604,13 @@ io.sockets.on('connection', function(socket) {
     socket.on('smartData', function(data){
         console.log(data);
     })
+
+    socket.on('upObject', function(data){
+        //TODO
+    })
+    socket.off('upObject', function(data){
+        //TODO
+    })
     socket.on('disconnect', function() {
         //playerLeftGame(socket.id);
     });

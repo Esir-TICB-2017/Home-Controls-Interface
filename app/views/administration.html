@@ -73,12 +73,13 @@
           
         <!-- Part where the user, who is an admin will add a new user -->
         <div class="container" ng-show="tab == 'addUser'">
+        <form name="registerForm" ng-controller="administrationCtrl" ng-submit="register(credentials)" novalidate>
             <h5 style="margin-bottom : 10pt;" class="center-align">Ajout d'un utilisateur pouvant controler la maison</h5>
             <div class="divider" style="margin-bottom : 20pt;"></div>
             <div class="row">
                 <div class="input-field col s12">
                     <i class="material-icons prefix">account_circle</i>
-                    <input id="newuser-name" type="text">
+                    <input id="newuser-name" type="text" ng-model="credentials.username" autocorrect=off>
                     <label for="newuser-name">Nom d'utilisateur</label>
                 </div>
             </div>
@@ -92,13 +93,13 @@
             <div class="row">
                 <div class="input-field cold s12">
                     <i class="material-icons prefix">edit</i>
-                    <input id="newuser-password-confirm" type="password">
+                    <input id="newuser-password-confirm"type="password"  ng-model="credentials.password">
                     <label for="newuser-password-confirm">Confirmez le mot de passe</label>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field cold s6">
-                    <select class="browser-default">
+                    <select class="browser-default" name="roleSelect" id="roleSelect" ng-model="credentials.role">
                         <option value="" disabled selected>Qu'est il dans la maison ?</option>
                         <option value="USER_ROLES.parents">Un parent</option>
                         <option value="USER_ROLES.child">Un enfant</option>
@@ -113,6 +114,7 @@
                     </button>
                 </div>
             </div>
+            </form>
 
             <script>
             $(document).ready(function() {

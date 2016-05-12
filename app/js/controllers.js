@@ -26,7 +26,8 @@ homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$sta
     $scope.sendSmartData = function(data){
         console.log('ici');
         var data = {
-            test : '25 degrés'
+            test : '25 degrés',
+            dvsd: 'fre'
         };
         socket.emit('smartData', data);
         
@@ -525,6 +526,9 @@ homeCIController.controller('registerCtrl', ['$scope', '$http', function($scope,
 }]);
 homeCIController.controller('administrationCtrl', ['$scope', '$http', 'UserService', '$state', '$anchorScroll', 'USER_ROLES', function($scope, $http, UserService, $state, $anchorScroll, USER_ROLES) {
     //A FAIRE : Connecter tout le panel d'administration au backend
+    $scope.register = function(credentials){
+        console.log(credentials);
+    }
     $scope.isAuthorized = UserService.isAuthorized;
     //If logged in, recover the user
     if (UserService.getCurrentUser()) {
