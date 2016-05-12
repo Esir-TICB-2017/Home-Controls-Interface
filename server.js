@@ -130,7 +130,6 @@ app.post('/login', function(req, res) {
                     expiresIn: 3600 // Expire dans 24h
                 });
                 console.log('here is the token' + token);
-                
                 // return the information including token as JSON
                 res.json({
                     user: user,
@@ -601,14 +600,48 @@ io.sockets.on('connection', function(socket) {
     console.log("********************* Client connected !************************");
     console.log("socket id : ")
     console.log(socket.id);
-    socket.on('smartData', function(data){
+    socket.on('smartData', function(data) {
         console.log(data);
     })
-
-    socket.on('upObject', function(data){
+    socket.on('registration', function(data) {
+        User.findOne({
+            username: data.username,
+            password: data.password,
+            role: data.role
+        }, function(err, user) {
+            if (err) {
+                socket.emit('registrationResponse', {
+                    type: false,
+                    data: "Error occured: " + err
+                });
+            } else {
+                if (user) {
+                    socket.emit('registrationResponse', {
+                        type: false,
+                        data: "User already exists!"
+                    });
+                } else {
+                    var userModel = new User();
+                    userModel.username = data.username;
+                    userModel.password = data.password;
+                    userModel.save(function(err, user) {
+                        user.token = jwt.sign(user, app.get('superSecret'));
+                        user.save(function(err, user1) {
+                            socket.emit('registrationResponse', {
+                                type: true,
+                                data: user1,
+                                token: user1.token
+                            });
+                        });
+                    })
+                }
+            }
+        });
+    })
+    socket.on('upObject', function(data) {
         //TODO
     })
-    socket.off('upObject', function(data){
+    socket.on('downObject', function(data) {
         //TODO
     })
     socket.on('disconnect', function() {

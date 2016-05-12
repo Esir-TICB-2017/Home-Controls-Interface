@@ -284,23 +284,23 @@ homeCIController.controller('objectsCtrl', ['UserService', '$scope', '$http', '$
         
         //types d'objets : lampe, volet, temperature, humidite, luminosite, co2
         objectList = data;
-        for each(var object in objectList){
-            if(object.type =="lampe"){
-                object.icon = "lightbulb_outline";
-            }
-            else if(object.type =="volet"){
-                object.icon = "reorder";
-            }
-            else if(object.type =="temperature"){
-                object.icon = "";
-            }
-            else if(object.type == "luminosite"){
-                object.icon = "brightness_medium";
-            }
-            else if(object.type == "humidite"){
-                object.icon = "opacity";
-            }
-        }
+        // for each(var object in objectList){
+        //     if(object.type =="lampe"){
+        //         object.icon = "lightbulb_outline";
+        //     }
+        //     else if(object.type =="volet"){
+        //         object.icon = "reorder";
+        //     }
+        //     else if(object.type =="temperature"){
+        //         object.icon = "";
+        //     }
+        //     else if(object.type == "luminosite"){
+        //         object.icon = "brightness_medium";
+        //     }
+        //     else if(object.type == "humidite"){
+        //         object.icon = "opacity";
+        //     }
+        // }
         
         $scope.listObjects = objectList;
     });
@@ -376,12 +376,18 @@ homeCIController.controller('loginCtrl', function($scope, $http, $rootScope, $lo
 homeCIController.controller('registerCtrl', ['$scope', '$http', function($scope, $http) {
     $scope.titleView = 'S\'enregistrer';
 }]);
-homeCIController.controller('administrationCtrl', ['$scope', '$http', 'UserService', '$state', '$anchorScroll','USER_ROLES', function($scope, $http, UserService, $state, $anchorScroll, USER_ROLES){
+homeCIController.controller('administrationCtrl', ['$scope', '$http', 'UserService', '$state', '$anchorScroll','USER_ROLES','socket', function($scope, $http, UserService, $state, $anchorScroll, USER_ROLES, socket){
     
     //A FAIRE : Connecter tout le panel d'administration au backend
-
     $scope.register = function(credentials){
+        console.log("ici");
         console.log(credentials);
+        var data = {
+            username : credentials.name,
+            password : credentials.password,
+            role : credentials.role
+        }
+        socket.emit('registration', data);
     }
     
     $scope.isAuthorized = UserService.isAuthorized;
