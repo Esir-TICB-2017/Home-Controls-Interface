@@ -1,0 +1,21 @@
+{
+  "server": {
+    "protocol": "http",
+    "host": "localhost:1337"
+  },
+  "facebook": {
+    "key": "103743310033763",
+    "secret": "16b49321f42f95dbe90583ce885f6dea",
+    "callback": "/handle_facebook_callback",
+    "state" : "very secret",
+    "scope": [
+      "public_profile",
+      "email"
+    ]
+  },
+  "twitter": {
+    "key": "[CONSUMER_KEY]",
+    "secret": "[CONSUMER_SECRET]",
+    "callback": "/handle_twitter_callback"
+  }
+}
