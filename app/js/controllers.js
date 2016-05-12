@@ -1,6 +1,8 @@
 'use strict'
 var homeCIController = angular.module('homeCIController', []);
-homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$state', function(UserService, $scope, $http, $state) {
+homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$state', 'socket', function(UserService, $scope, $http, $state, socket) {
+    var mySocketId = null;
+    socket.on('connected', onConnected);
     var objectList = {};
     var activeMenu = $('#menu');
     $scope.titleView = 'Home';
@@ -14,6 +16,21 @@ homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$sta
         objectList = data;
         $scope.listObjects = data;
     });
+
+    function onConnected(data) {
+        // Cache a copy of the client's socket.IO session ID on the App
+        mySocketId = data.socketId;
+        console.log("You are connected !");
+        console.log(mySocketId);
+    }
+    $scope.sendSmartData = function(data){
+        console.log('ici');
+        var data = {
+            test : '25 degrés'
+        };
+        socket.emit('smartData', data);
+        
+    }
 }]);
 homeCIController.controller('scenariosCtrl', ['UserService', '$scope', '$http', '$state', 'newScenario', function(UserService, $scope, $http, $state, newScenario) {
     $scope.isAuthorized = UserService.isAuthorized;

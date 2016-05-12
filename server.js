@@ -5,6 +5,7 @@
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
+var io = require('socket.io')(http);
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
 var mongoose = require('mongoose');
@@ -129,6 +130,7 @@ app.post('/login', function(req, res) {
                     expiresIn: 3600 // Expire dans 24h
                 });
                 console.log('here is the token' + token);
+                
                 // return the information including token as JSON
                 res.json({
                     user: user,
@@ -145,33 +147,33 @@ app.all('/', function(req, res, next) {
         root: __dirname
     });
 });
-// app.use(function(req, res, next) {
-//     // check header or url parameters or post parameters for token
-//     var token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers.authorization;
-//     // decode token
-//     if (token) {
-//         // verifies secret and checks exp
-//         jwt.verify(token, app.get('superSecret'), function(err, decoded) {
-//             if (err) {
-//                 return res.json({
-//                     success: false,
-//                     message: 'Failed to authenticate token.'
-//                 });
-//             } else {
-//                 // if everything is good, save to request for use in other routes
-//                 req.decoded = decoded;
-//                 next();
-//             }
-//         });
-//     } else {
-//         // if there is no token
-//         // return an error
-//         return res.status(401).send({
-//             success: false,
-//             message: 'No token provided.'
-//         });
-//     }
-// });
+app.use(function(req, res, next) {
+    // check header or url parameters or post parameters for token
+    var token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers.authorization;
+    // decode token
+    if (token) {
+        // verifies secret and checks exp
+        jwt.verify(token, app.get('superSecret'), function(err, decoded) {
+            if (err) {
+                return res.json({
+                    success: false,
+                    message: 'Failed to authenticate token.'
+                });
+            } else {
+                // if everything is good, save to request for use in other routes
+                req.decoded = decoded;
+                next();
+            }
+        });
+    } else {
+        // if there is no token
+        // return an error
+        return res.status(401).send({
+            success: false,
+            message: 'No token provided.'
+        });
+    }
+});
 app.get('/getObjects', function(req, res, next) {
         //retrieve all Rooms from Monogo
         mongoose.model('Object').find({}, function(err, objects) {
@@ -595,6 +597,17 @@ app.post('/signin', function(req, res) {
         }
     });
 });
+io.sockets.on('connection', function(socket) {
+    console.log("********************* Client connected !************************");
+    console.log("socket id : ")
+    console.log(socket.id);
+    socket.on('smartData', function(data){
+        console.log(data);
+    })
+    socket.on('disconnect', function() {
+        //playerLeftGame(socket.id);
+    });
+});
 // route to show a random message (GET http://localhost:8080/api/)
 app.get('/', function(req, res) {
     res.json({
@@ -616,5 +629,5 @@ app.post('/uploadjson/listepieces.json', function(req, res) {
     console.log(req.body);
 });
 http.listen(1337, function() {
-    console.log('OK');
+    console.log('OK on 1337');
 });

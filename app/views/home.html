@@ -1,27 +1,52 @@
-<a class="waves-effect waves-light btn" ng-click="allumerLampe()">Allumer</a>
-<a class="waves-effect waves-light btn" ng-click="eteindreLampe()">Eteindre</a>
-
+<a class="waves-effect waves-light btn" ng-click="allumerLampe()">
+    Allumer
+</a>
+<a class="waves-effect waves-light btn" ng-click="eteindreLampe()">
+    Eteindre
+</a>
 <ul class="collapsible" data-collapsible="accordion" style="margin-top: 0px">
-        <li>
-          <div class="collapsible-header"><i class="material-icons">add</i>Create new object widget…</div>
-          <div class="collapsible-body">
-          <div class="row">
-          <div class="col s2">
-                    <label>Object selection</label>
+    <li>
+        <div class="collapsible-header">
+            <i class="material-icons">
+                add
+            </i>
+            Create new object widget…
+        </div>
+        <div class="collapsible-body">
+            <div class="row">
+                <div class="col s2">
+                    <label>
+                        Object selection
+                    </label>
                     <select class="browser-default">
-                      <option value="" disabled="" selected="">Choose your object</option>
-                      <option ng-repeat="object in listObjects">{{object.name}}</option> 
+                        <option value="" disabled="" selected="">
+                            Choose your object
+                        </option>
+                        <option ng-repeat="object in listObjects">
+                            {{ object.name }}
+                        </option>
                     </select>
-                  </div>
-                  <div class="col s2">
-                    <label>Parameter selection</label>
+                </div>
+                <div class="col s2">
+                    <label>
+                        Parameter selection
+                    </label>
                     <select class="browser-default">
-                      <option value="" disabled="" selected="">Choose a parameter</option>
-                      <option ng-repeat="object in listObjects" ng-Value="object._id">{{object.parameters}}</option> 
+                        <option value="" disabled="" selected="">
+                            Choose a parameter
+                        </option>
+                        <option ng-repeat="object in listObjects" ng-Value="object._id">
+                            {{ object.parameters }}
+                        </option>
                     </select>
-                  </div>
-           </div>
-
-          </div>
-        </li>
-      </ul>
+                </div>
+            </div>
+        </div>
+    </li>
+</ul>
+<button class="btn waves-effect waves-light blue-grey darken-3" ng-click="sendSmartData()">
+    Send data
+    <i class="material-icons right">
+        send
+    </i>
+</button>

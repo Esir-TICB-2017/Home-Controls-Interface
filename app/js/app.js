@@ -82,6 +82,9 @@ homeControlsInterfaceApp.run(function($state, $rootScope, UserService, $location
                 console.log("user is not logged in");
             }
         }
+        if(UserService.isAuthenticated() && next.name == "login"){
+            $state.go('home');
+        }
         if (UserService.isAuthenticated()) {
             $rootScope.$broadcast(AUTH_EVENTS.loginSucces);
         }
