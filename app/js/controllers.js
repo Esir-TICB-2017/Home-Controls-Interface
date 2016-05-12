@@ -263,7 +263,7 @@ homeCIController.controller('scenariosCtrl', ['UserService', '$scope', '$http', 
         $scope.showAddObjectsMenu = true;
     };
 }]);
-homeCIController.controller('objectsCtrl', ['UserService', '$scope', '$http', '$state', 'USER_ROLES', function(UserService, $scope, $http, $state, USER_ROLES) {
+homeCIController.controller('objectsCtrl', ['UserService', '$scope', '$http', '$state', 'USER_ROLES', 'socket',function(UserService, $scope, $http, $state, USER_ROLES, socket) {
     //Verify the user autorization to access the datas
     $scope.isAuthorized = UserService.isAuthorized;
     if (UserService.getCurrentUser()) {
@@ -281,191 +281,43 @@ homeCIController.controller('objectsCtrl', ['UserService', '$scope', '$http', '$
     };
     //Recover objects and rooms that are in the home from the server
     $http.get('/getObjects').success(function(data) {
+        
+        //types d'objets : lampe, volet, temperature, humidite, luminosite, co2
         objectList = data;
-        $scope.listObjects = data;
-    });
-    $http.get('/getRooms').success(function(data) {
-        roomList = data;
-        $scope.listRooms = data;
-    });
-    //Functions called from the interface, used to deliver interactions to the user
-    //Add an object in the DB and update the list of objects on the interface
-    $scope.addObject = function(obj) {
-        //Prepare the data to send
-        var data = "name=" + obj.objectName;
-        //Send the request to the server
-        $http({
-            method: 'POST',
-            url: '/setObject',
-            data: data,
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
+        for each(var object in objectList){
+            if(object.type =="lampe"){
+                object.icon = "lightbulb_outline";
             }
-        }).
-        success(function(response) {
-            //Deal with the responses from the server
-            console.log(response);
-            $scope.codeStatus = response.data;
-            Materialize.toast('Objet créé !', 4000);
-            //Update the list of objects on the interface to be sure that it correspond to the objects stored server-side
-            $http.get('/getObjects').success(function(data) {
-                objectList = data;
-                $scope.listObjects = data;
-            });
-        }).
-        error(function(response) {
-            //If an error occur, save it in the scope and display in the console
-            $scope.codeStatus = response || "Request failed";
-            console.log($scope.codeStatus);
-        });
-    };
-    //Add a room in the database and update the list of rooms on the interface
-    $scope.addRoom = function(room) {
-            var data = "name=" + room.roomName;
-            //Send a post request to the server to send the name of the new room
-            $http({
-                method: 'POST',
-                url: '/setRoom',
-                data: data,
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            }).
-            success(function(response) {
-                //If everything has gone well, tells it to the user and update the list of rooms
-                console.log(response);
-                $scope.codeStatus = response.data;
-                Materialize.toast('Room created !', 4000);
-                $http.get('/getRooms').success(function(data) {
-                    roomList = data;
-                    $scope.listRooms = data;
-                });
-            }).
-            error(function(response) {
-                //If an error occur, save it in the scope and display in the console
-                $scope.codeStatus = response || "Request failed";
-                console.log($scope.codeStatus);
-            });
+            else if(object.type =="volet"){
+                object.icon = "reorder";
+            }
+            else if(object.type =="temperature"){
+                object.icon = "";
+            }
+            else if(object.type == "luminosite"){
+                object.icon = "brightness_medium";
+            }
+            else if(object.type == "humidite"){
+                object.icon = "opacity";
+            }
         }
-        //Delete an object in the DB
-    $scope.deleteObject = function(object) {
-        var data = "objectId=" + object._id;
-        //Send the request to the server
-        $http({
-            method: 'DELETE',
-            url: '/deleteObject',
-            data: data,
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        }).
-        success(function(response) {
-            //If everything has gone well, save the object in the interface and 
-            console.log(response);
-            $scope.codeStatus = response.data;
-            Materialize.toast('Object deleted !', 4000);
-            //Update the list of objects
-            $http.get('/getObjects').success(function(data) {
-                objectList = data;
-                $scope.listObjects = data;
-            });
-        }).
-        error(function(response) {
-            //If an error happens, save the status code and write it in the console
-            $scope.codeStatus = response || "Request failed";
-            console.log($scope.codeStatus);
-        });
-    };
-    //Delete a room in the DB
-    $scope.deleteRoom = function(room) {
-            var data = "roomId=" + room._id;
-            //Send the request Delete to the server
-            $http({
-                method: 'DELETE',
-                url: '/deleteRoom',
-                data: data,
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            }).
-            success(function(response) {
-                console.log(response);
-                $scope.codeStatus = response.data;
-                Materialize.toast('Room deleted !', 4000);
-                //Update the list of rooms
-                $http.get('/getRooms').success(function(data) {
-                    roomList = data;
-                    $scope.listRooms = data;
-                });
-            }).
-            error(function(response) {
-                //If an error happens, save the status code and write it in the console
-                $scope.codeStatus = response || "Request failed";
-                console.log($scope.codeStatus);
-            });
+        
+        $scope.listObjects = objectList;
+    });
+    
+    //Call the function that control the object
+    $scope.objectFunction = function(nameFct ,idObject){
+        var data = {
+                id : idObject
+            };
+        
+        if(nameFct == "up"){
+            socket.emit("up",data);
         }
-        //Download only one object
-    function getOneObject(objectId) {
-        var data = "objectId=" + objectId;
-        $http({
-            method: 'POST',
-            url: '/getOneObject',
-            data: data,
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        }).
-        success(function(response) {
-            console.log(response);
-            $scope.codeStatus = response.data;
-            return response;
-        }).
-        error(function(response) {
-            $scope.codeStatus = response || "Request failed";
-        });
-    };
-    //Add an object in a room, in the DB
-    $scope.addToRoom = function(object) {
-        var roomId = roomList[0]._id;
-        var objectId = object._id;
-        var data = "objectId=" + objectId + "&roomId=" + roomId;
-        $http({
-            method: 'PUT',
-            url: '/addObjectToRoom',
-            data: data,
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        }).
-        success(function(response) {
-            $scope.codeStatus = response.data;
-        }).
-        error(function(response) {
-            $scope.codeStatus = response || "Request failed";
-        });
-        return false;
-    };
-    //Delete an object from a room, in the DB
-    $scope.deleteFromRoom = function(object) {
-        var roomId = roomList[0]._id;
-        var objectId = object._id;
-        var data = "objectId=" + objectId + "&roomId=" + roomId;
-        $http({
-            method: 'DELETE',
-            url: '/deleteObjectFromRoom',
-            data: data,
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        }).
-        success(function(response) {
-            $scope.codeStatus = response.data;
-        }).
-        error(function(response) {
-            $scope.codeStatus = response || "Request failed";
-        });
-        return false;
-    };
+        else if(nameFct == "down"){
+            socket.emit("down", data);
+        }
+    }
 }]);
 homeCIController.controller('loginCtrl', function($scope, $http, $rootScope, $location, $state, LoginService, UserService) {
     document.getElementById("myButton").onclick = function() {
@@ -524,11 +376,14 @@ homeCIController.controller('loginCtrl', function($scope, $http, $rootScope, $lo
 homeCIController.controller('registerCtrl', ['$scope', '$http', function($scope, $http) {
     $scope.titleView = 'S\'enregistrer';
 }]);
-homeCIController.controller('administrationCtrl', ['$scope', '$http', 'UserService', '$state', '$anchorScroll', 'USER_ROLES', function($scope, $http, UserService, $state, $anchorScroll, USER_ROLES) {
+homeCIController.controller('administrationCtrl', ['$scope', '$http', 'UserService', '$state', '$anchorScroll','USER_ROLES', function($scope, $http, UserService, $state, $anchorScroll, USER_ROLES){
+    
     //A FAIRE : Connecter tout le panel d'administration au backend
+
     $scope.register = function(credentials){
         console.log(credentials);
     }
+    
     $scope.isAuthorized = UserService.isAuthorized;
     //If logged in, recover the user
     if (UserService.getCurrentUser()) {
