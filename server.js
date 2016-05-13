@@ -637,11 +637,11 @@ io.sockets.on('connection', function(socket) {
             }
         });
     })
-    socket.on('upObject', function(data) {
-        //TODO
+    socket.on('up', function(data) {
+        //TODO : appeler la fonction up(id) de mathieu avec id=data.id
     })
-    socket.on('downObject', function(data) {
-        //TODO
+    socket.on('down', function(data) {
+        //TODO : appeler la fonction down(id) de mathieu avec i=data.id
     })
     socket.on('disconnect', function() {
         //playerLeftGame(socket.id);
