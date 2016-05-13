@@ -1,5 +1,97 @@
 (function (angular) {
-    angular.module("ui.materialize", ["ui.materialize.ngModel", "ui.materialize.collapsible", "ui.materialize.toast", "ui.materialize.sidenav", "ui.materialize.material_select", "ui.materialize.dropdown", "ui.materialize.inputfield", "ui.materialize.input_date", "ui.materialize.tabs", "ui.materialize.pagination", "ui.materialize.pushpin", "ui.materialize.scrollspy", "ui.materialize.parallax","ui.materialize.modal", "ui.materialize.tooltipped",  "ui.materialize.slider", "ui.materialize.materialboxed"]);
+    var undefined;
+    angular.module("ui.materialize", ["ui.materialize.ngModel", "ui.materialize.collapsible", "ui.materialize.toast", "ui.materialize.sidenav", "ui.materialize.material_select", "ui.materialize.dropdown", "ui.materialize.inputfield", "ui.materialize.input_date", "ui.materialize.tabs", "ui.materialize.pagination", "ui.materialize.pushpin", "ui.materialize.scrollspy", "ui.materialize.parallax","ui.materialize.modal", "ui.materialize.tooltipped",  "ui.materialize.slider", "ui.materialize.materialboxed", "ui.materialize.scrollFire", "ui.materialize.nouislider", "ui.materialize.input_clock"]);
+
+    /*     example usage:
+     <div scroll-fire="func('Scrolled', 2000)" ></scroll-fire>
+     */
+    angular.module("ui.materialize.scrollFire", [])
+        .directive("scrollFire", ["$compile", "$timeout", function ($compile, $timeout) {
+            return {
+                restrict: "A",
+                scope: {
+                    offset: "@",
+                    scrollFire: "&"
+                },
+                link: function (scope, element, attrs) {
+                    var offset = scope.offset;
+                    if (!angular.isDefined(scope.offset)) {
+                        offset = 0;
+                    }
+                    offset = Number(offset) || 0;
+
+
+                    var fired = false;
+                    var handler = throttle(function () {
+                        console.log("Handler");
+                        if (fired) {
+                            return;
+                        }
+                        var windowScroll = window.pageYOffset + window.innerHeight;
+
+                        var elementOffset = element[0].getBoundingClientRect().top + window.pageYOffset;
+
+                        console.log(typeof offset);
+                        console.log((windowScroll - (elementOffset + offset)) + " left");
+
+                        if (windowScroll > (elementOffset + offset)) {
+                            fired = true;
+                            scope.scrollFire({});
+                            stop();
+                        }
+                    }, 100);
+
+                    function stop() {
+                        $(window).off("scroll resize blur focus", handler);
+                    }
+
+                    $(window).on("scroll resize blur focus", handler);
+                    handler();
+
+                    scope.$on('$destroy', stop);
+                }
+            };
+        }]);
+
+    // The throttle function from underscore: https://github.com/jashkenas/underscore/blob/master/underscore.js
+    function throttle(func, wait) {
+        var timeout, context, args, result;
+        var previous = 0;
+
+        var later = function() {
+            previous = + new Date();
+            timeout = null;
+            result = func.apply(context, args);
+            if (!timeout) context = args = null;
+        };
+
+        var throttled = function() {
+            var now = + new Date();
+            var remaining = wait - (now - previous);
+            context = this;
+            args = arguments;
+            if (remaining <= 0 || remaining > wait) {
+                if (timeout) {
+                    clearTimeout(timeout);
+                    timeout = null;
+                }
+                previous = now;
+                result = func.apply(context, args);
+                if (!timeout) context = args = null;
+            } else if (!timeout) {
+                timeout = setTimeout(later, remaining);
+            }
+            return result;
+        };
+
+        throttled.cancel = function() {
+            clearTimeout(timeout);
+            previous = 0;
+            timeout = context = args = null;
+        };
+
+        return throttled;
+    };
 
     angular.module("ui.materialize.ngModel", [])
         .directive("ngModel",["$timeout", function($timeout){
@@ -7,8 +99,14 @@
                 restrict: 'A',
                 priority: -1, // lower priority than built-in ng-model so it runs first
                 link: function(scope, element, attr) {
-                    scope.$watch(attr.ngModel,function(value){
+                    scope.$watch(attr.ngModel,function(value, oldValue){
                         $timeout(function () {
+                            // To stop an infinite feedback-loop with material multiple-select.
+                            if (value instanceof Array && oldValue instanceof Array) {
+                                if (value.length == oldValue.length) {
+                                    return;
+                                }
+                            }
                             if (value){
                                 element.trigger("change");
                             } else if(element.attr('placeholder') === undefined) {
@@ -140,10 +238,13 @@
         }]);
 
     angular.module("ui.materialize.tabs", [])
-        .directive("tabs", [function(){
+        .directive("tabs", ["$timeout", function($timeout){
             return {
                 link: function (scope, element, attrs) {
-                    element.tabs();
+                    element.addClass("tabs");
+                    $timeout(function() {
+                        element.tabs();
+                    });
                 }
             };
         }]);
@@ -159,7 +260,7 @@
                 },
                 link: function (scope, element, attrs) {
                     element.sideNav({
-                        menuWidth: (angular.isDefined(scope.menuwidth)) ? scope.menuwidth : undefined,
+                        menuWidth: (angular.isDefined(scope.menuwidth)) ? parseInt(scope.menuwidth, 10) : undefined,
                         edge: attrs.sidenav ? attrs.sidenav : "left",
                         closeOnClick: (angular.isDefined(scope.closeonclick)) ? scope.closeonclick == "true" : undefined
                     });
@@ -173,7 +274,26 @@
             return {
                 link: function (scope, element, attrs) {
                     if (element.is("select")) {
-                        function initSelect() {
+						//BugFix 139: In case of multiple enabled. Avoid the circular looping.
+                        function initSelect(newVal, oldVal) {                            
+                            if(attrs.multiple){
+                                if(oldVal !== undefined && newVal !== undefined){
+                                  if(oldVal.length === newVal.length){
+                                      return;
+                                  }
+                                }
+                                var activeUl = element.siblings("ul.active");
+                                if (newVal !== undefined && activeUl.length) { // If select is open
+                                    var selectedOptions = activeUl.children("li.active").length; // Number of selected elements
+                                    if (selectedOptions == newVal.length) {
+                                        return;
+                                    }
+                                }
+                            } else {
+                                if (newVal == element.val()){
+                                    return;
+                                }
+                            }
                             element.siblings(".caret").remove();
                             scope.$evalAsync(function() {
                               element.material_select();
@@ -545,6 +665,48 @@
             };
         }]);
 
+
+
+    /**
+     * time-picker directive
+     * Example:
+     <label for="input_starttime">Time</label>
+     <input id="input_starttime" input-clock data-twelvehour="false" type="text">
+     */
+    angular.module("ui.materialize.input_clock", [])
+        .directive('inputClock', [function () {
+            return {
+                restrict: 'A',
+                scope: {
+                    default: "@",
+                    fromnow: "=?",
+                    donetext: "@",
+                    autoclose: "=?",
+                    ampmclickable: "=?",
+                    darktheme: "=?",
+                    twelvehour: "=?",
+                    vibrate: "=?"
+                },
+                link: function (scope, element) {
+                    $(element).addClass("timepicker");
+                    if (!(scope.ngReadonly)) {
+                        element.clockpicker({
+                            default: (angular.isDefined(scope.default)) ? scope.default : '',
+                            fromnow: (angular.isDefined(scope.fromnow)) ? scope.fromnow : 0,
+                            donetext: (angular.isDefined(scope.donetext)) ? scope.donetext : 'Done',
+                            autoclose: (angular.isDefined(scope.autoclose)) ? scope.autoclose : false,
+                            ampmclickable: (angular.isDefined(scope.ampmclickable)) ? scope.ampmclickable : false,
+                            darktheme: (angular.isDefined(scope.darktheme)) ? scope.darktheme : false,
+                            twelvehour: (angular.isDefined(scope.twelvehour)) ? scope.twelvehour : true,
+                            vibrate: (angular.isDefined(scope.vibrate)) ? scope.vibrate : true
+                        });
+                    }
+                }
+            };
+        }]);
+
+
+
     /**
      * Example:
      <pagination
@@ -844,7 +1006,7 @@
                     outDuration: "@",
                     ready: '&?',
                     complete: '&?',
-                    open: '=',
+                    open: '=?',
                     enableTabs: '@?'
                 },
                 link: function (scope, element, attrs) {
@@ -931,6 +1093,51 @@
                         element.materialbox();
                     });
 
+                }
+            };
+        }]);
+
+    /* example usage:
+    <div nouislider ng-model='value' min="0" max="100"></div>
+    */
+    angular.module("ui.materialize.nouislider", [])
+        .directive("nouislider", ["$timeout", function($timeout){
+            return {
+                restrict: 'A',
+                scope: {
+                    ngModel: '=',
+                    min: '@',
+                    max: '@',
+                    step: '@?',
+                    connect: '@?',
+                    tooltips: '@?'
+                },
+                link: function (scope, element, attrs) {
+                    $timeout(function () {
+                        noUiSlider.create(element[0], {
+                          	start: scope.ngModel || 0,
+                          	step: parseFloat(scope.step || 1),
+                            tooltips: angular.isDefined(scope.connect) ? scope.tooltips : undefined,
+                          	connect: angular.isDefined(scope.connect) ? scope.connect : 'lower',
+                          	range: {
+                          		'min': parseFloat(scope.min || 0),
+                          		'max': parseFloat(scope.max || 100),
+                          	},
+                            format: {
+                                to: function (number) {
+                                    return Math.round(number * 100) / 100;
+                                },
+                                from: function (number) {
+                                    return Number(number);
+                                }
+                            }
+                        });
+
+                        element[0].noUiSlider.on('update', function(values, input) {
+                          scope.ngModel = parseInt(values[0], 10);
+                          scope.$apply();
+                        });
+                    });
                 }
             };
         }]);

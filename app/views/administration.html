@@ -1,4 +1,5 @@
 <div ng-if="canAccessAdmin" class="row">
+
     
         <div class="col s3" style = "margin-top : 10pt;">
             <ul class="side-nav fixed" style="margin-top : 48pt;">
@@ -85,14 +86,14 @@
             <div class="row">
                 <div class="input-field cold s12">
                     <i class="material-icons prefix">edit</i>
-                    <input id="newuser-password" type="password">
+                    <input id="newuser-password" type="password" ng-model="credentials.password">
                     <label for="newuser-password">Mot de passe</label>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field cold s12">
                     <i class="material-icons prefix">edit</i>
-                    <input id="newuser-password-confirm"type="password"  ng-model="credentials.password">
+                    <input id="newuser-password-confirm"type="password"  ng-model="credentials.confirmedPassword">
                     <label for="newuser-password-confirm">Confirmez le mot de passe</label>
                 </div>
             </div>
@@ -108,12 +109,20 @@
             </div>
            
             <div class="row">
-                <div class="input-field col s12 l2 push-l4 push-m8">
-                    <button id="submit" class="btn waves-effect waves-light blue-grey darken-3" type="submit" name="action">Inscrire
+            
+                <div class="input-field col s12 l2">
+                    <button id="submit" class="btn waves-effect waves-light blue-grey darken-3" type="submit" name="action" toast='click'>Inscrire
                     <i class="material-icons right">check</i>
                     </button>
                 </div>
+<<<<<<< HEAD
             </div>
+=======
+                <div class="col l8 offset-l2">
+                <h6 class="{{messageColor}}" style="margin-top : 22px">{{registerMessage}}</h6>
+                </div>
+
+>>>>>>> origin/master
                  </form>
             </div>
 

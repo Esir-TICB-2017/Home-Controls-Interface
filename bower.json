@@ -1,19 +1,18 @@
 {
   "name": "home_control",
   "description": "complete front-end and backend to control IoT in a personnal house",
-  "version": "0.0.1",
+  "version": "1.5",
   "homepage": "index.html",
   "license": "MIT",
   "dependencies": {
     "angular": "1.4.x",
     "angular-mocks": "1.4.x",
     "jquery": "~2.1.1",
-    "bootstrap": "~3.1.1",
     "angular-route": "1.4.x",
     "materialize": "0.97.6",
     "jquery-ui": "1.11.4",
-    "angular-storage": "1.4.x",
-    "angular-materialize": "0.0.1"
+    "angular-storage": "0.5.0",
+    "angular-materialize": "0.1.5"
   },
   "authors": [
     "esir_2017_ticb"

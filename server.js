@@ -623,6 +623,7 @@ io.sockets.on('connection', function(socket) {
                     var userModel = new User();
                     userModel.username = data.username;
                     userModel.password = data.password;
+                    userModel.role = data.role;
                     userModel.save(function(err, user) {
                         user.token = jwt.sign(user, app.get('superSecret'));
                         user.save(function(err, user1) {
