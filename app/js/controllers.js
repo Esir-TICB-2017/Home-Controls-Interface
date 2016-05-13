@@ -310,7 +310,6 @@ homeCIController.controller('objectsCtrl', ['UserService', '$scope', '$http', '$
     $http.get('/getObjects').success(function(data) {
         //types d'objets : lampe, volet, temperature, humidite, luminosite, co2
         var objectList = data;
-<<<<<<< HEAD
         
         angular.forEach(objectList, function(object,key){
             
@@ -329,20 +328,7 @@ homeCIController.controller('objectsCtrl', ['UserService', '$scope', '$http', '$
              else if(object.type == "humidite"){
                  object.icon = "opacity";
              }
-=======
-        angular.forEach(objectList, function(object, key) {
-            if (object.type == "lampe") {
-                object.icon = "lightbulb_outline";
-            } else if (object.type == "volet") {
-                object.icon = "reorder";
-            } else if (object.type == "temperature") {
-                object.icon = "";
-            } else if (object.type == "luminosite") {
-                object.icon = "brightness_medium";
-            } else if (object.type == "humidite") {
-                object.icon = "opacity";
-            }
->>>>>>> origin/master
+
         });
         $scope.listObjects = objectList;
     });
