@@ -19,6 +19,7 @@ homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$sta
     //Recover the objects in the home and put them in a list in the widget
     $http.get('/getObjects').success(function(data) {
         
+        console.log(data);
         //types d'objets : lampe, volet, temperature, humidite, luminosite, co2
         var objectList = data;
         
