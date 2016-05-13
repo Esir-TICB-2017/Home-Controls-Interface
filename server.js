@@ -602,6 +602,9 @@ io.sockets.on('connection', function(socket) {
     socket.on('smartData', function(data) {
         console.log(data);
     })
+    socket.on('updateProfile', function(data){
+        console.log(data);
+    })
     socket.on('registration', function(data) {
         User.findOne({
             username: data.username,

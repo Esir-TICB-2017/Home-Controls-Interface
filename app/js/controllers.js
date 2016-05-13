@@ -368,6 +368,20 @@ homeCIController.controller('registerCtrl', ['$scope', '$http', function($scope,
     $scope.titleView = 'S\'enregistrer';
 }]);
 homeCIController.controller('administrationCtrl', ['$scope', '$http', 'UserService', '$state', '$anchorScroll', 'USER_ROLES', 'socket', function($scope, $http, UserService, $state, $anchorScroll, USER_ROLES, socket) {
+    $scope.isAuthorized = UserService.isAuthorized;
+    //If logged in, recover the user
+    if (UserService.getCurrentUser()) {
+        $scope.currentUser = UserService.getCurrentUser()
+    };
+    //Recover the list of roles who can access this page
+    $scope.authorizedRoles = $state.current.data.authorizedRoles;
+    $scope.userIsAuthorized = $scope.isAuthorized($scope.authorizedRoles);
+    $scope.USER_ROLES = USER_ROLES;
+    $scope.users; //To be downloaded in the DB
+    $scope.tab = "profil"
+    $scope.goto = function(hash) {
+        $scope.tab = hash;
+    };
     //A FAIRE : Connecter tout le panel d'administration au backend
     $scope.register = function(credentials) {
         if (credentials.password != credentials.confirmedPassword) {
@@ -404,22 +418,55 @@ homeCIController.controller('administrationCtrl', ['$scope', '$http', 'UserServi
                     }
                     socket.emit('registration', data);
                 }
-                
             }
         }
     }
-    $scope.isAuthorized = UserService.isAuthorized;
-    //If logged in, recover the user
-    if (UserService.getCurrentUser()) {
-        $scope.currentUser = UserService.getCurrentUser()
-    };
-    //Recover the list of roles who can access this page
-    $scope.authorizedRoles = $state.current.data.authorizedRoles;
-    $scope.userIsAuthorized = $scope.isAuthorized($scope.authorizedRoles);
-    $scope.USER_ROLES = USER_ROLES;
-    $scope.users; //To be downloaded in the DB
-    $scope.tab = "profil"
-    $scope.goto = function(hash) {
-        $scope.tab = hash;
-    };
+    $scope.updateProfile = function(information) {
+        if (!information) {
+            $scope.messageColor = "red-text text-lighten-1";
+            $scope.updateProfileMessage = "Vous n'avez rien changé !";
+            setTimeout(function() {
+                $scope.updateProfileMessage = "";
+            }, 2000);
+        } else {
+
+            if (!(information.username)) information.username = UserService.getCurrentUser().username;
+            if (!information.role) information.role = UserService.getCurrentUser().role;
+            if (!information.newPassword && !information.oldPassword && !information.confirmNewPassword) {
+                information.password = UserService.getCurrentUser().password;
+                console.log(information);
+            } else {
+                if (information.newPassword || information.oldPassword || information.confirmNewPassword) {
+                    $scope.messageColor = "red-text text-lighten-1";
+                    $scope.updateProfileMessage = "Il manque des informations concernant le mot de passe !";
+                    setTimeout(function() {
+                        $scope.updateProfileMessage = "";
+                    }, 2000);
+                } else {
+                    if (information.newPassword != information.newConfirmedPassword) {
+                        $scope.messageColor = "red-text text-lighten-1";
+                        $scope.updateProfileMessage = "Ce ne sont pas les mêmes mots de passe";
+                        setTimeout(function() {
+                            $scope.updateProfileMessage = "";
+                        }, 2000);
+                    } else {
+                        information.password = information.newPassword;
+                        var data = {
+                            "currentUser": {
+                                username: UserService.getCurrentUser().username,
+                                password: UserService.getCurrentUser().password,
+                                role: UserService.getCurrentUser().role
+                            },
+                            "dataToUpdate": {
+                                username: information.username,
+                                password: information.password,
+                                role: information.role
+                            }
+                        }
+                        socket.emit('updateProfile', data);
+                    }
+                }
+            }
+        }
+    }
 }]);

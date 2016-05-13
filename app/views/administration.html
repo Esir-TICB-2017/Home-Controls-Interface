@@ -20,13 +20,14 @@
                     <h5><strong>{{currentUser.username}}</strong></h5>
                     <p style="padding-bottom : 10pt;">Role de l'utilisateur</p>
                 </div>
+                 <form name="updateProfilrForm" ng-controller="administrationCtrl" ng-submit="updateProfile(information)" novalidate>
                 <div class="col s8 offset-s2" style="margin-top : 60px;">
                     <p>Nom d'utilisateur</p>
                     <div class="divider" style="margin-bottom : 10pt;"></div>
                     <div class="row">
                         <div class="input-field col s12">
                             <i class="material-icons prefix">account_circle</i>
-                            <input id="name" type="text" value="{{currentUser.username}}">
+                            <input id="name" type="text" value="{{currentUser.username}}" ng-model="information.username">
                             <label for="name" class="active">Nom d'utilisateur</label>
                         </div>
                     </div>
@@ -35,17 +36,17 @@
                     <div class="row">
                         <div class="input-field cold s6">
                             <i class="material-icons prefix">edit</i>
-                            <input id="password" type="password">
+                            <input id="password" type="password" ng-model="information.oldPassword">
                             <label for="password">Ancien mot de passe</label>
                         </div>
                         <div class="input-field cold s12">
                             <i class="material-icons prefix">edit</i>
-                            <input id="password-new" type="password">
+                            <input id="password-new" type="password" ng-model="information.newPassword">
                             <label for="password-new">Nouveau mot de passe</label>
                         </div>
                         <div class="input-field cold s12">
                             <i class="material-icons prefix">edit</i>
-                            <input id="password-confirm" type="password">
+                            <input id="password-confirm" type="password" ng-model="information.confirmNewPassword">
                             <label for="password-confirm">Confirmez le mot de passe</label>
                         </div>
                     </div>
@@ -53,7 +54,7 @@
                     <div class="divider"></div>
                     <div class="row">
                         <div class="input-field cold s6">
-                            <select class="browser-default">
+                            <select class="browser-default" ng-model="information.role">
                                 <option value="" disabled selected>Quel rôle as-tu dans la maison ?</option>
                                 <option value="USER_ROLES.parents" ng-selected="currentUser.role == USER_ROLES.parents">Un parent</option>
                                 <option value="USER_ROLES.child" ng-selected="currentUser.role == USER_ROLES.child">Un enfant</option>
@@ -62,11 +63,15 @@
                         </div>
                     </div>
                     <div class="row">
-                    <div class="input-field col s12 l2 push-l4 push-m8">
-                        <button id="submit" class="btn waves-effect waves-light blue-grey darken-3" type="submit" name="action">Valider
-                        <i class="material-icons right">check</i>
-                        </button>
-                    </div>
+                     <div class="input-field col s12 l2">
+                    <button id="submit" class="btn waves-effect waves-light blue-grey darken-3" type="submit" name="action">Valider
+                    <i class="material-icons right">check</i>
+                    </button>
+                </div>
+                <div class="col l8 offset-l2">
+                <h6 class="{{messageColor}}" style="margin-top : 22px">{{updateProfileMessage}}</h6>
+                </div>
+                        </form>
                 </div>
             </div>
             
@@ -111,7 +116,7 @@
             <div class="row">
             
                 <div class="input-field col s12 l2">
-                    <button id="submit" class="btn waves-effect waves-light blue-grey darken-3" type="submit" name="action" toast='click'>Inscrire
+                    <button id="submit" class="btn waves-effect waves-light blue-grey darken-3" type="submit" name="action">Inscrire
                     <i class="material-icons right">check</i>
                     </button>
                 </div>
