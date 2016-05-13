@@ -643,6 +643,9 @@ io.sockets.on('connection', function(socket) {
     socket.on('down', function(data) {
         //TODO : appeler la fonction down(id) de mathieu avec i=data.id
     })
+    socket.on('automation', function(data){
+        //TODO : appeler l'API de David et Damien avec en envoyant le data
+    })
     socket.on('disconnect', function() {
         //playerLeftGame(socket.id);
     });

@@ -6,6 +6,11 @@ homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$sta
     var objectList = {};
     var activeMenu = $('#menu');
     $scope.titleView = 'Home';
+    
+    $scope.sendToAutomation = function(smart){
+        socket.emit('automation',smart);
+    };
+    
     //Recover the function used to check whether the user is authorized to access this page
     $scope.isAuthorized = UserService.isAuthorized;
     $('.collapsible').collapsible({
@@ -13,8 +18,31 @@ homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$sta
     });
     //Recover the objects in the home and put them in a list in the widget
     $http.get('/getObjects').success(function(data) {
-        objectList = data;
-        $scope.listObjects = data;
+        
+        //types d'objets : lampe, volet, temperature, humidite, luminosite, co2
+        var objectList = data;
+        
+        angular.forEach(objectList, function(object,key){
+            
+            if(object.type =="lampe"){
+                 object.icon = "lightbulb_outline";
+             }
+             else if(object.type =="volet"){
+                 object.icon = "reorder";
+             }
+             else if(object.type =="temperature"){
+                 object.icon = "";
+             }
+             else if(object.type == "luminosite"){
+                 object.icon = "brightness_medium";
+             }
+             else if(object.type == "humidite"){
+                 object.icon = "opacity";
+             }
+        });
+        
+        $scope.listObjects = objectList;
+        console.log($scope.listObjects);
     });
 
     function onConnected(data) {
@@ -286,6 +314,7 @@ homeCIController.controller('objectsCtrl', ['UserService', '$scope', '$http', '$
         var objectList = data;
         
         angular.forEach(objectList, function(object,key){
+            
             if(object.type =="lampe"){
                  object.icon = "lightbulb_outline";
              }
@@ -304,7 +333,6 @@ homeCIController.controller('objectsCtrl', ['UserService', '$scope', '$http', '$
         });
         
         $scope.listObjects = objectList;
-        console.log($scope.listObjects);
     });
     
     //Call the function that control the object
@@ -397,6 +425,7 @@ homeCIController.controller('administrationCtrl', ['$scope', '$http', 'UserServi
     if (UserService.getCurrentUser()) {
         $scope.currentUser = UserService.getCurrentUser()
     };
+    
     //Recover the list of roles who can access this page
     $scope.authorizedRoles = $state.current.data.authorizedRoles;
     $scope.userIsAuthorized = $scope.isAuthorized($scope.authorizedRoles);
