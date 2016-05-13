@@ -23,14 +23,13 @@ homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$sta
         console.log("You are connected !");
         console.log(mySocketId);
     }
-    $scope.sendSmartData = function(data){
+    $scope.sendSmartData = function(data) {
         console.log('ici');
         var data = {
-            test : '25 degrés',
+            test: '25 degrés',
             dvsd: 'fre'
         };
         socket.emit('smartData', data);
-        
     }
 }]);
 homeCIController.controller('scenariosCtrl', ['UserService', '$scope', '$http', '$state', 'newScenario', function(UserService, $scope, $http, $state, newScenario) {
@@ -263,7 +262,7 @@ homeCIController.controller('scenariosCtrl', ['UserService', '$scope', '$http', 
         $scope.showAddObjectsMenu = true;
     };
 }]);
-homeCIController.controller('objectsCtrl', ['UserService', '$scope', '$http', '$state', 'USER_ROLES', 'socket',function(UserService, $scope, $http, $state, USER_ROLES, socket) {
+homeCIController.controller('objectsCtrl', ['UserService', '$scope', '$http', '$state', 'USER_ROLES', 'socket', function(UserService, $scope, $http, $state, USER_ROLES, socket) {
     //Verify the user autorization to access the datas
     $scope.isAuthorized = UserService.isAuthorized;
     if (UserService.getCurrentUser()) {
@@ -281,42 +280,32 @@ homeCIController.controller('objectsCtrl', ['UserService', '$scope', '$http', '$
     };
     //Recover objects and rooms that are in the home from the server
     $http.get('/getObjects').success(function(data) {
-        
         //types d'objets : lampe, volet, temperature, humidite, luminosite, co2
         var objectList = data;
-        
-        angular.forEach(objectList, function(object,key){
-            if(object.type =="lampe"){
-                 object.icon = "lightbulb_outline";
-             }
-             else if(object.type =="volet"){
-                 object.icon = "reorder";
-             }
-             else if(object.type =="temperature"){
-                 object.icon = "";
-             }
-             else if(object.type == "luminosite"){
-                 object.icon = "brightness_medium";
-             }
-             else if(object.type == "humidite"){
-                 object.icon = "opacity";
-             }
+        angular.forEach(objectList, function(object, key) {
+            if (object.type == "lampe") {
+                object.icon = "lightbulb_outline";
+            } else if (object.type == "volet") {
+                object.icon = "reorder";
+            } else if (object.type == "temperature") {
+                object.icon = "";
+            } else if (object.type == "luminosite") {
+                object.icon = "brightness_medium";
+            } else if (object.type == "humidite") {
+                object.icon = "opacity";
+            }
         });
-        
         $scope.listObjects = objectList;
         console.log($scope.listObjects);
     });
-    
     //Call the function that control the object
-    $scope.objectFunction = function(nameFct ,idObject){
+    $scope.objectFunction = function(nameFct, idObject) {
         var data = {
-                id : idObject
-            };
-        
-        if(nameFct == "up"){
-            socket.emit("up",data);
-        }
-        else if(nameFct == "down"){
+            id: idObject
+        };
+        if (nameFct == "up") {
+            socket.emit("up", data);
+        } else if (nameFct == "down") {
             socket.emit("down", data);
         }
     }
@@ -378,20 +367,47 @@ homeCIController.controller('loginCtrl', function($scope, $http, $rootScope, $lo
 homeCIController.controller('registerCtrl', ['$scope', '$http', function($scope, $http) {
     $scope.titleView = 'S\'enregistrer';
 }]);
-homeCIController.controller('administrationCtrl', ['$scope', '$http', 'UserService', '$state', '$anchorScroll','USER_ROLES','socket', function($scope, $http, UserService, $state, $anchorScroll, USER_ROLES, socket){
-    
+homeCIController.controller('administrationCtrl', ['$scope', '$http', 'UserService', '$state', '$anchorScroll', 'USER_ROLES', 'socket', function($scope, $http, UserService, $state, $anchorScroll, USER_ROLES, socket) {
     //A FAIRE : Connecter tout le panel d'administration au backend
-    $scope.register = function(credentials){
-        console.log("ici");
-        console.log(credentials);
-        var data = {
-            username : credentials.name,
-            password : credentials.password,
-            role : credentials.role
+    $scope.register = function(credentials) {
+        if (credentials.password != credentials.confirmedPassword) {
+            $scope.messageColor = "red-text text-lighten-1";
+            $scope.registerMessage = "Ce ne sont pas les mêmes mots de passe";
+            setTimeout(function() {
+                $scope.registerMessage = "";
+            }, 2000);
+        } else {
+            if (credentials.password.length < 6) {
+                $scope.messageColor = "red-text text-lighten-1";
+                $scope.registerMessage = "Mot de passe trop court !";
+                setTimeout(function() {
+                    $scope.registerMessage = "";
+                }, 2000);
+            } else {
+                if (!credentials.username || !credentials.password || !credentials.role) {
+                    $scope.messageColor = "red-text text-lighten-1";
+                    $scope.registerMessage = "Il manque des informations !";
+                    setTimeout(function() {
+                        $scope.registerMessage = "";
+                    }, 2000);
+                } else {
+                    $scope.messageColor = "teal-text text-lighten-1";
+                    $scope.registerMessage = "Enregistré avec succès !";
+                    setTimeout(function() {
+                        $scope.registerMessage = "";
+                    }, 2000);
+                    console.log(credentials);
+                    var data = {
+                        username: credentials.username,
+                        password: credentials.password,
+                        role: credentials.role
+                    }
+                    socket.emit('registration', data);
+                }
+                
+            }
         }
-        socket.emit('registration', data);
     }
-    
     $scope.isAuthorized = UserService.isAuthorized;
     //If logged in, recover the user
     if (UserService.getCurrentUser()) {
