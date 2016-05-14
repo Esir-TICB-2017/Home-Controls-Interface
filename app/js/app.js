@@ -83,7 +83,7 @@ homeControlsInterfaceApp.run(function($state, $rootScope, UserService, $location
             }
         }
         if(UserService.isAuthenticated() && next.name == "login"){
-            $state.go('home');
+            $location.path('/home');
         }
         if (UserService.isAuthenticated()) {
             $rootScope.$broadcast(AUTH_EVENTS.loginSucces);

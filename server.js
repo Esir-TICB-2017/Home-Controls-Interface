@@ -174,7 +174,7 @@ app.use(function(req, res, next) {
 });
 app.get('/getObjects', function(req, res, next) {
         //retrieve all Rooms from Monogo
-        mongoose.model('Object').find({}, function(err, objects) {
+        mongoose.model('dataDb').find({}, function(err, objects) {
             if (err) {
                 return console.error(err);
             } else {
@@ -195,7 +195,7 @@ app.get('/getObjects', function(req, res, next) {
 app.get('/getOneObject/:id', function(req, res, next) {
         console.log(req.params.id);
         var objectId = req.params.id;
-        mongoose.model('Object').find({
+        mongoose.model('dataDb').find({
             _id: objectId
         }, function(err, object) {
             if (err) {
@@ -251,7 +251,7 @@ Return a Json with the deleted object and a console message
 app.delete('/deleteObject', function(req, res) {
     var objectId = req.body.objectId;
     //find blob by ID
-    mongoose.model('Object').findById(objectId, function(err, object) {
+    mongoose.model('dataDb').findById(objectId, function(err, object) {
         if (err) {
             return console.error(err);
         } else {
@@ -399,7 +399,7 @@ app.post('/deleteRoomFromObject', function(req, res) {
         if (err) {
             res.send("There was a problem updating the information to the database: " + err);
         } else {
-            mongoose.model('Object').find({
+            mongoose.model('dataDb').find({
                 _id: objectId
             }, function(err, object) {
                 if (err) {
@@ -435,7 +435,7 @@ app.put('/addObjectToRoom', function(req, res) {
             if (err) {
                 res.send("There was a problem updating the information to the database: " + err);
             } else {
-                mongoose.model('Object').find({
+                mongoose.model('dataDb').find({
                     _id: objectId
                 }, function(err, objects) {
                     if (err) {
@@ -646,6 +646,9 @@ io.sockets.on('connection', function(socket) {
     })
     socket.on('down', function(data) {
         //TODO : appeler la fonction down(id) de mathieu avec i=data.id
+    })
+    socket.on('automation', function(data){
+        //TODO : appeler l'API de David et Damien avec en envoyant le data
     })
     socket.on('disconnect', function() {
         //playerLeftGame(socket.id);

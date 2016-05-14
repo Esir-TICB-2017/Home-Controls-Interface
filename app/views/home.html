@@ -1,52 +1,116 @@
-<a class="waves-effect waves-light btn" ng-click="allumerLampe()">
-    Allumer
-</a>
-<a class="waves-effect waves-light btn" ng-click="eteindreLampe()">
-    Eteindre
-</a>
-<ul class="collapsible" data-collapsible="accordion" style="margin-top: 0px">
-    <li>
-        <div class="collapsible-header">
-            <i class="material-icons">
-                add
-            </i>
-            Create new object widget…
+<div class="row">
+    <div class="chip" ng-repeat="object in listObjects track by $index" ng-show="object.capteur == 'true'">
+            <i class="material-icons">{{object.icon}}</i>
+            {{object.name}}
         </div>
-        <div class="collapsible-body">
-            <div class="row">
-                <div class="col s2">
-                    <label>
-                        Object selection
-                    </label>
-                    <select class="browser-default">
-                        <option value="" disabled="" selected="">
-                            Choose your object
-                        </option>
-                        <option ng-repeat="object in listObjects">
-                            {{ object.name }}
-                        </option>
-                    </select>
+</div>
+<div class="row">
+        <div class="col s3" ng-repeat="object in listObjects track by $index" ng-show="object.capteur != 'false'">
+            <div class="card blue-grey darken-1">
+                <div class="card-content white-text">
+                  <span class="card-title">{{object.name}}</span>
+                  <p>Liste des fonctions disponibles : {{object.fonctions}}</p>
                 </div>
-                <div class="col s2">
-                    <label>
-                        Parameter selection
-                    </label>
-                    <select class="browser-default">
-                        <option value="" disabled="" selected="">
-                            Choose a parameter
-                        </option>
-                        <option ng-repeat="object in listObjects" ng-Value="object._id">
-                            {{ object.parameters }}
-                        </option>
-                    </select>
+                <div class="card-action">
+                  <a href="#">This is a link</a>
+                  <a href="#">This is a link</a>
                 </div>
             </div>
         </div>
-    </li>
-</ul>
-<button class="btn waves-effect waves-light blue-grey darken-3" ng-click="sendSmartData()">
-    Send data
-    <i class="material-icons right">
-        send
-    </i>
-</button>
+</div>
+
+<!-- PART TO SEND DATA TO THE AUTOMATION -->
+<div class="container">
+
+<div class="row">
+    <div class="col s12">
+        <div class=" card white">
+            <div class="container">
+                <h5 class="center-align" style="padding-top : 20px;">Données à envoyer à la gestion automatisée</h5>
+                <div class="divider" style="maring-bottom : 20px;"></div>
+                <div class="row">
+                    <form class="col s12" ng-submit="sendToAutomation(smart)">
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <select ng-model="smart.moment">
+                                    <option value="" disabled selected>Moment de la journée</option>
+                                    <option value="matin">Matin</option>
+                                    <option value="jour">Jour</option>
+                                    <option value="soir">Soir</option>
+                                    <option value="nuit">Nuit</option>
+                                </select>
+                            </div>
+                            <div class="input-field col s6">
+                                <input type="number" class="validate" id="tempSDB" ng-model="smart.captTemperatureIntSdb">
+                                <label for="tempSDB">Température de la salle de bain</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <input type="number" class="validate" id="tempSalle" ng-model="smart.captTemperatureIntSalle">
+                                <label for="tempSalle">Température du salon</label>
+                            </div>
+                            <div class="input-field col s6">
+                                <input type="number" class="validate" id="tempBR" ng-model="smart.captTemperatureIntChambre">
+                                <label for="tempBR">Température de la chambre</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <input type="number" class="validate" id="tempExt" ng-model="smart.captTemperatureExt">
+                                <label for="tempExt">Température extérieure</label>
+                            </div>
+                            <div class="input-field col s6">
+                                <input type="number" class="validate" id="lumSalle" ng-model="smart.captLuminositeIntSalle">
+                                <label for="lumSalle">Luminosité du salon</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <input type="number" class="validate" id="lumBR" ng-model="smart.captLuminositeIntChambre">
+                                <label for="lumBR">Luminosité de la chambre</label>
+                            </div>
+                            <div class="input-field col s6">
+                                <input type="number" class="validate" id="lumExt" ng-model="smart.captLuminositeExt">
+                                <label for="lumExt">Luminosité extérieure</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <input type="number" class="validate" id="consTemp" ng-model="smart.consigneTemp">
+                                <label for="consTemp">Consigne de température</label>
+                            </div>
+                            <div class="input-field col s6">
+                                <input type="number" class="validate" id="consLum" ng-model="smart.consigneLum">
+                                <label for="consLum">Consigne de luminosité</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s6">
+                                <input type="number" class="validate" id="consCO2" ng-model="smart.consigneCo2">
+                                <label for="consCO2">Consigne CO2</label>
+                            </div>
+                            <div class="input-field col s6">
+                                <input type="number" class="validate" id="valCO2" ng-model="smart.captCO2">
+                                <label for="valCO2">Valeur du capteur CO2</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12 l2 push-l4 push-m8">
+                                <button id="submit" class="btn waves-effect waves-light blue-grey darken-3" type="submit" name="action">Envoyer les données <i class="material-icons right">send</i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script> 
+    $(document).ready(function() {
+    $('select').material_select();
+  });
+</script>
