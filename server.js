@@ -153,10 +153,7 @@ app.use(function(req, res, next) {
         // verifies secret and checks exp
         jwt.verify(token, app.get('superSecret'), function(err, decoded) {
             if (err) {
-                return res.json({
-                    success: false,
-                    message: 'Failed to authenticate token.'
-                });
+                res.send("Failed to authenticate token.", 401);
             } else {
                 // if everything is good, save to request for use in other routes
                 req.decoded = decoded;
@@ -173,8 +170,8 @@ app.use(function(req, res, next) {
     }
 });
 app.get('/getObjects', function(req, res, next) {
-        //retrieve all Rooms from Monogo
-        mongoose.model('dataDb').find({}, function(err, objects) {
+        //retrieve all Rooms from Mongo
+        mongoose.model('Object').find({}, function(err, objects) {
             if (err) {
                 return console.error(err);
             } else {
@@ -195,7 +192,7 @@ app.get('/getObjects', function(req, res, next) {
 app.get('/getOneObject/:id', function(req, res, next) {
         console.log(req.params.id);
         var objectId = req.params.id;
-        mongoose.model('dataDb').find({
+        mongoose.model('Object').find({
             _id: objectId
         }, function(err, object) {
             if (err) {
@@ -251,7 +248,7 @@ Return a Json with the deleted object and a console message
 app.delete('/deleteObject', function(req, res) {
     var objectId = req.body.objectId;
     //find blob by ID
-    mongoose.model('dataDb').findById(objectId, function(err, object) {
+    mongoose.model('Object').findById(objectId, function(err, object) {
         if (err) {
             return console.error(err);
         } else {
@@ -399,7 +396,7 @@ app.post('/deleteRoomFromObject', function(req, res) {
         if (err) {
             res.send("There was a problem updating the information to the database: " + err);
         } else {
-            mongoose.model('dataDb').find({
+            mongoose.model('Object').find({
                 _id: objectId
             }, function(err, object) {
                 if (err) {
@@ -435,7 +432,7 @@ app.put('/addObjectToRoom', function(req, res) {
             if (err) {
                 res.send("There was a problem updating the information to the database: " + err);
             } else {
-                mongoose.model('dataDb').find({
+                mongoose.model('Object').find({
                     _id: objectId
                 }, function(err, objects) {
                     if (err) {
@@ -602,9 +599,44 @@ io.sockets.on('connection', function(socket) {
     socket.on('smartData', function(data) {
         console.log(data);
     })
-    socket.on('updateProfile', function(data){
+    socket.on('updateProfile', function(data) {
         console.log(data);
-    })
+        User.update({
+            username: data.currentUser.username,
+            password: data.currentUser.password
+        }, {
+            username: data.dataToUpdate.username,
+            password: data.dataToUpdate.password,
+            role: data.dataToUpdate.role
+        }, function(err, affected, resp) {
+            if (err) {
+                socket.emit('updateProfileResponse', {
+                    type: false,
+                    data: "Error occured: " + err
+                })
+            } else {
+                User.findOne({
+                    username: data.dataToUpdate.username,
+                    password: data.dataToUpdate.password,
+                    role: data.dataToUpdate.role
+                }, function(err, user) {
+                    if (err) {
+                        socket.emit('updateProfileResponse', {
+                            type: false,
+                            data: "Error occured while catching actual user: " + err
+                        });
+                    } else {
+                        if (user) {
+                            socket.emit('updateProfileResponse', {
+                                type: true,
+                                data: user
+                            });
+                        }
+                    }
+                })
+            }
+        });
+    });
     socket.on('registration', function(data) {
         User.findOne({
             username: data.username,
@@ -612,12 +644,14 @@ io.sockets.on('connection', function(socket) {
             role: data.role
         }, function(err, user) {
             if (err) {
+                console.log('err 1');
                 socket.emit('registrationResponse', {
                     type: false,
                     data: "Error occured: " + err
                 });
             } else {
                 if (user) {
+                    console.log('err 2');
                     socket.emit('registrationResponse', {
                         type: false,
                         data: "User already exists!"
@@ -630,6 +664,7 @@ io.sockets.on('connection', function(socket) {
                     userModel.save(function(err, user) {
                         user.token = jwt.sign(user, app.get('superSecret'));
                         user.save(function(err, user1) {
+                            console.log('ok tout est bon');
                             socket.emit('registrationResponse', {
                                 type: true,
                                 data: user1,
@@ -647,12 +682,10 @@ io.sockets.on('connection', function(socket) {
     socket.on('down', function(data) {
         //TODO : appeler la fonction down(id) de mathieu avec i=data.id
     })
-    socket.on('automation', function(data){
+    socket.on('automation', function(data) {
         //TODO : appeler l'API de David et Damien avec en envoyant le data
     })
-    socket.on('disconnect', function() {
-        //playerLeftGame(socket.id);
-    });
+    socket.on('disconnect', function() {});
 });
 // route to show a random message (GET http://localhost:8080/api/)
 app.get('/', function(req, res) {

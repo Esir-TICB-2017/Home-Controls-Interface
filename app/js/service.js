@@ -232,6 +232,13 @@ homeCIService.service('UserService', ['USER_ROLES', 'store', function(USER_ROLES
     
     var service = this;
     var currentUser = null;
+
+    service.setCurrentUserUsername = function(username){
+        var user = currentUser;
+        user.username = username;
+        store.set('user', user);
+
+    }
     
     service.setCurrentUser = function(user) {
         currentUser = user;
@@ -273,6 +280,7 @@ homeCIService.service('UserService', ['USER_ROLES', 'store', function(USER_ROLES
 }]);
 
 homeCIService.service('APIInterceptor', function($rootScope, UserService) {
+    console.log("ApiInterceptor intéragit");
     
     var service = this;
     
@@ -286,12 +294,14 @@ homeCIService.service('APIInterceptor', function($rootScope, UserService) {
         if (access_token) {
             config.headers.authorization = access_token;
         }
+
         //Return the config which is what will be send to the server
         return config;
     };
     
     //Catch the different kind of HTML response we may receive
     service.responseError = function(response) {
+
         if (response.status === 401) {
             $rootScope.$broadcast('unauthorized');
         }

@@ -6,11 +6,9 @@ homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$sta
     var objectList = {};
     var activeMenu = $('#menu');
     $scope.titleView = 'Home';
-    
-    $scope.sendToAutomation = function(smart){
-        socket.emit('automation',smart);
+    $scope.sendToAutomation = function(smart) {
+        socket.emit('automation', smart);
     };
-    
     //Recover the function used to check whether the user is authorized to access this page
     $scope.isAuthorized = UserService.isAuthorized;
     $('.collapsible').collapsible({
@@ -18,30 +16,22 @@ homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$sta
     });
     //Recover the objects in the home and put them in a list in the widget
     $http.get('/getObjects').success(function(data) {
-        
         console.log(data);
         //types d'objets : lampe, volet, temperature, humidite, luminosite, co2
         var objectList = data;
-        
-        angular.forEach(objectList, function(object,key){
-            
-            if(object.type =="lampe"){
-                 object.icon = "lightbulb_outline";
-             }
-             else if(object.type =="volet"){
-                 object.icon = "reorder";
-             }
-             else if(object.type =="temperature"){
-                 object.icon = "";
-             }
-             else if(object.type == "luminosite"){
-                 object.icon = "brightness_medium";
-             }
-             else if(object.type == "humidite"){
-                 object.icon = "opacity";
-             }
+        angular.forEach(objectList, function(object, key) {
+            if (object.type == "lampe") {
+                object.icon = "lightbulb_outline";
+            } else if (object.type == "volet") {
+                object.icon = "reorder";
+            } else if (object.type == "temperature") {
+                object.icon = "";
+            } else if (object.type == "luminosite") {
+                object.icon = "brightness_medium";
+            } else if (object.type == "humidite") {
+                object.icon = "opacity";
+            }
         });
-        
         $scope.listObjects = objectList;
         console.log($scope.listObjects);
     });
@@ -311,25 +301,18 @@ homeCIController.controller('objectsCtrl', ['UserService', '$scope', '$http', '$
     $http.get('/getObjects').success(function(data) {
         //types d'objets : lampe, volet, temperature, humidite, luminosite, co2
         var objectList = data;
-        
-        angular.forEach(objectList, function(object,key){
-            
-            if(object.type =="lampe"){
-                 object.icon = "lightbulb_outline";
-             }
-             else if(object.type =="volet"){
-                 object.icon = "reorder";
-             }
-             else if(object.type =="temperature"){
-                 object.icon = "";
-             }
-             else if(object.type == "luminosite"){
-                 object.icon = "brightness_medium";
-             }
-             else if(object.type == "humidite"){
-                 object.icon = "opacity";
-             }
-
+        angular.forEach(objectList, function(object, key) {
+            if (object.type == "lampe") {
+                object.icon = "lightbulb_outline";
+            } else if (object.type == "volet") {
+                object.icon = "reorder";
+            } else if (object.type == "temperature") {
+                object.icon = "";
+            } else if (object.type == "luminosite") {
+                object.icon = "brightness_medium";
+            } else if (object.type == "humidite") {
+                object.icon = "opacity";
+            }
         });
         $scope.listObjects = objectList;
     });
@@ -369,7 +352,7 @@ homeCIController.controller('loginCtrl', function($scope, $http, $rootScope, $lo
             username: loginID.username,
             password: loginID.password
         });
-        //Send th request to the server
+        //Send the request to the server
         $http({
             method: 'POST',
             url: '/login',
@@ -387,10 +370,12 @@ homeCIController.controller('loginCtrl', function($scope, $http, $rootScope, $lo
                 UserService.setCurrentUser(user);
                 $rootScope.username = UserService.getCurrentUser().username;
                 $rootScope.$broadcast('authorized');
+                Materialize.toast('Bienvenue ' + String(UserService.getCurrentUser().username) + ' ! ', 2000);
                 //Redirect to the home view automatically
                 $state.go('home');
             } else {
                 console.log('Error: Invalid user or password');
+                Materialize.toast('Identifiants invalides !', 2000);
             }
         }).
         error(function(data, status, headers, config) {
@@ -402,7 +387,7 @@ homeCIController.controller('loginCtrl', function($scope, $http, $rootScope, $lo
 homeCIController.controller('registerCtrl', ['$scope', '$http', function($scope, $http) {
     $scope.titleView = 'S\'enregistrer';
 }]);
-homeCIController.controller('administrationCtrl', ['$scope', '$http', 'UserService', '$state', '$anchorScroll', 'USER_ROLES', 'socket', function($scope, $http, UserService, $state, $anchorScroll, USER_ROLES, socket) {
+homeCIController.controller('administrationCtrl', ['$scope', '$http', 'UserService', '$state', '$anchorScroll', 'USER_ROLES', 'socket', '$rootScope', function($scope, $http, UserService, $state, $anchorScroll, USER_ROLES, socket, $rootScope) {
     $scope.isAuthorized = UserService.isAuthorized;
     //If logged in, recover the user
     if (UserService.getCurrentUser()) {
@@ -417,6 +402,16 @@ homeCIController.controller('administrationCtrl', ['$scope', '$http', 'UserServi
     $scope.goto = function(hash) {
         $scope.tab = hash;
     };
+    socket.on('registrationResponse', function(data) {
+        Materialize.toast('Le profile de ' + String(data.data.username) + ' à été créé', 2000);
+    });
+    socket.on('updateProfileResponse', function(data) {
+        console.log(data.data.username);
+        UserService.setCurrentUserUsername(data.data.username);
+        $rootScope.username = data.data.username;
+        console.log(UserService.getCurrentUser());
+         Materialize.toast('Profil mis à jour', 2000);
+    });
     //A FAIRE : Connecter tout le panel d'administration au backend
     $scope.register = function(credentials) {
         if (credentials.password != credentials.confirmedPassword) {
@@ -464,44 +459,52 @@ homeCIController.controller('administrationCtrl', ['$scope', '$http', 'UserServi
                 $scope.updateProfileMessage = "";
             }, 2000);
         } else {
-
             if (!(information.username)) information.username = UserService.getCurrentUser().username;
             if (!information.role) information.role = UserService.getCurrentUser().role;
-            if (!information.newPassword && !information.oldPassword && !information.confirmNewPassword) {
+            if (!information.newPassword && !information.oldPassword && !information.confirmedNewPassword) {
                 information.password = UserService.getCurrentUser().password;
-                console.log(information);
+            }
+            if (information.newPassword && (!information.oldPassword || !information.confirmedNewPassword) || information.oldPassword && (!information.newPassword || !information.confirmedNewPassword) || information.confirmedNewPassword && (!information.oldPassword || !information.newPassword)) {
+                $scope.messageColor = "red-text text-lighten-1";
+                $scope.updateProfileMessage = "Il manque des informations concernant le mot de passe !";
+                setTimeout(function() {
+                    $scope.updateProfileMessage = "";
+                }, 2000);
             } else {
-                if (information.newPassword || information.oldPassword || information.confirmNewPassword) {
+                if (information.newPassword != information.confirmedNewPassword) {
                     $scope.messageColor = "red-text text-lighten-1";
-                    $scope.updateProfileMessage = "Il manque des informations concernant le mot de passe !";
+                    $scope.updateProfileMessage = "Ce ne sont pas les mêmes mots de passe";
                     setTimeout(function() {
                         $scope.updateProfileMessage = "";
                     }, 2000);
                 } else {
-                    if (information.newPassword != information.newConfirmedPassword) {
+                    if (information.oldPassword != UserService.getCurrentUser().password && information.oldPassword) {
                         $scope.messageColor = "red-text text-lighten-1";
-                        $scope.updateProfileMessage = "Ce ne sont pas les mêmes mots de passe";
+                        $scope.updateProfileMessage = "Vous n'avez pas bien saisi votre ancien mot de passe";
                         setTimeout(function() {
                             $scope.updateProfileMessage = "";
                         }, 2000);
                     } else {
-                        information.password = information.newPassword;
-                        var data = {
-                            "currentUser": {
-                                username: UserService.getCurrentUser().username,
-                                password: UserService.getCurrentUser().password,
-                                role: UserService.getCurrentUser().role
-                            },
-                            "dataToUpdate": {
-                                username: information.username,
-                                password: information.password,
-                                role: information.role
-                            }
+                        if (information.newPassword) {
+                            information.password = information.newPassword;
                         }
-                        socket.emit('updateProfile', data);
                     }
                 }
             }
+            var data = {
+                "currentUser": {
+                    username: UserService.getCurrentUser().username,
+                    password: UserService.getCurrentUser().password,
+                    role: UserService.getCurrentUser().role
+                },
+                "dataToUpdate": {
+                    username: information.username,
+                    password: information.password,
+                    role: information.role
+                }
+            }
+            console.log(data);
+            socket.emit('updateProfile', data);
         }
     }
 }]);
