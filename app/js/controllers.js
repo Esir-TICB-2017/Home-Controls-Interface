@@ -412,8 +412,12 @@ homeCIController.controller('administrationCtrl', ['$scope', '$http', 'UserServi
         console.log(UserService.getCurrentUser());
          Materialize.toast('Profil mis à jour', 2000);
     });
-    //A FAIRE : Connecter tout le panel d'administration au backend
+    /**
+     * Allow the current User to register a new user.
+     * @param  {object} credentials [username - password - role]
+     */
     $scope.register = function(credentials) {
+        //Verify if passwords match
         if (credentials.password != credentials.confirmedPassword) {
             $scope.messageColor = "red-text text-lighten-1";
             $scope.registerMessage = "Ce ne sont pas les mêmes mots de passe";
@@ -421,6 +425,7 @@ homeCIController.controller('administrationCtrl', ['$scope', '$http', 'UserServi
                 $scope.registerMessage = "";
             }, 2000);
         } else {
+            //Verify if password is at least 6 caracters long
             if (credentials.password.length < 6) {
                 $scope.messageColor = "red-text text-lighten-1";
                 $scope.registerMessage = "Mot de passe trop court !";
@@ -428,6 +433,7 @@ homeCIController.controller('administrationCtrl', ['$scope', '$http', 'UserServi
                     $scope.registerMessage = "";
                 }, 2000);
             } else {
+                //Verify if there is missing information
                 if (!credentials.username || !credentials.password || !credentials.role) {
                     $scope.messageColor = "red-text text-lighten-1";
                     $scope.registerMessage = "Il manque des informations !";
@@ -435,6 +441,7 @@ homeCIController.controller('administrationCtrl', ['$scope', '$http', 'UserServi
                         $scope.registerMessage = "";
                     }, 2000);
                 } else {
+                    //Register the new user by sending a socket serverside
                     $scope.messageColor = "teal-text text-lighten-1";
                     $scope.registerMessage = "Enregistré avec succès !";
                     setTimeout(function() {
@@ -451,6 +458,10 @@ homeCIController.controller('administrationCtrl', ['$scope', '$http', 'UserServi
             }
         }
     }
+    /**
+     * Allow current User to update its profile informations
+     * @param  {object} information [username - passwords - role]
+     */
     $scope.updateProfile = function(information) {
         if (!information) {
             $scope.messageColor = "red-text text-lighten-1";
