@@ -2,6 +2,9 @@
 // BASE SETUP ==========================================================
 // =====================================================================
 // call the packages we need
+var nools = require('./AlgoNools/Main.js');
+var automation=require('./AlgoNools/Functions.js');
+
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
@@ -684,6 +687,8 @@ io.sockets.on('connection', function(socket) {
     })
     socket.on('automation', function(data) {
         //TODO : appeler l'API de David et Damien avec en envoyant le data
+        // Définir le nom du socket vers le client, pour l'instant dans le fichier Functions : 'actionneurs'
+        automation.react(data, socket.emit());
     })
     socket.on('disconnect', function() {});
 });
@@ -710,3 +715,6 @@ app.post('/uploadjson/listepieces.json', function(req, res) {
 http.listen(1337, function() {
     console.log('OK on 1337');
 });
+
+// Fonction pour lancer l'algorithme d'aide à la décision
+//nools.Nools();
