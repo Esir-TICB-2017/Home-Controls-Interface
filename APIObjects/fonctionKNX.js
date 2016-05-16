@@ -5,9 +5,11 @@ KnxConnectionTunneling = require('./src/KnxConnectionTunneling.js');
 exports.KnxHelper = KnxHelper;
 exports.KnxConnectionTunneling = KnxConnectionTunneling;
 // varriable
-var ipplateauknx = '192.168.1.118';
-var portplateauknx = 3671;
-var portserver = 13671;
+var fs = require("fs");
+var conf = JSON.parse(fs.readFileSync('../config.json'));
+var ipplateauknx = conf.knx.ipplateauknx;
+var portplateauknx = conf.knx.portplateauknx;
+var portserver = conf.knx.portserver;
 var ipserver = fonction.getIpAddress();
 //crée les variables de connexion à la plaque KNX
 var KnxConnectionTunneling = require('knx.js').KnxConnectionTunneling;

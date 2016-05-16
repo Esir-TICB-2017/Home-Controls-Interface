@@ -1,6 +1,16 @@
 var fonctionKNX = require("./fonctionKNX.js");
 var fonctionRest = require("./fonctionRest.js");
 var monMongo = require("./monMongo.js");
+var init = function() {
+    //---- connection aux équipements KNX
+    fonctionKNX.connectionKNX(function() {
+        if (fonctionKNX.connection.connected == true) {
+            fonctionKNX.socketListenerKNX();
+            console.log('vous etes connecté a KNX');
+        }
+    });
+    //-- création de la routine pour relever les valeurs .
+}
 var up = function(id) {
     var data = monMongo.findByOneId(id, function(data) {
         var param = data.fonction;
@@ -43,5 +53,6 @@ var down = function(id) {
         }
     });
 }
+exports.init = init;
 exports.up = up;
 exports.down = down;
