@@ -1,0 +1,337 @@
+//	*******************************************************************
+//	Fichier comportant toutes les règles destinées au raisonneur
+//	*******************************************************************
+
+import("./Functions.js");
+import("./Objets.js");
+
+// 		============================================================
+//		Règles pour gérer le changement de moment de la journée
+//		1ère règle pour que ce soit bien pris en compte pour la suite
+//			-> Matin dans salle de bain, salle, chambre
+//			-> Journée dans salle de bain, salle, chambre
+//			-> Soir dans salle de bain, salle, chambre
+//			-> Nuit dans salle de bain, salle, chambre
+//		============================================================
+rule matin {
+	when {
+		moment       : Moment moment.getValue() == 'matin';
+		consigneTemp : Consigne consigneTemp.getMesure() == 'temperature';
+		consigneLum  : Consigne consigneLum.getMesure() == 'luminosite';
+	}
+	then {
+		modify(consigneTemp, function(){consigneTemp.valueSdb = consigne_temperature + 2;});
+		modify(consigneLum, function(){consigneLum.valueChambre = consigne_temperature -150;});
+	}
+}
+
+rule jour {
+	when {
+		moment       : Moment moment.getValue() == 'jour';
+		consigneTemp : Consigne consigneTemp.getMesure() == 'temperature';
+	}
+	then {
+		modify(consigneTemp, function(){consigneTemp.valueSdb = consigne_temperature - 2;});
+		modify(consigneTemp, function(){consigneTemp.valueSalle = consigne_temperature - 1;});
+		modify(consigneTemp, function(){consigneTemp.valueChambre = consigne_temperature - 2;});
+	}
+}
+
+rule soir {
+	when {
+		moment       : Moment moment.getValue() == 'soir';
+		consigneTemp : Consigne consigneTemp.getMesure() == 'temperature';
+		consigneLum  : Consigne consigneLum.getMesure() == 'luminosite';
+	}
+	then {
+		modify(consigneTemp, function(){consigneTemp.valueSdb = consigne_temperature + 1;});
+		modify(consigneTemp, function(){consigneTemp.valueSalle = consigne_temperature + 1;});
+		modify(consigneTemp, function(){consigneTemp.valueChambre = consigne_temperature - 1;});
+		modify(consigneLum, function(){consigneLum.valueChambre = consigne_luminosite - 150;});
+	}
+}
+
+rule nuit {
+	when {
+		moment       : Moment moment.getValue() == 'soir';
+		consigneTemp : Consigne consigneTemp.getMesure() == 'temperature';
+		consigneLum  : Consigne consigneLum.getMesure() == 'luminosite';
+	}
+	then {
+		modify(consigneTemp, function(){consigneTemp.valueSdb = consigne_temperature - 2;});
+		modify(consigneTemp, function(){consigneTemp.valueSalle = consigne_temperature - 2;});
+		modify(consigneLum, function(){consigneLum.valueSalle = consigne_luminosite - 150;});
+		modify(consigneTemp, function(){consigneTemp.valueChambre = consigne_temperature - 1;});
+		modify(consigneLum, function(){consigneLum.valueChambre = consigne_luminosite - 150;});
+	}
+}
+
+
+// 		============================================================
+//		Règles pour gérer la salle de bain
+//			-> Chauffage
+//		============================================================
+
+/*		********				Chauffage				 ******** */
+rule SDBchauffageUp {
+	when {
+		consigne    : Consigne consigne.getMesure() == 'temperature';
+		chauffage   : Chauffage chauffage.getPlace() == 'sdb';
+		temperature : CaptTemperature temperature.getPlace() == 'sdb' && temperature.getValue() < (consigne.getValue('sdb') - 0.5);
+	}
+	then{
+		modify(chauffage, function(){chauffage.setEtat('on');});
+		modify(chauffage, function(){chauffage.value += 1;});
+	}
+}
+
+rule SDBchauffageDown {
+	when {
+		consigne    : Consigne consigne.getMesure() == 'temperature';
+		chauffage   : Chauffage chauffage.getPlace() == 'sdb';
+		temperature : CaptTemperature temperature.getPlace() == 'sdb' && temperature.getValue() > (consigne.getValue('sdb') + 0.5);
+	}
+	then{
+		modify(chauffage, function(){chauffage.setEtat('on');});
+		modify(chauffage, function(){chauffage.value() -= 1;});
+	}
+}
+
+
+// 		============================================================
+//		Règles pour gérer la chambre
+//			-> Chauffage
+//			-> Lumière
+//			-> Volet
+//		============================================================
+
+/*		********				Chauffage				 ******** */
+rule ChambreChauffageUp1 {
+	when {
+		consigne       : Consigne consigne.getMesure() == 'temperature';
+		temperatureInt : CaptTemperature temperatureInt.getPlace() == 'chambre' 	&& temperatureInt.getValue() < (consigne.getValue('chambre') - 1);
+		volet          : Volet volet.getPlace() == 'chambre'						&& volet.getValue() == 'down';
+		temperatureExt : CaptTemperature temperatureExt.getPlace() == 'exterieur' 	&& temperatureExt.getValue() >= consigne.getValueTempSuf();
+		lum            : CaptLuminosite lum.getPlace() == 'exterieur' 				&& lum.getValue() >= consigne.getValueLumSuf();
+	}
+	then {
+		modify(volet, function(){volet.up();});
+	}
+}
+
+rule ChambreChauffageUp2 {
+	when {
+		consigne    : Consigne consigne.getMesure() == 'temperature';
+		chauffage   : Chauffage chauffage.getPlace() == 'chambre';
+		temperature : CaptTemperature temperature.getPlace() == 'chambre' 				&& temperature.getValue() < (consigne.getValue('chambre') - 1);
+		volet       : Volet volet.getPlace() == 'chambre' 								&& volet.getValue() == 'up';
+		or( temperatureExt : CaptTemperature temperatureExt.getPlace() == 'exterieur' 	&& temperatureExt.getValue() < consigne.getValueTempSuf(),
+			luminositeExt : CaptLuminosite luminositeExt.getPlace() == 'exterieur' 		&& luminositeExt.getValue() < consigne.getValueLumSuf());
+	} 
+	then {
+		modify(chauffage, function(){chauffage.setEtat('on');});
+		modify(chauffage, function(){chauffage.up();});
+	}
+}
+
+rule ChambreChauffageDown1 {
+	when {
+		consigne    : Consigne consigne.getMesure() == 'temperature';
+		chauffage   : Chauffage chauffage.getPlace() == 'chambre' 			&& chauffage.getEtat() == 'on';
+		temperature : CaptTemperature temperature.getPlace() == 'chambre' 	&& temperature.getValue() > (consigne.getValue('chambre') + 1);
+	}
+	then {
+		modify(chauffage, function(){chauffage.setEtat('off');});
+	}
+}
+
+rule ChambreChauffageDown2 {
+	when {
+		consigne       : Consigne consigne.getMesure() == 'temperature';
+		chauffage      : Chauffage chauffage.getPlace() == 'chambre' 				&& chauffage.getEtat() == 'off';
+		temperature    : CaptTemperature temperature.getPlace() == 'chambre' 		&& temperature.getValue() > (consigne.getValue('chambre') + 1);
+		volet          : Volet volet.getPlace() == 'chambre' 						&& volet.getValue() == 'up';
+		luminosite     : CaptLuminosite luminosite.getPlace() == 'exterieur' 		&& luminosite.getValue() > consigne.getValueLumFort();
+		temperatureExt : CaptTemperature temperatureExt.getPlace() == 'exterieur' 	&& temperatureExt.getValue() > consigne.getValueTempFort();
+	}
+	then {
+		modify(volet, function(){volet.down();});
+	}
+}
+
+/*		********				Luminosité				 ******** */
+rule ChambreLuminositeUp1 {
+	when {
+		consigne   : Consigne consigne.getMesure() == 'luminosite';
+		volet      : Volet volet.getPlace() == 'chambre' 				&& volet.getValue() == 'up';
+		lumiere    : Lumiere lumiere.getPlace() == 'chambre' 			&& lumiere.getValue() == 'down';
+		luminosite : CaptLuminosite luminosite.getPlace() == 'chambre' 	&& luminosite.getValue() < (consigne.getValue('chambre') - 25);
+	}
+	then {
+		modify(lumiere, function(){lumiere.up();});
+	}
+}
+
+rule ChambreLuminositeUp2 {
+	when {
+		consigne      : Consigne consigne.getMesure() == 'luminosite';
+		luminosite    : CaptLuminosite luminosite.getPlace() == 'chambre' 		&& luminosite.getValue() < (consigne.getValue('chambre') - 25);
+		volet         : Volet volet.getPlace() == 'chambre' 					&& volet.getValue() == 'down';
+		luminositeExt : CaptLuminosite luminositeExt.getPlace() == 'exterieur' 	&& luminositeExt.getValue() > consigne.getValueJourSuf();
+	}
+	then {
+		modify(volet, function(){volet.up();});
+	}
+}
+
+rule ChambreLuminositeDown {
+	when {
+		consigne   : Consigne consigne.getMesure() == 'luminosite';
+		luminosite : CaptLuminosite luminosite.getPlace() == 'chambre' 	&& luminosite.getValue() > (consigne.getValue('chambre') + 25);
+		lumiere    : Lumiere lumiere.getPlace() == 'chambre' 			&& lumiere.getValue() == 'up';
+		}
+	then {
+		modify(lumiere, function(){lumiere.down();});
+	}
+}
+
+
+// 		============================================================
+//		Règles pour gérer la salle
+//			-> Chauffage
+//			-> Lumière
+//			-> Volet
+//			-> VMC
+//		============================================================
+
+/*		********				Chauffage				 ******** */
+rule SalleChauffageUp1 {
+	when {
+		consigne       : Consigne consigne.getMesure() == 'temperature';
+		temperatureInt : CaptTemperature temperatureInt.getPlace() == 'salle' 		&& temperatureInt.getValue() < (consigne.getValue('salle') - 1);
+		volet          : Volet volet.getPlace() == 'salle' 							&& volet.getValue() == 'down';
+		temperatureExt : CaptTemperature temperatureExt.getPlace() == 'exterieur' 	&& temperatureExt.getValue() >= consigne.getValueTempSuf();
+		lum            : CaptLuminosite lum.getPlace() == 'exterieur' 				&& lum.getValue() >= consigne.getValueLumSuf();
+	}
+	then {
+		modify(volet, function(){volet.up();});
+	}
+}
+
+rule SalleChauffageUp2 {
+	when {
+		consigne    : Consigne consigne.getMesure() == 'temperature';
+		chauffage   : Chauffage chauffage.getPlace() == 'salle';
+		temperature : CaptTemperature temperature.getPlace() == 'salle' 				&& temperature.getValue() < (consigne.getValue('salle') - 1);
+		volet       : Volet volet.getPlace() == 'salle' 								&& volet.getValue() == 'up';
+		or( temperatureExt : CaptTemperature temperatureExt.getPlace() == 'exterieur' 	&& temperatureExt.getValue() < consigne.getValueTempSuf(),
+			luminositeExt : CaptLuminosite luminositeExt.getPlace() == 'exterieur' 		&& luminositeExt.getValue() < consigne.getValueLumSuf());
+	} 
+	then {
+		modify(chauffage, function(){chauffage.setEtat('on');});
+		modify(chauffage, function(){chauffage.up();});
+	}
+}
+
+rule SalleChauffageDown1 {
+	when {
+		consigne    : Consigne consigne.getMesure() == 'temperature';
+		chauffage   : Chauffage chauffage.getPlace() == 'salle' 			&& chauffage.getEtat() == 'on';
+		temperature : CaptTemperature temperature.getPlace() == 'salle' 	&& temperature.getValue() > (consigne.getValue('salle') + 1);
+	}
+	then {
+		modify(chauffage, function(){chauffage.setEtat('off');});
+	}
+}
+
+rule SalleChauffageDown2 {
+	when {
+		consigne       : Consigne consigne.getMesure() == 'temperature';
+		chauffage      : Chauffage chauffage.getPlace() == 'salle' 					&& chauffage.getEtat() == 'off';
+		temperature    : CaptTemperature temperature.getPlace() == 'salle'			&& temperature.getValue() > (consigne.getValue('salle') + 1);
+		volet          : Volet volet.getPlace() == 'salle' 							&& volet.getValue() == 'up';
+		luminosite     : CaptLuminosite luminosite.getPlace() == 'exterieur' 		&& luminosite.getValue() > consigne.getValueLumFort();
+		temperatureExt : CaptTemperature temperatureExt.getPlace() == 'exterieur' 	&& temperatureExt.getValue() > consigne.getValueTempFort();
+	}
+	then {
+		modify(volet, function(){volet.down();});
+	}
+}
+
+
+/*		********				Luminosité				 ******** */
+rule SalleLuminositeUp1 {
+	when {
+		consigne   : Consigne consigne.getMesure() == 'luminosite';
+		volet      : Volet volet.getPlace() == 'salle' 					&& volet.getValue() == 'up';
+		lumiere    : Lumiere lumiere.getPlace() == 'salle' 				&& lumiere.getValue() == 'down';
+		luminosite : CaptLuminosite luminosite.getPlace() == 'salle' 	&& luminosite.getValue() < (consigne.getValue('salle') - 25);
+	}
+	then {
+		modify(lumiere, function(){lumiere.up()};);
+	}
+}
+
+rule SalleLuminositeUp2 {
+	when {
+		consigne      : Consigne consigne.getMesure() == 'luminosite';
+		luminosite    : CaptLuminosite luminosite.getPlace() == 'salle' 		&& luminosite.getValue() < (consigne.getValue('salle') - 25);
+		volet         : Volet volet.getPlace() == 'salle' 						&& volet.getValue() == 'down';
+		luminositeExt : CaptLuminosite luminositeExt.getPlace() == 'exterieur' 	&& luminositeExt.getValue() > consigne.getValueJourSuf();
+	}
+	then {
+		modify(volet, function(){volet.up()};);
+	}
+}
+
+rule SalleLuminositeDown {
+	when {
+		consigne   : Consigne consigne.getMesure() == 'luminosite';
+		luminosite : CaptLuminosite luminosite.getPlace() == 'salle' 	&& luminosite.getValue() > (consigne.getValue('salle') + 25);
+		lumiere    : Lumiere lumiere.getPlace() == 'salle' 				&& lumiere.getValue() == 'up';
+		}
+	then {
+		modify(lumiere, function(){lumiere.down();});
+	}
+}
+
+
+/*		********				VMC  				 ******** */
+rule SalleAugVMC {
+	when {
+		consigne : Consigne consigne.getMesure() == 'co2';
+		co2      : CaptCO2 co2.getValue() > (consigne.co2 + 25);
+		vmc      : VMC vmc.getValue() == 1;
+	}
+	then {
+		modify(vmc, function(){vmc.setV2();});
+		console.log(vmc);
+	}
+}
+
+rule SalleDimVMC {
+	when {
+		consigne : Consigne consigne.getMesure() == 'co2';
+		co2      : CaptCO2 co2.getValue() < (consigne.co2 - 25);
+		vmc      : VMC vmc.getValue() == 2;
+	}
+	then {
+		modify(vmc, function(){vmc.setV1();});
+		console.log(vmc);
+	}
+}
+
+// 		============================================================
+//		Règles divers
+//			-> Fermeture des volets quand il fait nuit
+//		============================================================
+rule VoletNuitDown {
+	when {
+		luminosite : CaptLuminosite luminosite.getPlace() == 'exterieur';
+		consigne   : Consigne consigne.getMesure() == 'luminosite' 			&& (luminosite.getValue() < consigne.getValueJourSuf());
+		volet      : Volet;
+	}
+	then {
+		modify(volet, function(){volet.down();});
+	}
+}

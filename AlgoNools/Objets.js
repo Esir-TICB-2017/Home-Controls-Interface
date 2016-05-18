@@ -35,6 +35,7 @@ define Consigne {
 	tempFort     : 25,
 	lumFort      : 1000,
 	jourSuf      : 100,
+	co2 		 : 300,
 
 	constructor : function(val1, val2, val3, mesure){
 		this.valueSdb     = val1;
@@ -99,7 +100,7 @@ define Chauffage {
 		this.id    = id;
 		this.value = value;
 		this.place = place;
-		this.etat  = 'on';
+		this.etat  = 'off';
  	},
 
  	getId : function(){
