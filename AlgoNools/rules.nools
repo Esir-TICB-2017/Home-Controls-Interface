@@ -2,7 +2,6 @@
 //	Fichier comportant toutes les règles destinées au raisonneur
 //	*******************************************************************
 
-import("./Functions.js");
 import("./Objets.js");
 
 // 		============================================================
@@ -20,7 +19,7 @@ rule matin {
 		consigneLum  : Consigne consigneLum.getMesure() == 'luminosite';
 	}
 	then {
-		modify(consigneTemp, function(){consigneTemp.valueSdb = consigne_temperature + 2;});
+		modify(consigneTemp, function(){consigneTemp.valueSdb   = consigne_temperature + 2;});
 		modify(consigneLum, function(){consigneLum.valueChambre = consigne_temperature -150;});
 	}
 }
@@ -31,8 +30,8 @@ rule jour {
 		consigneTemp : Consigne consigneTemp.getMesure() == 'temperature';
 	}
 	then {
-		modify(consigneTemp, function(){consigneTemp.valueSdb = consigne_temperature - 2;});
-		modify(consigneTemp, function(){consigneTemp.valueSalle = consigne_temperature - 1;});
+		modify(consigneTemp, function(){consigneTemp.valueSdb     = consigne_temperature - 2;});
+		modify(consigneTemp, function(){consigneTemp.valueSalle   = consigne_temperature - 1;});
 		modify(consigneTemp, function(){consigneTemp.valueChambre = consigne_temperature - 2;});
 	}
 }
@@ -44,10 +43,10 @@ rule soir {
 		consigneLum  : Consigne consigneLum.getMesure() == 'luminosite';
 	}
 	then {
-		modify(consigneTemp, function(){consigneTemp.valueSdb = consigne_temperature + 1;});
-		modify(consigneTemp, function(){consigneTemp.valueSalle = consigne_temperature + 1;});
+		modify(consigneTemp, function(){consigneTemp.valueSdb     = consigne_temperature + 1;});
+		modify(consigneTemp, function(){consigneTemp.valueSalle   = consigne_temperature + 1;});
 		modify(consigneTemp, function(){consigneTemp.valueChambre = consigne_temperature - 1;});
-		modify(consigneLum, function(){consigneLum.valueChambre = consigne_luminosite - 150;});
+		modify(consigneLum, function(){consigneLum.valueChambre   = consigne_luminosite - 150;});
 	}
 }
 
@@ -58,11 +57,11 @@ rule nuit {
 		consigneLum  : Consigne consigneLum.getMesure() == 'luminosite';
 	}
 	then {
-		modify(consigneTemp, function(){consigneTemp.valueSdb = consigne_temperature - 2;});
-		modify(consigneTemp, function(){consigneTemp.valueSalle = consigne_temperature - 2;});
-		modify(consigneLum, function(){consigneLum.valueSalle = consigne_luminosite - 150;});
+		modify(consigneTemp, function(){consigneTemp.valueSdb     = consigne_temperature - 2;});
+		modify(consigneTemp, function(){consigneTemp.valueSalle   = consigne_temperature - 2;});
+		modify(consigneLum, function(){consigneLum.valueSalle     = consigne_luminosite - 150;});
 		modify(consigneTemp, function(){consigneTemp.valueChambre = consigne_temperature - 1;});
-		modify(consigneLum, function(){consigneLum.valueChambre = consigne_luminosite - 150;});
+		modify(consigneLum, function(){consigneLum.valueChambre   = consigne_luminosite - 150;});
 	}
 }
 
@@ -268,7 +267,7 @@ rule SalleLuminositeUp1 {
 		luminosite : CaptLuminosite luminosite.getPlace() == 'salle' 	&& luminosite.getValue() < (consigne.getValue('salle') - 25);
 	}
 	then {
-		modify(lumiere, function(){lumiere.up()};);
+		modify(lumiere, function(){lumiere.up();});
 	}
 }
 
@@ -280,7 +279,7 @@ rule SalleLuminositeUp2 {
 		luminositeExt : CaptLuminosite luminositeExt.getPlace() == 'exterieur' 	&& luminositeExt.getValue() > consigne.getValueJourSuf();
 	}
 	then {
-		modify(volet, function(){volet.up()};);
+		modify(volet, function(){volet.up();});
 	}
 }
 

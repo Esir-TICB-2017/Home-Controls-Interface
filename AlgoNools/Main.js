@@ -15,8 +15,6 @@ global.consigne_co2 = 300;
 global.retour = "";
 
 
-
-
 // Correspondance entre nools et ce fichier JS
 var nools           = require ('nools');
 var ruleFilePath    = __dirname + '/rules.nools';
@@ -36,7 +34,7 @@ var session         = flow.getSession();
  *		-> Consigne    (x3) : Température, Luminosité, CO2
  */
 
- /* ==> Changer les id des objets <== */
+/* ==> Changer les id des objets <== */
 var Chauffage                            = flow.getDefined('chauffage');
 session.assert(chauffageSdb              = new Chauffage (consigne_temperature, 'id', 'sdb'));
 session.assert(chauffageSalle            = new Chauffage (consigne_temperature, 'id', 'salle'));
@@ -76,17 +74,8 @@ var Moment                               = flow.getDefined('moment');
 session.assert(moment                    = new Moment('jour'));
 
 
-function afficherData() {
-	//console.log(voletChambre.getValue());
-}
-
-
 var obj = "{'consigneTemp':30,'consigneLum':40,'consigneCo2';41,'captLuminositeExt':32,'captTemperatureIntSalle':11,'captTemperatureIntChambre':14,'captTemperatureIntSdb':5,'captLuminositeIntSalle':11,'captTemperatureIntChambre':12,'captLuminositeExt':121,'captCO2':12,'moment':'soir'}";
-
-
 
 
 // Démarrage du raisonneur
 session.matchUntilHalt().then(function(){});
-
-setTimeout(afficherData, 200);

@@ -3,8 +3,9 @@
 //	Fonctions externes pour travailler via les API nécessaires
 //
 //	*******************************************************************
-	react = function(obj, callback){
 
+	react = function(obj, callback){
+		
 		consigneTemp.setValue(obj.consigneTemp);
 		consigneLum.setValue(obj.consigneLum);
 		consigneCo2.setValue(obj.consigneCo2);
@@ -38,7 +39,7 @@
 		setTimeout(function(){
 				callback('actionneurs',"{'chauffageSdb':"+chauffageSdb.getValue()+", 'chauffageChambre':"+chauffageChambre.getValue()+", 'chauffageSalle':"+chauffageSalle.getValue()+", 'lumiereChambre':"+lumiereChambre.getValue()+", 'lumiereSalle':"+lumiereSalle.getValue()+", 'voletSalle':"+"voletSalle.getValue()"+", 'voletChambre':"+"voletChambre.getValue()"+", 'vmc':"+vmc.getValue()+"}");
 			});
-
+		
 	}
 
 exports.react = react;
