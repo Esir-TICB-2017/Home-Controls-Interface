@@ -327,6 +327,40 @@ homeCIService.service('LoginService', function($http) {
     };
 });
 
+homeCIService.service('parseObjctsFunction', function(){
+    
+    /*  Parse an the string function received in every object from the server to adapt it to our needs
+    *   Exemple :
+    *   String : name:up;param:<str val="On"/>;name:down;param:<str val="Off"/>
+    *   Will return : [{name:'up',param:'<str val="On"/>'},{name:'down',param:'<str val="Off"/>'}]
+    */
+    this.parse = function(functions){
+        //Variable containing the result, will be returned
+        var res = "[{" ;
+    
+        //Temporary variable used to split a part of the String
+        var temp = functions.split(";");
+        //For each instruction, if it's a name parameter we create a new object, if not, we continue to store
+        //each parameter in the object, adding ' around the parameter to make it a string
+        angular.forEach(temp,function(val,key){
+            if((val.indexOf("name") != -1) && (res != "[{")){
+                res += "},{";
+            }
+            if(res.charAt(res.length -1)!="{"){
+                res += ",";
+            }
+            var temp2 = val.split(":");
+            res += temp2[0];
+            res += ":'" + temp2[1] + "'"
+        })
+        res += ("}]");
+        
+        res = eval("(" + res + ")");
+        
+        return res;
+    }
+});
+
 homeCIService.factory('socket', function ($rootScope) {
   var socket = io.connect();
   return {

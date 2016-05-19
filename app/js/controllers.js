@@ -1,6 +1,6 @@
 'use strict'
 var homeCIController = angular.module('homeCIController', []);
-homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$state', 'socket', function(UserService, $scope, $http, $state, socket) {
+homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$state', 'socket','parseObjctsFunction' ,function(UserService, $scope, $http, $state, socket,parseObjctsFunction) {
     var mySocketId = null;
     socket.on('connected', onConnected);
     var objectList = {};
@@ -31,7 +31,9 @@ homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$sta
             } else if (object.type == "humidite") {
                 object.icon = "opacity";
             }
+            object.fonction = parseObjctsFunction.parse(object.fonction);
         });
+        
         $scope.listObjects = objectList;
         console.log($scope.listObjects);
     });
@@ -293,7 +295,7 @@ homeCIController.controller('scenariosCtrl', ['UserService', '$scope', '$http', 
         $scope.showAddObjectsMenu = true;
     };
 }]);
-homeCIController.controller('objectsCtrl', ['UserService', '$scope', '$http', '$state', 'USER_ROLES', 'socket', function(UserService, $scope, $http, $state, USER_ROLES, socket) {
+homeCIController.controller('objectsCtrl', ['UserService', '$scope', '$http', '$state', 'USER_ROLES', 'socket', 'parseObjctsFunction' ,function(UserService, $scope, $http, $state, USER_ROLES, socket, parseObjctsFunction) {
     //Verify the user autorization to access the datas
     $scope.isAuthorized = UserService.isAuthorized;
     if (UserService.getCurrentUser()) {
@@ -325,7 +327,9 @@ homeCIController.controller('objectsCtrl', ['UserService', '$scope', '$http', '$
             } else if (object.type == "humidite") {
                 object.icon = "opacity";
             }
+            object.fonction = parseObjctsFunction.parse(object.fonction);
         });
+        console.log(objectList[0].fonction);
         $scope.listObjects = objectList;
     });
     //Call the function that control the object
