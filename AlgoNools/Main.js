@@ -6,8 +6,8 @@
 //			->	Création des équipements
 //
 //	*******************************************************************
-var fs = require("fs")
-var vm = require('vm')
+var fs = require("fs");
+var vm = require('vm');
 
 global.consigne_temperature = 19;
 global.consigne_luminosite = 500;
@@ -19,7 +19,7 @@ global.retour = "";
 
 // Correspondance entre nools et ce fichier JS
 var nools           = require ('nools');
-var ruleFilePath    = __dirname + '/test.nools';
+var ruleFilePath    = __dirname + '/rules.nools';
 var flow            = nools.compile(ruleFilePath);
 var session         = flow.getSession();
 
