@@ -79,3 +79,10 @@ var obj = "{'consigneTemp':30,'consigneLum':40,'consigneCo2';41,'captLuminositeE
 
 // Démarrage du raisonneur
 session.matchUntilHalt().then(function(){});
+
+function run(){
+	session.matchUntilHalt();
+}
+
+// Redémarrage toutes les 2 secondes pour s'assurer d'avoir le raisonneur en fonctionnement
+setInterval(run, 2000);
