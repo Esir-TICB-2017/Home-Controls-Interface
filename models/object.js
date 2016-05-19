@@ -6,7 +6,8 @@ var objectsSchema = new mongoose.Schema({
     capteur: Boolean,
     fonction: String,
     lien: String,
-    type: String
+    type: String,
+    value : String
 }, {
     _id: true
 });
