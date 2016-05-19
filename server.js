@@ -18,6 +18,7 @@ var Sensor = require('./models/sensor');
 var Scenario = require('./models/scenario');
 var session = require('express-session');
 var APIObjects=require("./APIObjects/APIObjects.js");
+var fonctionKNX=require('./APIObjects/fonctionKNX.js');
 app.use('/bower_components', express.static(__dirname + '/bower_components')); //supplies folder
 app.use('/js', express.static(__dirname + '/app/js'));
 app.use('/publicViews', express.static(__dirname + '/app/publicViews'));
@@ -28,6 +29,7 @@ app.use('/css', express.static(__dirname + '/app/css'));
 // configuration =======================================================
 // =====================================================================
 APIObjects.init();
+
 var port = process.env.PORT || 1337; // Port du serveur
 //-----Permet de vérifier la connexion à la base de données------
 mongoose.connection.on('open', function(ref) {

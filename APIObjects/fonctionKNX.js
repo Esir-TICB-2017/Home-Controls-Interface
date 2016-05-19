@@ -6,7 +6,7 @@ exports.KnxHelper = KnxHelper;
 exports.KnxConnectionTunneling = KnxConnectionTunneling;
 // varriable
 var fs = require("fs");
-var conf = JSON.parse(fs.readFileSync('../config.json'));
+var conf = JSON.parse(fs.readFileSync('./config.json'));
 var ipplateauknx = conf.knx.ipplateauknx;
 var portplateauknx = conf.knx.portplateauknx;
 var portserver = conf.knx.portserver;

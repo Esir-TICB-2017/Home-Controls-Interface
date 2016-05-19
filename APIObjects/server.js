@@ -8,12 +8,12 @@ var http = require('http').Server(app);
 //|===================================================================================|
 //|==================================== server =======================================|
 //|===================================================================================|
-fonctionKNX.connectionKNX(function() {
+/*fonctionKNX.connectionKNX(function() {
     if (fonctionKNX.connection.connected == true) {
         fonctionKNX.socketListenerKNX();
         console.log('vous etes connecté a KNX');
     }
-});
+});*/
 
 
 /*
