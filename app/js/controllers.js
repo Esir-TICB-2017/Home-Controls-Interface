@@ -35,13 +35,25 @@ homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$sta
         $scope.listObjects = objectList;
         console.log($scope.listObjects);
     });
+    
+    //Call the function that control the object
+    $scope.objectFunction = function(nameFct, idObject) {
+        var data = {
+            id: idObject
+        };
+        if (nameFct == "up") {
+            socket.emit("up", data);
+        } else if (nameFct == "down") {
+            socket.emit("down", data);
+        }
+    };
 
     function onConnected(data) {
         // Cache a copy of the client's socket.IO session ID on the App
         mySocketId = data.socketId;
         console.log("You are connected !");
         console.log(mySocketId);
-    }
+    };
     $scope.sendSmartData = function(data) {
         console.log('ici');
         var data = {
@@ -49,7 +61,7 @@ homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$sta
             dvsd: 'fre'
         };
         socket.emit('smartData', data);
-    }
+    };
 }]);
 homeCIController.controller('scenariosCtrl', ['UserService', '$scope', '$http', '$state', 'newScenario', function(UserService, $scope, $http, $state, newScenario) {
     $scope.isAuthorized = UserService.isAuthorized;

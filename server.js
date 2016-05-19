@@ -14,12 +14,14 @@ var morgan = require('morgan');
 var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var config = require('./config'); // get our config file
-var User = require('./app/models/user'); // get our mongoose model
-var Room = require('./app/models/room');
-var Object = require('./app/models/object');
-var Sensor = require('./app/models/sensor');
-var Scenario = require('./app/models/scenario');
+var User = require('./models/user'); // get our mongoose model
+var Room = require('./models/room');
+var Object = require('./models/object');
+var Sensor = require('./models/sensor');
+var Scenario = require('./models/scenario');
 var session = require('express-session');
+var APIObjects = require("./APIObjects/APIObjects.js");
+var fonctionKNX = require('./APIObjects/fonctionKNX.js');
 app.use('/bower_components', express.static(__dirname + '/bower_components')); //supplies folder
 app.use('/js', express.static(__dirname + '/app/js'));
 app.use('/publicViews', express.static(__dirname + '/app/publicViews'));
@@ -29,10 +31,13 @@ app.use('/css', express.static(__dirname + '/app/css'));
 // =====================================================================
 // configuration =======================================================
 // =====================================================================
+APIObjects.init();
+
 var port = process.env.PORT || 1337; // Port du serveur
 //-----Permet de vérifier la connexion à la base de données------
 mongoose.connection.on('open', function(ref) {
     console.log('Connected to mongo server.');
+
 });
 mongoose.connection.on('error', function(err) {
     console.log('Could not connect to mongo server!');
@@ -173,8 +178,8 @@ app.use(function(req, res, next) {
     }
 });
 app.get('/getObjects', function(req, res, next) {
-        //retrieve all Rooms from Mongo
-        mongoose.model('Object').find({}, function(err, objects) {
+        //retrieve all objects from Mongo
+        mongoose.model('objects').find({}, function(err, objects) {
             if (err) {
                 return console.error(err);
             } else {
@@ -195,7 +200,7 @@ app.get('/getObjects', function(req, res, next) {
 app.get('/getOneObject/:id', function(req, res, next) {
         console.log(req.params.id);
         var objectId = req.params.id;
-        mongoose.model('Object').find({
+        mongoose.model('objects').find({
             _id: objectId
         }, function(err, object) {
             if (err) {
@@ -251,7 +256,7 @@ Return a Json with the deleted object and a console message
 app.delete('/deleteObject', function(req, res) {
     var objectId = req.body.objectId;
     //find blob by ID
-    mongoose.model('Object').findById(objectId, function(err, object) {
+    mongoose.model('objects').findById(objectId, function(err, object) {
         if (err) {
             return console.error(err);
         } else {
@@ -680,10 +685,14 @@ io.sockets.on('connection', function(socket) {
         });
     })
     socket.on('up', function(data) {
+        console.log("up");
         //TODO : appeler la fonction up(id) de mathieu avec id=data.id
+        APIObjects.up(data.id);
     })
     socket.on('down', function(data) {
+        console.log("down");
         //TODO : appeler la fonction down(id) de mathieu avec i=data.id
+        APIObjects.down(data.id);
     })
     socket.on('automation', function(data) {
         //TODO : appeler l'API de David et Damien avec en envoyant le data
@@ -716,5 +725,21 @@ http.listen(1337, function() {
     console.log('OK on 1337');
 });
 
+
 // Fonction pour lancer l'algorithme d'aide à la décision
 //nools.Nools();
+
+//MATHIEU ET DANN : C'EST QUOI CA ???
+process.on('SIGINT', function() {
+    if (fonctionKNX.connection.connected) {
+        console.log('deconnection du tunel KNX');
+        fonctionKNX.deconnectionKNX(function() {
+            console.log('shut down server');
+            process.exit();
+        });
+    } else {
+        console.log('shut down server');
+        process.exit();
+    }
+});
+
