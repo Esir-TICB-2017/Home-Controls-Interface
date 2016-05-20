@@ -24,7 +24,7 @@ var addObjet = function(name, protocol, capteur, funct, link, callback) {
         callback();
     });
 }
-/*
+
 var connectionBDD = function(callback) {
     var mongoose = require('mongoose');
     mongoose.connect('mongodb://louison:123456@ds037395.mongolab.com:37395/homecontrol');
@@ -38,7 +38,7 @@ var connectionBDD = function(callback) {
         console.log('Could not connect to mongo server!');
         console.log(err);
     });
-}*/
+}
 exports.findByOneId = findByOneId;
 exports.addObjet = addObjet;
-//exports.connectionBDD=connectionBDD;
+exports.connectionBDD=connectionBDD;
