@@ -12,6 +12,10 @@ import("./Objets.js");
 //			-> Soir dans salle de bain, salle, chambre
 //			-> Nuit dans salle de bain, salle, chambre
 //		============================================================
+
+
+
+
 rule matin {
 	when {
 		moment       : Moment moment.getValue() == 'matin';
