@@ -21,7 +21,7 @@ var Object = require('./models/object');
 var Sensor = require('./models/sensor');
 var Scenario = require('./models/scenario');
 var session = require('express-session');
-var apiObjects = require("./apiObjects/apiObjects.js");
+var apiObjects = require("./APIObjects/APIObjects.js");
 var fonctionKNX = require('./APIObjects/fonctionKNX.js');
 var favicon = require('serve-favicon');
 app.use('/bower_components', express.static(__dirname + '/bower_components')); //supplies folder

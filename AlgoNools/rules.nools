@@ -353,7 +353,7 @@ rule nuit {
 rule SDBchauffageUp {
 	when {
 		consigne    : Consigne consigne.getMesure() == 'temperature';
-		chauffage   : Chauffage chauffage.getPlace() == 'sdb';
+		chauffage   : Chauffage chauffage.getPlace() == 'sdb'		  && chauffage.getValue() < 30;
 		temperature : CaptTemperature temperature.getPlace() == 'sdb' && temperature.getValue() < (consigne.getValue('sdb') - 0.5);
 	}
 	then{
@@ -369,8 +369,7 @@ rule SDBchauffageDown {
 		temperature : CaptTemperature temperature.getPlace() == 'sdb' && temperature.getValue() > (consigne.getValue('sdb') + 0.5);
 	}
 	then{
-		modify(chauffage, function(){chauffage.setEtat('on');});
-		modify(chauffage, function(){chauffage.add(1);});
+		modify(chauffage, function(){chauffage.setEtat('off');});
 	}
 }
 
@@ -401,7 +400,7 @@ rule ChambreChauffageUp2 {
 		consigne    : Consigne consigne.getMesure() == 'temperature';
 		chauffage   : Chauffage chauffage.getPlace() == 'chambre';
 		temperature : CaptTemperature temperature.getPlace() == 'chambre' 				&& temperature.getValue() < (consigne.getValue('chambre') - 1);
-		volet       : Volet volet.getPlace() == 'chambre' 								&& volet.getValue() == 'up';
+		volet       : Volet volet.getPlace() == 'chambre' 								&& volet.getValue() == 'up'    &&    chauffage.getValue() < 30;
 		or( temperatureExt : CaptTemperature temperatureExt.getPlace() == 'exterieur' 	&& temperatureExt.getValue() < consigne.getValueTempSuf(),
 			luminositeExt : CaptLuminosite luminositeExt.getPlace() == 'exterieur' 		&& luminositeExt.getValue() < consigne.getValueLumSuf());
 	} 
@@ -498,7 +497,7 @@ rule SalleChauffageUp1 {
 rule SalleChauffageUp2 {
 	when {
 		consigne    : Consigne consigne.getMesure() == 'temperature';
-		chauffage   : Chauffage chauffage.getPlace() == 'salle';
+		chauffage   : Chauffage chauffage.getPlace() == 'salle'							&& chauffage.getValue() < 30;
 		temperature : CaptTemperature temperature.getPlace() == 'salle' 				&& temperature.getValue() < (consigne.getValue('salle') - 1);
 		volet       : Volet volet.getPlace() == 'salle' 								&& volet.getValue() == 'up';
 		or( temperatureExt : CaptTemperature temperatureExt.getPlace() == 'exterieur' 	&& temperatureExt.getValue() < consigne.getValueTempSuf(),
@@ -582,7 +581,6 @@ rule SalleAugVMC {
 	}
 	then {
 		modify(vmc, function(){vmc.setV2();});
-		console.log(vmc);
 	}
 }
 
@@ -594,7 +592,6 @@ rule SalleDimVMC {
 	}
 	then {
 		modify(vmc, function(){vmc.setV1();});
-		console.log(vmc);
 	}
 }
 

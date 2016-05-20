@@ -58,8 +58,8 @@ Nools = function(){
 	session.assert(captLuminositeIntChambre  = new CaptLuminosite(consigne_luminosite, 'chambre'));
 
 	var Volet                                = flow.getDefined('volet');
-	session.assert(voletSalle                = new Volet('up', 'id', 'salle'));
-	session.assert(voletChambre              = new Volet('up', 'id', 'chambre'));
+	session.assert(voletSalle                = new Volet('down', 'id', 'salle'));
+	session.assert(voletChambre              = new Volet('down', 'id', 'chambre'));
 
 	var Consigne                             = flow.getDefined('consigne');
 	session.assert(consigneTemp              = new Consigne(consigne_temperature, consigne_temperature, consigne_temperature, 'temperature'));

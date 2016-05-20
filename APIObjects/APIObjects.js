@@ -34,6 +34,7 @@ var init = function(tabIdCapteur) {
     }, 3000);
 }
 var objectChangeState = function(action ,id,callback) {
+    callback("on est dans la fonction");
     var data = monMongo.findByOneId(id, function(data) {
         var param = data.fonction;
         console.log(data.fonction);

@@ -11,7 +11,7 @@
 
 
 
-//var api = require("../APIObjects/APIObjects.js");
+var api = require("../APIObjects/APIObjects.js");
 
 define Moment {
 	value : null,
@@ -177,12 +177,12 @@ define Volet {
 
 	up : function(){
 		this.value = 'up';
-		//api.up(this.id)
+		api.objectChangeState('up', this.id, function(data){console.log("volet up :" + data);});
 	},
 
 	down : function(){
 		this.value = 'down';
-		//api.down(this.id)
+		api.down('down',this.id, function(data){console.log("volet down :" + data);});
 	}
 }
 
@@ -234,12 +234,12 @@ define Lumiere {
 
 	up : function(){
 		this.value = 'up';
-		//api.up(this.id)
+		api.objectChangeState('up', this.id, function(data){console.log("lumiere up :" + data);});
 	},
 
 	down : function(){
 		this.value = 'down';
-		//api.down(this.id)
+		api.objectChangeState('up', this.id, function(data){console.log("lumiere down :" + data);});
 	}
 }
 
