@@ -32,12 +32,10 @@ var init = function(tabIdCapteur) {
 }
 
 var objectChangeState = function(action, id, callback) {
-    console.log(id);
     var data = monMongo.findByOneId(id, function(data) {
-        for (i in data.function) {
-            if (data.function[i].name == action) {
-                var parametre = data.function[i].param;
-                console.log(parametre);
+        for (i in data.fonction) {
+            if (data.fonction[i].name == action) {
+                var parametre = data.fonction[i].param;
             }
         }
         //en fonction du protocole selectionné 
@@ -46,10 +44,9 @@ var objectChangeState = function(action, id, callback) {
             callback(true);
         } else if (data.protocole == 'Rest') {
             var restParametre = '<str val="' + parametre + '"/>';
-            var rep = fonctionRest.changerEtat(data.lien, restParametre, function(data){
-                 callback(data);
+            var rep = fonctionRest.changerEtat(data.lien, restParametre, function(data) {
+                callback(data);
             });
-           
         } else {
             callback('error on objectChangeState');
         }
