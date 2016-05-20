@@ -129,6 +129,12 @@ define Chauffage {
 	},
 	setEtat : function(etat){
 		this.etat = etat;
+	},
+	setValue : function(valeur){
+	this.value=valeur;
+	},
+	add : function(valeur){
+	this.value+=valeur;
 	}
 }
 
@@ -140,6 +146,7 @@ define CaptTemperature {
 		this.place = place;
 		this.value = value;
 	},
+
 
 	getPlace : function(){
 		return this.place;
@@ -282,6 +289,7 @@ define VMC {
 	}
 }
 
+
 rule matin {
 	when {
 		moment       : Moment moment.getValue() == 'matin';
@@ -350,7 +358,7 @@ rule SDBchauffageUp {
 	}
 	then{
 		modify(chauffage, function(){chauffage.setEtat('on');});
-		modify(chauffage, function(){chauffage.value += 1;});
+		modify(chauffage, function(){chauffage.add(1);});
 	}
 }
 
@@ -362,7 +370,7 @@ rule SDBchauffageDown {
 	}
 	then{
 		modify(chauffage, function(){chauffage.setEtat('on');});
-		modify(chauffage, function(){chauffage.value() -= 1;});
+		modify(chauffage, function(){chauffage.add(1);});
 	}
 }
 

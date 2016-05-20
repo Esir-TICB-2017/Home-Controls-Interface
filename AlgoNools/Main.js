@@ -78,6 +78,7 @@ Nools = function(){
 	
 	// Démarrage du raisonneur
 	session.matchUntilHalt().then(function(){});
+
 }
 
 exports.Nools=Nools;
