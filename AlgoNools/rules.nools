@@ -12,8 +12,7 @@
 //			-> Soir dans salle de bain, salle, chambre
 //			-> Nuit dans salle de bain, salle, chambre
 //		============================================================
-
-
+global api = require('api.js');
 
 define Moment {
 	value : null,
@@ -191,7 +190,7 @@ define Volet {
 
 	down : function(){
 		this.value = 'down';
-		api.down('down',this.id, function(data){console.log("volet down :" + data);});
+		api.objectChangeState('down',this.id, function(data){console.log("volet down :" + data);});
 	}
 }
 
@@ -290,17 +289,25 @@ define VMC {
 }
 
 
+rule test{
+	when{
+		moment : Moment moment.getValue()=='matin';
+		volet  : Volet;
+	}
+	then{
+		modify(volet,function(){volet.down()});
+	}
+}
 rule matin {
 	when {
 		moment       : Moment moment.getValue() == 'matin';
 		consigneTemp : Consigne consigneTemp.getMesure() == 'temperature';
 		consigneLum  : Consigne consigneLum.getMesure() == 'luminosite';
-		lum : Lumiere;
+
 	}
 	then {
 		modify(consigneTemp, function(){consigneTemp.valueSdb   = consigne_temperature + 2;});
 		modify(consigneLum, function(){consigneLum.valueChambre = consigne_temperature -150;});
-		modify(lum, function(){lum.up();});
 	}
 }
 

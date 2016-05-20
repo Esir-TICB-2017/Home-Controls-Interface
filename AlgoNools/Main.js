@@ -43,7 +43,7 @@ Nools = function(){
 	session.assert(chauffageChambre          = new Chauffage (consigne_temperature, 'id', 'chambre'));
 	
 	var Lumiere                              = flow.getDefined('lumiere');
-	session.assert(lumiereSalle              = new Lumiere ('down', '573f2c9ff2763a101b8abffe', 'salle'));
+	session.assert(lumiereSalle              = new Lumiere ('down', '573f2c9ff2763a101b8abffc', 'salle'));
 	session.assert(lumiereChambre            = new Lumiere ('down', '573f2c9ff2763a101b8ac009', 'chambre'));
 
 	var CaptTemperature                      = flow.getDefined('captTemperature');
