@@ -1,6 +1,6 @@
 'use strict'
 var homeCIController = angular.module('homeCIController', []);
-homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$state', 'socket','parseObjctsFunction' ,function(UserService, $scope, $http, $state, socket,parseObjctsFunction) {
+homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$state', 'socket', 'parseObjctsFunction', function(UserService, $scope, $http, $state, socket, parseObjctsFunction) {
     var mySocketId = null;
     socket.on('connected', onConnected);
     var objectList = {};
@@ -16,7 +16,6 @@ homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$sta
     });
     //Recover the objects in the home and put them in a list in the widget
     $http.get('/getObjects').success(function(data) {
-        console.log(data);
         //types d'objets : lampe, volet, temperature, humidite, luminosite, co2
         var objectList = data;
         angular.forEach(objectList, function(object, key) {
@@ -33,22 +32,8 @@ homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$sta
             }
             object.fonction = parseObjctsFunction.parse(object.fonction);
         });
-        
         $scope.listObjects = objectList;
-        console.log($scope.listObjects);
     });
-    
-    //Call the function that control the object
-    $scope.objectFunction = function(nameFct, idObject) {
-        var data = {
-            id: idObject
-        };
-        if (nameFct == "up") {
-            socket.emit("up", data);
-        } else if (nameFct == "down") {
-            socket.emit("down", data);
-        }
-    };
 
     function onConnected(data) {
         // Cache a copy of the client's socket.IO session ID on the App
@@ -295,7 +280,7 @@ homeCIController.controller('scenariosCtrl', ['UserService', '$scope', '$http', 
         $scope.showAddObjectsMenu = true;
     };
 }]);
-homeCIController.controller('objectsCtrl', ['UserService', '$scope', '$http', '$state', 'USER_ROLES', 'socket', 'parseObjctsFunction' ,function(UserService, $scope, $http, $state, USER_ROLES, socket, parseObjctsFunction) {
+homeCIController.controller('objectsCtrl', ['UserService', '$scope', '$http', '$state', 'USER_ROLES', 'socket', 'parseObjctsFunction', function(UserService, $scope, $http, $state, USER_ROLES, socket, parseObjctsFunction) {
     //Verify the user autorization to access the datas
     $scope.isAuthorized = UserService.isAuthorized;
     if (UserService.getCurrentUser()) {
@@ -329,20 +314,8 @@ homeCIController.controller('objectsCtrl', ['UserService', '$scope', '$http', '$
             }
             object.fonction = parseObjctsFunction.parse(object.fonction);
         });
-        console.log(objectList[0].fonction);
         $scope.listObjects = objectList;
     });
-    //Call the function that control the object
-    $scope.objectFunction = function(nameFct, idObject) {
-        var data = {
-            id: idObject
-        };
-        if (nameFct == "up") {
-            socket.emit("up", data);
-        } else if (nameFct == "down") {
-            socket.emit("down", data);
-        }
-    }
 }]);
 homeCIController.controller('loginCtrl', function($scope, $http, $rootScope, $location, $state, LoginService, UserService) {
     document.getElementById("myButton").onclick = function() {
@@ -426,58 +399,58 @@ homeCIController.controller('administrationCtrl', ['$scope', '$http', 'UserServi
         UserService.setCurrentUserUsername(data.data.username);
         $rootScope.username = data.data.username;
         console.log(UserService.getCurrentUser());
-         Materialize.toast('Profil mis à jour', 2000);
+        Materialize.toast('Profil mis à jour', 2000);
     });
     /**
      * Allow the current User to register a new user.
      * @param  {object} credentials [username - password - role]
      */
     $scope.register = function(credentials) {
-        //Verify if passwords match
-        if (credentials.password != credentials.confirmedPassword) {
-            $scope.messageColor = "red-text text-lighten-1";
-            $scope.registerMessage = "Ce ne sont pas les mêmes mots de passe";
-            setTimeout(function() {
-                $scope.registerMessage = "";
-            }, 2000);
-        } else {
-            //Verify if password is at least 6 caracters long
-            if (credentials.password.length < 6) {
+            //Verify if passwords match
+            if (credentials.password != credentials.confirmedPassword) {
                 $scope.messageColor = "red-text text-lighten-1";
-                $scope.registerMessage = "Mot de passe trop court !";
+                $scope.registerMessage = "Ce ne sont pas les mêmes mots de passe";
                 setTimeout(function() {
                     $scope.registerMessage = "";
                 }, 2000);
             } else {
-                //Verify if there is missing information
-                if (!credentials.username || !credentials.password || !credentials.role) {
+                //Verify if password is at least 6 caracters long
+                if (credentials.password.length < 6) {
                     $scope.messageColor = "red-text text-lighten-1";
-                    $scope.registerMessage = "Il manque des informations !";
+                    $scope.registerMessage = "Mot de passe trop court !";
                     setTimeout(function() {
                         $scope.registerMessage = "";
                     }, 2000);
                 } else {
-                    //Register the new user by sending a socket serverside
-                    $scope.messageColor = "teal-text text-lighten-1";
-                    $scope.registerMessage = "Enregistré avec succès !";
-                    setTimeout(function() {
-                        $scope.registerMessage = "";
-                    }, 2000);
-                    console.log(credentials);
-                    var data = {
-                        username: credentials.username,
-                        password: credentials.password,
-                        role: credentials.role
+                    //Verify if there is missing information
+                    if (!credentials.username || !credentials.password || !credentials.role) {
+                        $scope.messageColor = "red-text text-lighten-1";
+                        $scope.registerMessage = "Il manque des informations !";
+                        setTimeout(function() {
+                            $scope.registerMessage = "";
+                        }, 2000);
+                    } else {
+                        //Register the new user by sending a socket serverside
+                        $scope.messageColor = "teal-text text-lighten-1";
+                        $scope.registerMessage = "Enregistré avec succès !";
+                        setTimeout(function() {
+                            $scope.registerMessage = "";
+                        }, 2000);
+                        console.log(credentials);
+                        var data = {
+                            username: credentials.username,
+                            password: credentials.password,
+                            role: credentials.role
+                        }
+                        socket.emit('registration', data);
                     }
-                    socket.emit('registration', data);
                 }
             }
         }
-    }
-    /**
-     * Allow current User to update its profile informations
-     * @param  {object} information [username - passwords - role]
-     */
+        /**
+         * Allow current User to update its profile informations
+         * @param  {object} information [username - passwords - role]
+         */
     $scope.updateProfile = function(information) {
         if (!information) {
             $scope.messageColor = "red-text text-lighten-1";
