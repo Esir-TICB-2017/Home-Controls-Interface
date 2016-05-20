@@ -22,12 +22,14 @@ var Scenario = require('./models/scenario');
 var session = require('express-session');
 var APIObjects = require("./APIObjects/APIObjects.js");
 var fonctionKNX = require('./APIObjects/fonctionKNX.js');
+var favicon = require('serve-favicon');
 app.use('/bower_components', express.static(__dirname + '/bower_components')); //supplies folder
 app.use('/js', express.static(__dirname + '/app/js'));
 app.use('/publicViews', express.static(__dirname + '/app/publicViews'));
 app.use('/img', express.static(__dirname + '/app/img'));
 app.use('/views', express.static(__dirname + '/app/views'));
 app.use('/css', express.static(__dirname + '/app/css'));
+app.use(favicon(__dirname + '/app/img/favicon.ico'));
 // =====================================================================
 // configuration =======================================================
 // =====================================================================
