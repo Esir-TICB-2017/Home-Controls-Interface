@@ -12,7 +12,7 @@ var init = function() {
     //-- création de la routine pour relever les valeurs .
     
 }
-var objectFunction = function(action ,id) {
+var objectChangeState = function(action ,id) {
     var data = monMongo.findByOneId(id, function(data) {
         var param = data.fonction;
         param = param.split(';');
@@ -34,5 +34,4 @@ var objectFunction = function(action ,id) {
     });
 }
 exports.init = init;
-exports.up = up;
-exports.down = down;
+exports.objectChangeState = objectChangeState;
