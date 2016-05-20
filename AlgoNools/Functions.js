@@ -41,11 +41,9 @@ var main = require('./Main.js');
 		session.modify(moment);
 
 		setTimeout(function(){
-				console.log('actionneurs',"{'chauffageSdb':"+chauffageSdb.getValue()+", 'chauffageChambre':"+chauffageChambre.getValue()+", 'chauffageSalle':"+chauffageSalle.getValue()+", 'lumiereChambre':"+lumiereChambre.getValue()+", 'lumiereSalle':"+lumiereSalle.getValue()+", 'voletSalle':"+voletSalle.getValue()+", 'voletChambre':"+voletChambre.getValue()+", 'vmc':"+vmc.getValue()+"}");
-				//callback("{'chauffageSdb':"+chauffageSdb.getValue()+", 'chauffageChambre':"+chauffageChambre.getValue()+", 'chauffageSalle':"+chauffageSalle.getValue()+", 'lumiereChambre':"+lumiereChambre.getValue()+", 'lumiereSalle':"+lumiereSalle.getValue()+", 'voletSalle':"+voletSalle.getValue()+", 'voletChambre':"+voletChambre.getValue()+", 'vmc':"+vmc.getValue()+"}");
 
-			},1000);
-		
+				callback('actionneurs',"{'chauffageSdb':"+chauffageSdb.getValue()+", 'chauffageChambre':"+chauffageChambre.getValue()+", 'chauffageSalle':"+chauffageSalle.getValue()+", 'lumiereChambre':"+lumiereChambre.getValue()+", 'lumiereSalle':"+lumiereSalle.getValue()+", 'voletSalle':"+voletSalle.getValue()+", 'voletChambre':"+voletChambre.getValue()+", 'vmc':"+vmc.getValue()+"}");
+				},1000);
 	}
 
 exports.react = react;

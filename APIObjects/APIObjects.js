@@ -11,52 +11,49 @@ var init = function(tabIdCapteur) {
     });
     //-- création de la routine pour relever les valeurs .
     var rep;
-    setInterval(function(){
-        for (var i=0 ; i<tabIdCapteur.lenght;i ){
-            var encour=tabIdCapteur[i];
-            monMongo.findByOneId(encour, function(data){
-                fonctionRest.getEtat(data.lien,function(rep){
+    setInterval(function() {
+        for (var i = 0; i < tabIdCapteur.lenght; i) {
+            var encour = tabIdCapteur[i];
+            monMongo.findByOneId(encour, function(data) {
+                fonctionRest.getEtat(data.lien, function(rep) {
                     console.log(rep);
-                    if(rep!='error'){
-                        monMongo.updateValueObject(encour,rep,function(){
-                            console.log('valeur mise à jour pour '+encour);
+                    if (rep != 'error') {
+                        monMongo.updateValueObject(encour, rep, function() {
+                            console.log('valeur mise à jour pour ' + encour);
                             i++;
                         });
-                    }
-                    else{
+                    } else {
                         console.log('error');
                     }
-                   
                 });
-
             });
         }
     }, 3000);
 }
-var objectChangeState = function(action ,id,callback) {
-    callback("on est dans la fonction");
+
+var objectChangeState = function(action, id, callback) {
+    console.log(id);
     var data = monMongo.findByOneId(id, function(data) {
-        var param = data.fonction;
-        console.log(data.fonction);
-        param = param.split(';');
-        for (i in param) {
-            if (param[i].indexOf(action) != -1) {
-                param = param[parseInt(i) + 1].replace('param:', "");
+        for (i in data.function) {
+            if (data.function[i].name == action) {
+                var parametre = data.function[i].param;
+                console.log(parametre);
             }
         }
         //en fonction du protocole selectionné 
         if (data.protocole == 'knx') {
-            fonctionKNX.setknx(data.lien, param);
-            return true;
+            fonctionKNX.setknx(data.lien, parametre);
+            callback(true);
         } else if (data.protocole == 'Rest') {
-            var rep = fonctionRest.changerEtat(data.lien, param);
-            return true;
+            var restParametre = '<str val="' + parametre + '"/>';
+            var rep = fonctionRest.changerEtat(data.lien, restParametre, function(data){
+                 callback(data);
+            });
+           
         } else {
-            return 'error';
+            callback('error on objectChangeState');
         }
     });
 }
-
 exports.init = init;
 exports.objectChangeState = objectChangeState;
-

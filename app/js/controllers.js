@@ -1,6 +1,6 @@
 'use strict'
 var homeCIController = angular.module('homeCIController', []);
-homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$state', 'socket', 'parseObjctsFunction', function(UserService, $scope, $http, $state, socket, parseObjctsFunction) {
+homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$state', 'socket', function(UserService, $scope, $http, $state, socket) {
     var mySocketId = null;
     socket.on('connected', onConnected);
     var objectList = {};
@@ -14,6 +14,10 @@ homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$sta
     $('.collapsible').collapsible({
         accordion: false
     });
+        socket.on('actionneurs',function(data){
+        console.log(data);
+    });
+        
     //Recover the objects in the home and put them in a list in the widget
     $http.get('/getObjects').success(function(data) {
         //types d'objets : lampe, volet, temperature, humidite, luminosite, co2
@@ -31,7 +35,7 @@ homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$sta
             } else if (object.type == "humidite") {
                 object.icon = "opacity";
             }
-            //object.fonction = parseObjctsFunction.parse(object.fonction);
+            //object.fonction = objectList.
         });
         $scope.listObjects = objectList;
     });
@@ -281,7 +285,7 @@ homeCIController.controller('scenariosCtrl', ['UserService', '$scope', '$http', 
         $scope.showAddObjectsMenu = true;
     };
 }]);
-homeCIController.controller('objectsCtrl', ['UserService', '$scope', '$http', '$state', 'USER_ROLES', 'socket', 'parseObjctsFunction', function(UserService, $scope, $http, $state, USER_ROLES, socket, parseObjctsFunction) {
+homeCIController.controller('objectsCtrl', ['UserService', '$scope', '$http', '$state', 'USER_ROLES', 'socket', function(UserService, $scope, $http, $state, USER_ROLES, socket) {
     //Verify the user autorization to access the datas
     $scope.isAuthorized = UserService.isAuthorized;
     if (UserService.getCurrentUser()) {
@@ -300,6 +304,7 @@ homeCIController.controller('objectsCtrl', ['UserService', '$scope', '$http', '$
     //Recover objects and rooms that are in the home from the server
     $http.get('/getObjects').success(function(data) {
         //types d'objets : lampe, volet, temperature, humidite, luminosite, co2
+        console.log(data);
         var objectList = data;
         angular.forEach(objectList, function(object, key) {
             if (object.type == "lampe") {
@@ -313,8 +318,9 @@ homeCIController.controller('objectsCtrl', ['UserService', '$scope', '$http', '$
             } else if (object.type == "humidite") {
                 object.icon = "opacity";
             }
-            object.fonction = parseObjctsFunction.parse(object.fonction);
+            
         });
+        console.log(objectList);
         $scope.listObjects = objectList;
     });
 }]);
