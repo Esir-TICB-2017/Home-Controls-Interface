@@ -4,7 +4,6 @@
 // call the packages we need
 //var nools = require('./AlgoNools/Main.js');
 //var automation = require('./AlgoNools/Functions.js');
-
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
@@ -34,12 +33,10 @@ app.use(favicon(__dirname + '/app/img/favicon.ico'));
 // configuration =======================================================
 // =====================================================================
 APIObjects.init();
-
 var port = process.env.PORT || 1337; // Port du serveur
 //-----Permet de vérifier la connexion à la base de données------
 mongoose.connection.on('open', function(ref) {
     console.log('Connected to mongo server.');
-
 });
 mongoose.connection.on('error', function(err) {
     console.log('Could not connect to mongo server!');
@@ -57,8 +54,11 @@ app.use(bodyParser.json());
 var Grant = require('grant-express'),
     grant = new Grant(require('./config.json'))
 app.use(session({
-    secret: 'very secret'
-}))
+    secret: 'very secret',
+    proxy: true,
+    resave: true,
+    saveUninitialized: true
+}));
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -724,13 +724,10 @@ app.post('/uploadjson/listepieces.json', function(req, res) {
     console.log(req.body);
 });
 http.listen(1337, function() {
-    console.log('OK on 1337');
+    console.log('Server is running on 1337 port');
 });
-
-
 // Fonction pour lancer l'algorithme d'aide à la décision
 //nools.Nools();
-
 //MATHIEU ET DANN : C'EST QUOI CA ???
 // c'est un truc super cool ! en fait quand tu quites ton serveur , ca execute cette fonction avant de vraiment le fermer . 
 // du coup ca me permet de faire la deconnexion du KnX quand je quite le server ;) 
@@ -746,4 +743,3 @@ process.on('SIGINT', function() {
         process.exit();
     }
 });
-
