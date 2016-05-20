@@ -77,7 +77,14 @@ Nools = function(){
 
 	
 	// Démarrage du raisonneur
-	session.matchUntilHalt().then(function(){});
+	session.matchUntilHalt().then(
+        function(){
+            console.log("DONE");
+        },
+        function(err){
+            console.log(err.stack);
+        }
+    );
 
 }
 
