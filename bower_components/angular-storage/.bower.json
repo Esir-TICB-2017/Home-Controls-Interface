@@ -37,6 +37,6 @@
     "commit": "709e871cc37d4b713a11bbdd569f6ef45352b718"
   },
   "_source": "https://github.com/Aspera/angular-storage.git",
-  "_target": "0.5.0",
+  "_target": "~0.5.0",
   "_originalSource": "angular-storage"
 }
