@@ -36,7 +36,7 @@ var setKNX = function(adresse, value) {
 var getKNX = function(adresse) {
         connection.RequestStatus(adresse);
     }
-    //ajouter le lister + maj de la BDD quand il y a un truc qui se passe 
+    //ajouter le listener + maj de la BDD quand il y a un truc qui se passe 
 var socketListenerKNX = function() {
     connection.on('status', function(data, data1, data2) {
         console.log('status : L\'adresse ' + data + " est a l'état : " + data1);
@@ -44,7 +44,7 @@ var socketListenerKNX = function() {
     });
     connection.on('event', function(data, data1, data2) {
         console.log('event : L\'adresse ' + data + " est a l'état : " + data1);
-        //traiter la donné
+        //traiter la donnée
     });
 }
 exports.setKNX = setKNX;
