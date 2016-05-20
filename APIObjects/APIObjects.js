@@ -10,9 +10,26 @@ var init = function() {
         }
     });
     //-- création de la routine pour relever les valeurs .
+    var rep;
+    setInterval(function(tabIdCapteur){
+        for (i in tabIdCapteur){
+            monMongo.findByOneId(tabIdCapteur[i], function(data){
+                fonctionRest.getEtat(data.lien,function(rep){
+                    if(rep!='error'){
+                        monMongo.updateValueObject(tabIdCapteur[i],rep,function(){
+                            console.log('valeur mise à jour');
+                        });
+                    }
+                   
+                });
+
+            });
+        }
+
+    }, 3000);
     
 }
-var up = function(id) {
+var up = function(id,callback) {
     var data = monMongo.findByOneId(id, function(data) {
         var param = data.fonction;
         param = param.split(';');
@@ -24,16 +41,17 @@ var up = function(id) {
         //en fonction du protocole selectionné 
         if (data.protocole == 'knx') {
             fonctionKNX.setknx(data.lien, param);
-            return true;
+            callback(true);
         } else if (data.protocole == 'Rest') {
-            var rep = fonctionRest.changerEtat(data.lien, param);
-            return true;
+            fonctionRest.changerEtat(data.lien, param,function(rep){
+                callback( true);
+            });
         } else {
-            return 'error';
+            callback ('error');
         }
     });
 }
-var down = function(id) {
+var down = function(id,callback) {
     var data = monMongo.findByOneId(id, function(data) {
         var param = data.fonction;
         param = param.split(';');
@@ -45,12 +63,15 @@ var down = function(id) {
         //en fonction du protocole selectionné 
         if (data.protocole == 'knx') {
             fonctionKNX.setknx(data.lien, param);
-            return true;
+            callback (true);
         } else if (data.protocole == 'Rest') {
-            var rep = fonctionRest.changerEtat(data.lien, param);
-            return true;
+            fonctionRest.changerEtat(data.lien, param,function(rep){
+               callback (true);
+
+            });
         } else {
-            return 'error';
+            callback ('error');
+
         }
     });
 }
