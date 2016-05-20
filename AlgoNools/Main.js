@@ -6,14 +6,11 @@
 //			->	Création des équipements
 //
 //	*******************************************************************
-var fs = require("fs");
-var vm = require('vm');
 
 global.consigne_temperature = 19;
 global.consigne_luminosite = 500;
 global.consigne_co2 = 300;
 global.retour = "";
-
 
 // Correspondance entre nools et ce fichier JS
 var nools           = require ('nools');
