@@ -18,7 +18,9 @@ var ruleFilePath    = __dirname + '/rules.nools';
 var flow            = nools.compile(ruleFilePath);
 var session         = flow.getSession();
 
+
 exports.session = session
+exports.ruleFilePath = ruleFilePath;
 
 /*
  *	Création des objets
@@ -78,15 +80,16 @@ Nools = function(){
 	session.matchUntilHalt().then(function(){});
 }
 
+exports.Nools=Nools;
+/*
 
 var obj = "{'consigneTemp':30,'consigneLum':40,'consigneCo2';41,'captLuminositeExt':32,'captTemperatureIntSalle':11,'captTemperatureIntChambre':14,'captTemperatureIntSdb':5,'captLuminositeIntSalle':11,'captTemperatureIntChambre':12,'captLuminositeExt':121,'captCO2':12,'moment':'soir'}";
 
 
-exports.Nools=Nools;
 
 function run(){
 	session.matchUntilHalt();
 }
 
 // Redémarrage toutes les 2 secondes pour s'assurer d'avoir le raisonneur en fonctionnement
-setInterval(run, 2000);
+setInterval(run, 2000);*/

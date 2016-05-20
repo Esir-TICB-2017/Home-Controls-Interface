@@ -729,6 +729,7 @@ http.listen(1337, function() {
     console.log('Server is running on 1337 port');
 });
 // Fonction pour lancer l'algorithme d'aide à la décision
+
 nools.Nools();
 
 //MATHIEU ET DANN : C'EST QUOI CA ???
