@@ -6,7 +6,7 @@ exports.KnxHelper = KnxHelper;
 exports.KnxConnectionTunneling = KnxConnectionTunneling;
 // varriable
 var fs = require("fs");
-var conf = JSON.parse(fs.readFileSync('./config.json'));
+
 var ipplateauknx = conf.knx.ipplateauknx;
 var portplateauknx = conf.knx.portplateauknx;
 var portserver = conf.knx.portserver;
@@ -34,8 +34,8 @@ var setKNX = function(adresse, value) {
     }
 }
 var getKNX = function(adresse) {
-        connection.RequestStatus(adresse);
-    }
+    connection.RequestStatus(adresse);
+}
     //ajouter le listener + maj de la BDD quand il y a un truc qui se passe 
 var socketListenerKNX = function() {
     connection.on('status', function(data, data1, data2) {

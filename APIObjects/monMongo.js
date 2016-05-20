@@ -27,15 +27,13 @@ var addObject = function(name, protocol, capteur, funct, link,type,valeur, callb
         callback();
     });
 }
-var updateObject = function(identifiant,valeur,callback){
-    ObjectModel.update({ id : identifiant}, { value : valeur }, function (err) {
-         if (err) { throw err; }
-      console.log('la valeur est maitenant : '+ valeur);
-      callback();
+var updateValueObject = function(id,valeur,callback){
+    ObjectModel.findOneAndUpdate({'_id' : id} , {'value' : valeur }, {upsert:true}, function(err, doc){
+        if (err) { throw err; }
+        console.log('la valeur est maitenant : '+ valeur);
+        callback();
     });
 }
-
-
 var connectionBDD = function(callback) {
     var mongoose = require('mongoose');
     mongoose.connect('mongodb://louison:123456@ds037395.mongolab.com:37395/homecontrol');
@@ -52,5 +50,5 @@ var connectionBDD = function(callback) {
 }
 exports.findByOneId = findByOneId;
 exports.addObject = addObject;
-exports.updateObject = updateObject;
+exports.updateValueObject = updateValueObject;
 exports.connectionBDD=connectionBDD;

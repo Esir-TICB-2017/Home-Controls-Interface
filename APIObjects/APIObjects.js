@@ -10,14 +10,32 @@ var init = function() {
         }
     });
     //-- création de la routine pour relever les valeurs .
+    var rep;
+    setInterval(function(tabIdCapteur){
+        for (i in tabIdCapteur){
+            monMongo.findByOneId(tabIdCapteur[i], function(data){
+                fonctionRest.getEtat(data.lien,function(rep){
+                    if(rep!='error'){
+                        monMongo.updateValueObject(tabIdCapteur[i],rep,function(){
+                            console.log('valeur mise à jour');
+                        });
+                    }
+                   
+                });
+
+            });
+        }
+
+    }, 3000);
     
 }
-var up = function(id) {
+
+var objectChangeState = function(action ,id) {
     var data = monMongo.findByOneId(id, function(data) {
         var param = data.fonction;
         param = param.split(';');
         for (i in param) {
-            if (param[i].indexOf('up') != -1) {
+            if (param[i].indexOf(action) != -1) {
                 param = param[parseInt(i) + 1].replace('param:', "");
             }
         }
@@ -33,27 +51,7 @@ var up = function(id) {
         }
     });
 }
-var down = function(id) {
-    var data = monMongo.findByOneId(id, function(data) {
-        var param = data.fonction;
-        param = param.split(';');
-        for (i in param) {
-            if (param[i].indexOf('down') != -1) {
-                param = param[parseInt(i) + 1].replace('param:', "");
-            }
-        }
-        //en fonction du protocole selectionné 
-        if (data.protocole == 'knx') {
-            fonctionKNX.setknx(data.lien, param);
-            return true;
-        } else if (data.protocole == 'Rest') {
-            var rep = fonctionRest.changerEtat(data.lien, param);
-            return true;
-        } else {
-            return 'error';
-        }
-    });
-}
+
 exports.init = init;
-exports.up = up;
-exports.down = down;
+exports.objectChangeState = objectChangeState;
+

@@ -2,9 +2,9 @@
 // BASE SETUP ==========================================================
 // =====================================================================
 // call the packages we need
-var nools = require('./AlgoNools/Main.js');
-var automation = require('./AlgoNools/Functions.js');
-var session = nools.session;
+ var nools = require('./AlgoNools/Main.js');
+ var automation = require('./AlgoNools/Functions.js');
+ var session = nools.session;
 
 var express = require('express');
 var app = express();
@@ -21,7 +21,7 @@ var Object = require('./models/object');
 var Sensor = require('./models/sensor');
 var Scenario = require('./models/scenario');
 var session = require('express-session');
-var APIObjects = require("./APIObjects/APIObjects.js");
+var apiObjects = require("./apiObjects/apiObjects.js");
 var fonctionKNX = require('./APIObjects/fonctionKNX.js');
 var favicon = require('serve-favicon');
 app.use('/bower_components', express.static(__dirname + '/bower_components')); //supplies folder
@@ -34,7 +34,6 @@ app.use(favicon(__dirname + '/app/img/favicon.ico'));
 // =====================================================================
 // configuration =======================================================
 // =====================================================================
-APIObjects.init();
 var port = process.env.PORT || 1337; // Port du serveur
 //-----Permet de vérifier la connexion à la base de données------
 mongoose.connection.on('open', function(ref) {
@@ -72,6 +71,7 @@ app.get('/handle_facebook_callback', function(req, res, next) {
         res.sendFile('index.html', {
             root: __dirname
         });
+        apiObjects.init();
         //res.end(JSON.stringify(req.query, null, 2))
     })
     // var oauth2 = require('simple-oauth2')({
@@ -140,7 +140,6 @@ app.post('/login', function(req, res) {
                 var token = jwt.sign(user, app.get('superSecret'), {
                     expiresIn: 3600 // Expire dans 24h
                 });
-                console.log('here is the token' + token);
                 // return the information including token as JSON
                 res.json({
                     user: user,
@@ -202,7 +201,6 @@ app.get('/getObjects', function(req, res, next) {
     Return the object querried (Json format)
     */
 app.get('/getOneObject/:id', function(req, res, next) {
-        console.log(req.params.id);
         var objectId = req.params.id;
         mongoose.model('objects').find({
             _id: objectId
@@ -226,14 +224,12 @@ app.get('/getOneObject/:id', function(req, res, next) {
     Return the object created (Json format)
      */
 app.post('/setObject', function(req, res) {
-    console.log(req.body);
     var query = {
         name: req.body.name
     };
     var myObj = new Object({
         name: req.body.name
     });
-    console.log(myObj);
     Object.findOneAndUpdate(query, myObj, {
         upsert: true
     }, function(err, doc) {
@@ -431,7 +427,6 @@ app.put('/addObjectToRoom', function(req, res) {
     Room.findOne({
         _id: roomId
     }, function(err, room) {
-        console.log(room);
         Object.update({
             _id: objectId
         }, {
@@ -606,13 +601,10 @@ app.post('/signin', function(req, res) {
 });
 io.sockets.on('connection', function(socket) {
     console.log("********************* Client connected !************************");
-    console.log("socket id : ")
-    console.log(socket.id);
     socket.on('smartData', function(data) {
         console.log(data);
     })
     socket.on('updateProfile', function(data) {
-        console.log(data);
         User.update({
             username: data.currentUser.username,
             password: data.currentUser.password
@@ -656,14 +648,12 @@ io.sockets.on('connection', function(socket) {
             role: data.role
         }, function(err, user) {
             if (err) {
-                console.log('err 1');
                 socket.emit('registrationResponse', {
                     type: false,
                     data: "Error occured: " + err
                 });
             } else {
                 if (user) {
-                    console.log('err 2');
                     socket.emit('registrationResponse', {
                         type: false,
                         data: "User already exists!"
@@ -676,7 +666,6 @@ io.sockets.on('connection', function(socket) {
                     userModel.save(function(err, user) {
                         user.token = jwt.sign(user, app.get('superSecret'));
                         user.save(function(err, user1) {
-                            console.log('ok tout est bon');
                             socket.emit('registrationResponse', {
                                 type: true,
                                 data: user1,
@@ -688,15 +677,8 @@ io.sockets.on('connection', function(socket) {
             }
         });
     })
-    socket.on('up', function(data) {
-        console.log("up");
-        //TODO : appeler la fonction up(id) de mathieu avec id=data.id
-        APIObjects.up(data.id);
-    })
-    socket.on('down', function(data) {
-        console.log("down");
-        //TODO : appeler la fonction down(id) de mathieu avec i=data.id
-        APIObjects.down(data.id);
+    socket.on('objectFunction', function(data){
+        apiObjects.objectChangeStatef(data.nameFct, data.id);
     })
     socket.on('automation', function(data) {
         //TODO : appeler l'API de David et Damien avec en envoyant le data
@@ -726,11 +708,13 @@ app.post('/uploadjson/listepieces.json', function(req, res) {
     console.log(req.body);
 });
 http.listen(1337, function() {
-    console.log('Server is running on 1337 port');
+    console.log('Server is running on port 1337');
 });
 // Fonction pour lancer l'algorithme d'aide à la décision
 
+
 nools.Nools();
+
 
 //MATHIEU ET DANN : C'EST QUOI CA ???
 // c'est un truc super cool ! en fait quand tu quites ton serveur , ca execute cette fonction avant de vraiment le fermer . 
