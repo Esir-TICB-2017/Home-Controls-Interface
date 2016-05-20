@@ -10,6 +10,7 @@ var init = function() {
         }
     });
     //-- création de la routine pour relever les valeurs .
+    
 }
 var up = function(id) {
     var data = monMongo.findByOneId(id, function(data) {

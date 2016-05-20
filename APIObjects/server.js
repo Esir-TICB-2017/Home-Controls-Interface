@@ -1,5 +1,5 @@
-var API = require("./APIObject.js");
-var fonctionKNX = require("./fonctionKNX");
+//var API = require("./APIObject.js");
+//var fonctionKNX = require("./fonctionKNX");
 var express = require('C:/Users/Math/AppData/Roaming/npm/node_modules/express');
 var app = express();
 var url = require('url');
@@ -16,16 +16,23 @@ var http = require('http').Server(app);
 });*/
 
 
-/*
+
 
 var BDD = require("./monMongo.js");
 BDD.connectionBDD(function(){
-     BDD.addObjet("lampeSalon", "Rest", false, "name:up;param:<str val=\"On\"/>;name:down;param:<str val=\"Off\"/>", "http://148.60.19.201:8080/obix/org/knx/@XEclairage/@XMarche%20Arret/@XM%20A_salon_ecl_1/%24@CDPT_Switch~event/", function(){
+   /* BDD.addObject("lampeSalon", "Rest", false, "name:up;param:<str val=\"On\"/>;name:down;param:<str val=\"Off\"/>", "http://148.60.19.201:8080/obix/org/knx/@XEclairage/@XMarche%20Arret/@XM%20A_salon_ecl_1/%24@CDPT_Switch~event/","lampe","000", function(){
         console.log('yes');
+
+    })*/
+
+
+    BDD.updateObject('573efd97234b97a81cb4ef55','111',function(){
+        console.log('mise ajour effective');
     })
+
 })
 
-*/
+
 
 //API.down('573998dd1b0f602c50933cbf');
 //|===================================================================================|
