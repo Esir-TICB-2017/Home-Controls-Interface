@@ -11,33 +11,30 @@ var init = function(tabIdCapteur) {
     });
     //-- création de la routine pour relever les valeurs .
     var rep;
-    setInterval(function(){
-        for (var i=0 ; i<tabIdCapteur.lenght;i ){
-            var encour=tabIdCapteur[i];
-            monMongo.findByOneId(encour, function(data){
-                fonctionRest.getEtat(data.lien,function(rep){
+    setInterval(function() {
+        for (var i = 0; i < tabIdCapteur.lenght; i) {
+            var encour = tabIdCapteur[i];
+            monMongo.findByOneId(encour, function(data) {
+                fonctionRest.getEtat(data.lien, function(rep) {
                     console.log(rep);
-                    if(rep!='error'){
-                        monMongo.updateValueObject(encour,rep,function(){
-                            console.log('valeur mise à jour pour '+encour);
+                    if (rep != 'error') {
+                        monMongo.updateValueObject(encour, rep, function() {
+                            console.log('valeur mise à jour pour ' + encour);
                             i++;
                         });
-                    }
-                    else{
+                    } else {
                         console.log('error');
                     }
-                   
                 });
-
             });
         }
     }, 3000);
 }
-var objectChangeState = function(action ,id,callback) {
+var objectChangeState = function(action, id, callback) {
+    console.log(id);
     var data = monMongo.findByOneId(id, function(data) {
-        
-        for(i in data.function){
-            if(data.function[i].name == action){
+        for (i in data.function) {
+            if (data.function[i].name == action) {
                 var parametre = data.function[i].param;
                 console.log(parametre);
             }
@@ -45,17 +42,17 @@ var objectChangeState = function(action ,id,callback) {
         //en fonction du protocole selectionné 
         if (data.protocole == 'knx') {
             fonctionKNX.setknx(data.lien, parametre);
-            return true;
+            callback(true);
         } else if (data.protocole == 'Rest') {
-            var restParametre = '<str val="' + data.function[i].param + '"/>';
-            var rep = fonctionRest.changerEtat(data.lien, restParametre);
-            return true;
+            var restParametre = '<str val="' + parametre + '"/>';
+            var rep = fonctionRest.changerEtat(data.lien, restParametre, function(data){
+                 callback(data);
+            });
+           
         } else {
-            return 'error';
+            callback('error on objectChangeState');
         }
     });
 }
-
 exports.init = init;
 exports.objectChangeState = objectChangeState;
-
