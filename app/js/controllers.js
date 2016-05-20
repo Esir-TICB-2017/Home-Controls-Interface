@@ -14,6 +14,10 @@ homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$sta
     $('.collapsible').collapsible({
         accordion: false
     });
+        socket.on('actionneurs',function(data){
+        console.log(data);
+    });
+        
     //Recover the objects in the home and put them in a list in the widget
     $http.get('/getObjects').success(function(data) {
         //types d'objets : lampe, volet, temperature, humidite, luminosite, co2

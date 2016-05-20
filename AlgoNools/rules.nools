@@ -582,7 +582,6 @@ rule SalleAugVMC {
 	}
 	then {
 		modify(vmc, function(){vmc.setV2();});
-		console.log(vmc);
 	}
 }
 
@@ -594,7 +593,6 @@ rule SalleDimVMC {
 	}
 	then {
 		modify(vmc, function(){vmc.setV1();});
-		console.log(vmc);
 	}
 }
 
