@@ -6,6 +6,7 @@ exports.KnxHelper = KnxHelper;
 exports.KnxConnectionTunneling = KnxConnectionTunneling;
 // varriable
 var fs = require("fs");
+var conf = require('../config');
 
 var ipplateauknx = conf.knx.ipplateauknx;
 var portplateauknx = conf.knx.portplateauknx;

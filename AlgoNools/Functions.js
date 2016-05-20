@@ -3,9 +3,12 @@
 //	Fonctions externes pour travailler via les API nécessaires
 //
 //	*******************************************************************
+var main = require('./Main.js');
+
 
 	react = function(obj, callback){
-		
+		console.log("react : "+obj);
+		var session = main.session;
 		consigneTemp.setValue(obj.consigneTemp);
 		consigneLum.setValue(obj.consigneLum);
 		consigneCo2.setValue(obj.consigneCo2);
@@ -37,8 +40,10 @@
 		session.modify(moment);
 
 		setTimeout(function(){
-				callback('actionneurs',"{'chauffageSdb':"+chauffageSdb.getValue()+", 'chauffageChambre':"+chauffageChambre.getValue()+", 'chauffageSalle':"+chauffageSalle.getValue()+", 'lumiereChambre':"+lumiereChambre.getValue()+", 'lumiereSalle':"+lumiereSalle.getValue()+", 'voletSalle':"+"voletSalle.getValue()"+", 'voletChambre':"+"voletChambre.getValue()"+", 'vmc':"+vmc.getValue()+"}");
-			});
+				//callback('actionneurs',"{'chauffageSdb':"+chauffageSdb.getValue()+", 'chauffageChambre':"+chauffageChambre.getValue()+", 'chauffageSalle':"+chauffageSalle.getValue()+", 'lumiereChambre':"+lumiereChambre.getValue()+", 'lumiereSalle':"+lumiereSalle.getValue()+", 'voletSalle':"+voletSalle.getValue()+", 'voletChambre':"+voletChambre.getValue()+", 'vmc':"+vmc.getValue()+"}");
+				console.log("{'chauffageSdb':"+chauffageSdb.getValue()+", 'chauffageChambre':"+chauffageChambre.getValue()+", 'chauffageSalle':"+chauffageSalle.getValue()+", 'lumiereChambre':"+lumiereChambre.getValue()+", 'lumiereSalle':"+lumiereSalle.getValue()+", 'voletSalle':"+voletSalle.getValue()+", 'voletChambre':"+voletChambre.getValue()+", 'vmc':"+vmc.getValue()+"}");
+
+			},1000);
 		
 	}
 

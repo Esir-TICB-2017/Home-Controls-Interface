@@ -683,7 +683,9 @@ io.sockets.on('connection', function(socket) {
     socket.on('automation', function(data) {
         //TODO : appeler l'API de David et Damien avec en envoyant le data
         // Définir le nom du socket vers le client, pour l'instant dans le fichier Functions : 'actionneurs'
-        automation.react(data, socket.emit());
+        //automation.react(data, socket.emit());
+        console.log("socket : "+data);
+        automation.react(data,console.log(),session);
     })
     socket.on('disconnect', function() {});
 });

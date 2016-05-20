@@ -14,10 +14,5 @@
         "key": "[CONSUMER_KEY]",
         "secret": "[CONSUMER_SECRET]",
         "callback": "/handle_twitter_callback"
-    },
-    "knx": {
-        "ipplateauknx": "192.168.1.118",
-        "portplateauknx": 3671,
-        "portserver": 13671
     }
 }
