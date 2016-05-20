@@ -2,10 +2,9 @@
 // BASE SETUP ==========================================================
 // =====================================================================
 // call the packages we need
- var nools = require('./AlgoNools/Main.js');
- var automation = require('./AlgoNools/Functions.js');
- var session = nools.session;
-
+var nools = require('./AlgoNools/Main.js');
+var automation = require('./AlgoNools/Functions.js');
+var session = nools.session;
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
@@ -677,8 +676,10 @@ io.sockets.on('connection', function(socket) {
             }
         });
     })
-    socket.on('objectFunction', function(data){
-        apiObjects.objectChangeStatef(data.nameFct, data.id);
+    socket.on('objectFunction', function(data) {
+        apiObjects.objectChangeState(data.nameFct, data.id, function(data) {
+            console.log(data);
+        });
     })
 
     socket.on('automation', function(data) {
@@ -710,11 +711,7 @@ http.listen(1337, function() {
     console.log('Server is running on port 1337');
 });
 // Fonction pour lancer l'algorithme d'aide à la décision
-
-
 nools.Nools();
-
-
 //MATHIEU ET DANN : C'EST QUOI CA ???
 // c'est un truc super cool ! en fait quand tu quites ton serveur , ca execute cette fonction avant de vraiment le fermer . 
 // du coup ca me permet de faire la deconnexion du KnX quand je quite le server ;) 
