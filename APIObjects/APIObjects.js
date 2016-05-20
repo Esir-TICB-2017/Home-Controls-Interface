@@ -29,52 +29,31 @@ var init = function() {
     }, 3000);
     
 }
-var up = function(id,callback) {
+
+
+
+
+var objectChangeState = function(action ,id) {
     var data = monMongo.findByOneId(id, function(data) {
         var param = data.fonction;
         param = param.split(';');
         for (i in param) {
-            if (param[i].indexOf('up') != -1) {
+            if (param[i].indexOf(action) != -1) {
                 param = param[parseInt(i) + 1].replace('param:', "");
             }
         }
         //en fonction du protocole selectionné 
         if (data.protocole == 'knx') {
             fonctionKNX.setknx(data.lien, param);
-            callback(true);
+            return true;
         } else if (data.protocole == 'Rest') {
-            fonctionRest.changerEtat(data.lien, param,function(rep){
-                callback( true);
-            });
+            var rep = fonctionRest.changerEtat(data.lien, param);
+            return true;
         } else {
-            callback ('error');
+            return 'error';
         }
     });
 }
-var down = function(id,callback) {
-    var data = monMongo.findByOneId(id, function(data) {
-        var param = data.fonction;
-        param = param.split(';');
-        for (i in param) {
-            if (param[i].indexOf('down') != -1) {
-                param = param[parseInt(i) + 1].replace('param:', "");
-            }
-        }
-        //en fonction du protocole selectionné 
-        if (data.protocole == 'knx') {
-            fonctionKNX.setknx(data.lien, param);
-            callback (true);
-        } else if (data.protocole == 'Rest') {
-            fonctionRest.changerEtat(data.lien, param,function(rep){
-               callback (true);
 
-            });
-        } else {
-            callback ('error');
-
-        }
-    });
-}
 exports.init = init;
-exports.up = up;
-exports.down = down;
+exports.objectChangeState=objectChangeState;
