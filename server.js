@@ -730,6 +730,8 @@ http.listen(1337, function() {
 //nools.Nools();
 
 //MATHIEU ET DANN : C'EST QUOI CA ???
+// c'est un truc super cool ! en fait quand tu quites ton serveur , ca execute cette fonction avant de vraiment le fermer . 
+// du coup ca me permet de faire la deconnexion du KnX quand je quite le server ;) 
 process.on('SIGINT', function() {
     if (fonctionKNX.connection.connected) {
         console.log('deconnection du tunel KNX');

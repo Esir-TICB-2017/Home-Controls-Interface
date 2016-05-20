@@ -1,6 +1,6 @@
-var ObjetModel = require('../models/object');
+var ObjectModel = require('../models/object');
 var findByOneId = function(id, callback) {
-    ObjetModel.findById(id, function(err, answer) {
+    ObjectModel.findById(id, function(err, answer) {
         if (!err) {
             callback(answer);
         } else {
@@ -8,15 +8,18 @@ var findByOneId = function(id, callback) {
         }
     })
 }
-var addObjet = function(name, protocol, capteur, funct, link, callback) {
-    var newObjet = new ObjetModel({
+
+var addObject = function(name, protocol, capteur, funct, link,type,valeur, callback) {
+    var newObject = new ObjectModel({
         nom: name
     });
-    newObjet.protocole = protocol;
-    newObjet.capteur = capteur;
-    newObjet.fonction = funct;
-    newObjet.lien = link;
-    newObjet.save(function(err) {
+    newObject.protocole = protocol;
+    newObject.capteur = capteur;
+    newObject.fonction = funct;
+    newObject.lien = link;
+    newObject.type = type;
+    newObject.value = valeur; 
+    newObject.save(function(err) {
         if (err) {
             throw err;
         }
@@ -24,12 +27,20 @@ var addObjet = function(name, protocol, capteur, funct, link, callback) {
         callback();
     });
 }
-/*
+var updateObject = function(identifiant,valeur,callback){
+    ObjectModel.update({ id : identifiant}, { value : valeur }, function (err) {
+         if (err) { throw err; }
+      console.log('la valeur est maitenant : '+ valeur);
+      callback();
+    });
+}
+
+
 var connectionBDD = function(callback) {
     var mongoose = require('mongoose');
     mongoose.connect('mongodb://louison:123456@ds037395.mongolab.com:37395/homecontrol');
     var db = mongoose.connection;
-    var dataDb = db.model('objects', ObjetModel);
+    var dataDb = db.model('objects', ObjectModel);
     mongoose.connection.on('open', function(ref) {
         console.log('Connected to mongo server.');
         callback();
@@ -38,7 +49,8 @@ var connectionBDD = function(callback) {
         console.log('Could not connect to mongo server!');
         console.log(err);
     });
-}*/
+}
 exports.findByOneId = findByOneId;
-exports.addObjet = addObjet;
-//exports.connectionBDD=connectionBDD;
+exports.addObject = addObject;
+exports.updateObject = updateObject;
+exports.connectionBDD=connectionBDD;
