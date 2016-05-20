@@ -4,7 +4,7 @@ var objectsSchema = new mongoose.Schema({
     protocole: String,
     nom: String,
     capteur: Boolean,
-    fonction: String,
+    fonction: [],
     lien: String,
     type: String,
     value : String

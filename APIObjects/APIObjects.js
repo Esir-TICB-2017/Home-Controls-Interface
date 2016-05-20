@@ -33,6 +33,7 @@ var init = function() {
 var objectChangeState = function(action ,id) {
     var data = monMongo.findByOneId(id, function(data) {
         var param = data.fonction;
+        console.log(data.fonction);
         param = param.split(';');
         for (i in param) {
             if (param[i].indexOf(action) != -1) {

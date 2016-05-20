@@ -17,6 +17,7 @@ homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$sta
     //Recover the objects in the home and put them in a list in the widget
     $http.get('/getObjects').success(function(data) {
         //types d'objets : lampe, volet, temperature, humidite, luminosite, co2
+        console.log(data);
         var objectList = data;
         angular.forEach(objectList, function(object, key) {
             if (object.type == "lampe") {
@@ -30,7 +31,7 @@ homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$sta
             } else if (object.type == "humidite") {
                 object.icon = "opacity";
             }
-            object.fonction = parseObjctsFunction.parse(object.fonction);
+            //object.fonction = parseObjctsFunction.parse(object.fonction);
         });
         $scope.listObjects = objectList;
     });
@@ -319,7 +320,6 @@ homeCIController.controller('objectsCtrl', ['UserService', '$scope', '$http', '$
 }]);
 homeCIController.controller('loginCtrl', function($scope, $http, $rootScope, $location, $state, LoginService, UserService) {
     document.getElementById("myButton").onclick = function() {
-        console.log("ici");
         location.href = "http://localhost:1337/connect/facebook";
     };
     $scope.titleView = 'Login';
