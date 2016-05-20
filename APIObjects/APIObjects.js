@@ -12,33 +12,12 @@ var init = function() {
     //-- création de la routine pour relever les valeurs .
     
 }
-var up = function(id) {
+var objectFunction = function(action ,id) {
     var data = monMongo.findByOneId(id, function(data) {
         var param = data.fonction;
         param = param.split(';');
         for (i in param) {
-            if (param[i].indexOf('up') != -1) {
-                param = param[parseInt(i) + 1].replace('param:', "");
-            }
-        }
-        //en fonction du protocole selectionné 
-        if (data.protocole == 'knx') {
-            fonctionKNX.setknx(data.lien, param);
-            return true;
-        } else if (data.protocole == 'Rest') {
-            var rep = fonctionRest.changerEtat(data.lien, param);
-            return true;
-        } else {
-            return 'error';
-        }
-    });
-}
-var down = function(id) {
-    var data = monMongo.findByOneId(id, function(data) {
-        var param = data.fonction;
-        param = param.split(';');
-        for (i in param) {
-            if (param[i].indexOf('down') != -1) {
+            if (param[i].indexOf(action) != -1) {
                 param = param[parseInt(i) + 1].replace('param:', "");
             }
         }
