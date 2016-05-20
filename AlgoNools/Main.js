@@ -43,8 +43,8 @@ Nools = function(){
 	session.assert(chauffageChambre          = new Chauffage (consigne_temperature, 'id', 'chambre'));
 	
 	var Lumiere                              = flow.getDefined('lumiere');
-	session.assert(lumiereSalle              = new Lumiere ('down', 'id', 'salle'));
-	session.assert(lumiereChambre            = new Lumiere ('down', 'id', 'chambre'));
+	session.assert(lumiereSalle              = new Lumiere ('down', '573f2c9ff2763a101b8abffe', 'salle'));
+	session.assert(lumiereChambre            = new Lumiere ('down', '573f2c9ff2763a101b8ac009', 'chambre'));
 
 	var CaptTemperature                      = flow.getDefined('captTemperature');
 	session.assert(captTemperatureIntSdb     = new CaptTemperature(consigne_temperature, 'sdb'));
@@ -58,8 +58,8 @@ Nools = function(){
 	session.assert(captLuminositeIntChambre  = new CaptLuminosite(consigne_luminosite, 'chambre'));
 
 	var Volet                                = flow.getDefined('volet');
-	session.assert(voletSalle                = new Volet('down', 'id', 'salle'));
-	session.assert(voletChambre              = new Volet('down', 'id', 'chambre'));
+	session.assert(voletSalle                = new Volet('down', '573f2c9ff2763a101b8abfff', 'salle'));
+	session.assert(voletChambre              = new Volet('down', '573f2c9ff2763a101b8ac000', 'chambre'));
 
 	var Consigne                             = flow.getDefined('consigne');
 	session.assert(consigneTemp              = new Consigne(consigne_temperature, consigne_temperature, consigne_temperature, 'temperature'));

@@ -32,7 +32,7 @@ var init = function(tabIdCapteur) {
 }
 
 var objectChangeState = function(action, id, callback) {
-    console.log(id);
+    callback("on est dans la fonction");
     var data = monMongo.findByOneId(id, function(data) {
         for (i in data.function) {
             if (data.function[i].name == action) {
