@@ -35,20 +35,20 @@ var init = function(tabIdCapteur) {
 }
 var objectChangeState = function(action ,id,callback) {
     var data = monMongo.findByOneId(id, function(data) {
-        var param = data.fonction;
-        console.log(data.fonction);
-        param = param.split(';');
-        for (i in param) {
-            if (param[i].indexOf(action) != -1) {
-                param = param[parseInt(i) + 1].replace('param:', "");
+        
+        for(i in data.function){
+            if(data.function[i].name == action){
+                var parametre = data.function[i].param;
+                console.log(parametre);
             }
         }
         //en fonction du protocole selectionné 
         if (data.protocole == 'knx') {
-            fonctionKNX.setknx(data.lien, param);
+            fonctionKNX.setknx(data.lien, parametre);
             return true;
         } else if (data.protocole == 'Rest') {
-            var rep = fonctionRest.changerEtat(data.lien, param);
+            var restParametre = '<str val="' + data.function[i].param + '"/>';
+            var rep = fonctionRest.changerEtat(data.lien, restParametre);
             return true;
         } else {
             return 'error';
