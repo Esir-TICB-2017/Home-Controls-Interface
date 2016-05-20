@@ -30,9 +30,6 @@ var init = function() {
     
 }
 
-
-
-
 var objectChangeState = function(action ,id) {
     var data = monMongo.findByOneId(id, function(data) {
         var param = data.fonction;
@@ -56,4 +53,5 @@ var objectChangeState = function(action ,id) {
 }
 
 exports.init = init;
-exports.objectChangeState=objectChangeState;
+exports.objectChangeState = objectChangeState;
+

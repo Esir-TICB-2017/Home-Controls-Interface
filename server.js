@@ -678,20 +678,7 @@ io.sockets.on('connection', function(socket) {
         });
     })
     socket.on('objectFunction', function(data){
-        
-    })
-    socket.on('up', function(data) {
-        console.log('up');
-        //TODO : appeler la fonction up(id) de mathieu avec id=data.id
-        if(!data){
-            socket.emit('upResponse', {error : 'no ID provided'});
-        }
-       var done =  apiObjects.up(data.id);
-    })
-    socket.on('down', function(data) {
-        console.log("down");
-        //TODO : appeler la fonction down(id) de mathieu avec i=data.id
-        apiObjects.down(data.id);
+        apiObjects.objectChangeState(data.nameFct, data.id);
     })
     socket.on('automation', function(data) {
         //TODO : appeler l'API de David et Damien avec en envoyant le data
