@@ -14,8 +14,14 @@ var http = require('http').Server(app);
         console.log('vous etes connecté a KNX');
     }
 });*/
-//var tabIdCapteur =["573efd97234b97a81cb4ef55"];
-//API.init(tabIdCapteur);
+var BDD = require("./monMongo.js");
+var tabIdCapteur = ["573f0e18f8e098a827075b17","573f0e18f8e098a827075b18","573f0e18f8e098a827075b19","573f0e18f8e098a827075b1a"];
+BDD.connectionBDD(function(){
+    API.init(tabIdCapteur);
+
+});
+
+
 
 
 

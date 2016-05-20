@@ -1,7 +1,7 @@
 var fonctionKNX = require("./fonctionKNX.js");
 var fonctionRest = require("./fonctionRest.js");
 var monMongo = require("./monMongo.js");
-var init = function() {
+var init = function(tabIdCapteur) {
     //---- connection aux équipements KNX
     fonctionKNX.connectionKNX(function() {
         if (fonctionKNX.connection.connected == true) {
@@ -11,26 +11,29 @@ var init = function() {
     });
     //-- création de la routine pour relever les valeurs .
     var rep;
-    setInterval(function(tabIdCapteur){
-        for (i in tabIdCapteur){
-            monMongo.findByOneId(tabIdCapteur[i], function(data){
+    setInterval(function(){
+        for (var i=0 ; i<tabIdCapteur.lenght;i ){
+            var encour=tabIdCapteur[i];
+            monMongo.findByOneId(encour, function(data){
                 fonctionRest.getEtat(data.lien,function(rep){
+                    console.log(rep);
                     if(rep!='error'){
-                        monMongo.updateValueObject(tabIdCapteur[i],rep,function(){
-                            console.log('valeur mise à jour');
+                        monMongo.updateValueObject(encour,rep,function(){
+                            console.log('valeur mise à jour pour '+encour);
+                            i++;
                         });
+                    }
+                    else{
+                        console.log('error');
                     }
                    
                 });
 
             });
         }
-
     }, 3000);
-    
 }
-
-var objectChangeState = function(action ,id) {
+var objectChangeState = function(action ,id,callback) {
     var data = monMongo.findByOneId(id, function(data) {
         var param = data.fonction;
         console.log(data.fonction);
