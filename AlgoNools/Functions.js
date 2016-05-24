@@ -10,7 +10,6 @@ var main = require('./Main.js');
 		
 		if(obj.consigneTemp==null || obj.consigneLum==null || obj.consigneCo2==null || obj.captTemperatureExt==null || obj.captTemperatureIntSalle==null || obj.captTemperatureIntChambre==null || obj.captTemperatureIntSdb==null || obj.captLuminositeIntSalle==null || obj.captLuminositeIntChambre==null || obj.captLuminositeExt==null || obj.captCO2==null || obj.moment==null){
 			callback('actionneurs',{err:"Il manque un paramètre"});
-				},1000);
 		}
 		else{
 		var session = main.session;
