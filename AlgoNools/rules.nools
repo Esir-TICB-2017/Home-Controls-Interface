@@ -616,10 +616,14 @@ rule VoletNuitDown {
 	when {
 		luminosite : CaptLuminosite luminosite.getPlace() == 'exterieur';
 		consigne   : Consigne consigne.getMesure() == 'luminosite' 			&& (luminosite.getValue() < consigne.getValueJourSuf());
-		volet      : Volet;
+		volet1      : Volet volet1.getPlace() == 'salle';
+		volet2      : Volet volet2.getPlace() == 'chambre';
 	}
 	then {
-		modify(volet, function(){volet.down();});
-		api.objectChangeState('down', volet.getId());
+		modify(volet1, function(){volet1.down();});
+		modify(volet2, function(){volet2.down();});
+		api.objectChangeState('down', volet1.getId());
+		api.objectChangeState('down', volet2.getId());
+			
 	}
 }
