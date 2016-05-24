@@ -1,0 +1,205 @@
+﻿séfefe
+Merge branch 'master' of https://github.com/Esir-TICB-2017/Home-Controls-Interface
+
+# Conflicts:
+#	APIObjects/APIObjects.js
+#	bower_components/materialize/.bower.json
+#
+# It looks like you may be committing a merge.
+# If this is not correct, please remove the file
+#	.git/MERGE_HEAD
+# and try again.
+
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch and 'origin/master' have diverged,
+# and have 1 and 2 different commits each, respectively.
+#   (use "git pull" to merge the remote branch into yours)
+#
+# All conflicts fixed but you are still merging.
+#
+# Changes to be committed:
+#	modified:   APIObjects/APIObjects.js
+#	modified:   AlgoNools/Main.js
+#	modified:   AlgoNools/rules.nools
+#	deleted:    bower_components/Materialize/.editorconfig
+#	deleted:    bower_components/Materialize/.npmignore
+#	deleted:    bower_components/Materialize/CHANGELOG.md
+#	deleted:    bower_components/Materialize/CONTRIBUTING.md
+#	deleted:    bower_components/Materialize/bin/materialize.css
+#	deleted:    bower_components/Materialize/bower.json
+#	deleted:    bower_components/Materialize/dist/css/materialize.css
+#	deleted:    bower_components/Materialize/dist/font/material-design-icons/Material-Design-Icons.eot
+#	deleted:    bower_components/Materialize/dist/font/material-design-icons/Material-Design-Icons.ttf
+#	deleted:    bower_components/Materialize/dist/font/roboto/Roboto-Light.ttf
+#	deleted:    bower_components/Materialize/dist/font/roboto/Roboto-Light.woff
+#	deleted:    bower_components/Materialize/dist/font/roboto/Roboto-Medium.eot
+#	deleted:    bower_components/Materialize/dist/font/roboto/Roboto-Medium.woff
+#	deleted:    bower_components/Materialize/dist/font/roboto/Roboto-Regular.eot
+#	deleted:    bower_components/Materialize/dist/font/roboto/Roboto-Thin.eot
+#	deleted:    bower_components/Materialize/dist/fonts/roboto/Roboto-Bold.eot
+#	deleted:    bower_components/Materialize/dist/fonts/roboto/Roboto-Bold.ttf
+#	deleted:    bower_components/Materialize/dist/fonts/roboto/Roboto-Bold.woff
+#	deleted:    bower_components/Materialize/dist/fonts/roboto/Roboto-Bold.woff2
+#	deleted:    bower_components/Materialize/dist/fonts/roboto/Roboto-Light.eot
+#	deleted:    bower_components/Materialize/dist/fonts/roboto/Roboto-Light.woff
+#	deleted:    bower_components/Materialize/dist/fonts/roboto/Roboto-Medium.woff
+#	deleted:    bower_components/Materialize/dist/fonts/roboto/Roboto-Thin.eot
+#	deleted:    bower_components/Materialize/fonts/roboto/Roboto-Bold.eot
+#	deleted:    bower_components/Materialize/fonts/roboto/Roboto-Bold.woff
+#	deleted:    bower_components/Materialize/fonts/roboto/Roboto-Bold.woff2
+#	deleted:    bower_components/Materialize/fonts/roboto/Roboto-Light.woff
+#	deleted:    bower_components/Materialize/fonts/roboto/Roboto-Regular.eot
+#	deleted:    bower_components/Materialize/fonts/roboto/Roboto-Regular.woff
+#	deleted:    bower_components/Materialize/fonts/roboto/Roboto-Regular.woff2
+#	deleted:    bower_components/Materialize/fonts/roboto/Roboto-Thin.ttf
+#	deleted:    bower_components/Materialize/js/character_counter.js
+#	deleted:    bower_components/Materialize/js/collapsible.js
+#	deleted:    bower_components/Materialize/js/global.js
+#	deleted:    bower_components/Materialize/js/hammer.min.js
+#	deleted:    bower_components/Materialize/js/jquery.easing.1.3.js
+#	deleted:    bower_components/Materialize/js/materialbox.js
+#	deleted:    bower_components/Materialize/js/parallax.js
+#	deleted:    bower_components/Materialize/js/scrollspy.js
+#	deleted:    bower_components/Materialize/js/slider.js
+#	deleted:    bower_components/Materialize/js/tooltip.js
+#	deleted:    bower_components/Materialize/js/velocity.min.js
+#	deleted:    bower_components/Materialize/sass/components/_buttons.scss
+#	deleted:    bower_components/Materialize/sass/components/_carousel.scss
+#	deleted:    bower_components/Materialize/sass/components/_color.scss
+#	deleted:    bower_components/Materialize/sass/components/_dropdown.scss
+#	deleted:    bower_components/Materialize/sass/components/_normalize.scss
+#	deleted:    bower_components/Materialize/sass/components/_prefixer.scss
+#	deleted:    bower_components/Materialize/sass/components/_roboto.scss
+#	deleted:    bower_components/Materialize/sass/components/_sideNav.scss
+#	deleted:    bower_components/Materialize/sass/components/_toast.scss
+#	deleted:    bower_components/Materialize/sass/components/_tooltip.scss
+#	deleted:    bower_components/Materialize/sass/components/_typography.scss
+#	deleted:    bower_components/Materialize/sass/components/_variables.scss
+#	deleted:    bower_components/Materialize/sass/components/date_picker/_default.scss
+#	deleted:    bower_components/Materialize/sass/components/forms/_checkboxes.scss
+#	deleted:    bower_components/Materialize/sass/components/forms/_input-fields.scss
+#	deleted:    bower_components/Materialize/sass/components/forms/_range.scss
+#	deleted:    bower_components/Materialize/templates/masonry-template/js/init.js
+#	deleted:    bower_components/Materialize/templates/parallax-template/background3.jpg
+#	deleted:    bower_components/Materialize/templates/parallax-template/js/init.js
+#	deleted:    bower_components/Materialize/templates/starter-template/js/init.js
+#	deleted:    bower_components/Materialize/tests/spec/helper.js
+#	deleted:    bower_components/Materialize/tests/spec/select/selectSpec.js
+#	deleted:    bower_components/Materialize/tests/spec/tabs/tabsSpec.js
+#	deleted:    bower_components/materialize/.gitattributes
+#	deleted:    bower_components/materialize/.travis.yml
+#	deleted:    bower_components/materialize/LICENSE
+#	deleted:    bower_components/materialize/bin/materialize.js
+#	deleted:    bower_components/materialize/dist/css/materialize.min.css
+#	deleted:    bower_components/materialize/dist/font/material-design-icons/Material-Design-Icons.svg
+#	deleted:    bower_components/materialize/dist/font/material-design-icons/Material-Design-Icons.woff
+#	deleted:    bower_components/materialize/dist/font/material-design-icons/Material-Design-Icons.woff2
+#	deleted:    bower_components/materialize/dist/font/roboto/Roboto-Bold.eot
+#	deleted:    bower_components/materialize/dist/font/roboto/Roboto-Bold.ttf
+#	deleted:    bower_components/materialize/dist/font/roboto/Roboto-Bold.woff
+#	deleted:    bower_components/materialize/dist/font/roboto/Roboto-Bold.woff2
+#	deleted:    bower_components/materialize/dist/font/roboto/Roboto-Light.eot
+#	deleted:    bower_components/materialize/dist/font/roboto/Roboto-Light.woff2
+#	deleted:    bower_components/materialize/dist/font/roboto/Roboto-Medium.ttf
+#	deleted:    bower_components/materialize/dist/font/roboto/Roboto-Medium.woff2
+#	deleted:    bower_components/materialize/dist/font/roboto/Roboto-Regular.ttf
+#	deleted:    bower_components/materialize/dist/font/roboto/Roboto-Regular.woff
+#	deleted:    bower_components/materialize/dist/font/roboto/Roboto-Regular.woff2
+#	deleted:    bower_components/materialize/dist/font/roboto/Roboto-Thin.ttf
+#	deleted:    bower_components/materialize/dist/font/roboto/Roboto-Thin.woff
+#	deleted:    bower_components/materialize/dist/font/roboto/Roboto-Thin.woff2
+#	deleted:    bower_components/materialize/dist/fonts/roboto/Roboto-Light.ttf
+#	deleted:    bower_components/materialize/dist/fonts/roboto/Roboto-Light.woff2
+#	deleted:    bower_components/materialize/dist/fonts/roboto/Roboto-Medium.eot
+#	deleted:    bower_components/materialize/dist/fonts/roboto/Roboto-Medium.ttf
+#	deleted:    bower_components/materialize/dist/fonts/roboto/Roboto-Medium.woff2
+#	deleted:    bower_components/materialize/dist/fonts/roboto/Roboto-Regular.eot
+#	deleted:    bower_components/materialize/dist/fonts/roboto/Roboto-Regular.ttf
+#	deleted:    bower_components/materialize/dist/fonts/roboto/Roboto-Regular.woff
+#	deleted:    bower_components/materialize/dist/fonts/roboto/Roboto-Regular.woff2
+#	deleted:    bower_components/materialize/dist/fonts/roboto/Roboto-Thin.ttf
+#	deleted:    bower_components/materialize/dist/fonts/roboto/Roboto-Thin.woff
+#	deleted:    bower_components/materialize/dist/fonts/roboto/Roboto-Thin.woff2
+#	deleted:    bower_components/materialize/dist/js/materialize.js
+#	deleted:    bower_components/materialize/dist/js/materialize.min.js
+#	deleted:    bower_components/materialize/extras/noUiSlider/nouislider.css
+#	deleted:    bower_components/materialize/extras/noUiSlider/nouislider.js
+#	deleted:    bower_components/materialize/extras/noUiSlider/nouislider.min.js
+#	deleted:    bower_components/materialize/fonts/roboto/Roboto-Bold.ttf
+#	deleted:    bower_components/materialize/fonts/roboto/Roboto-Light.eot
+#	deleted:    bower_components/materialize/fonts/roboto/Roboto-Light.ttf
+#	deleted:    bower_components/materialize/fonts/roboto/Roboto-Light.woff2
+#	deleted:    bower_components/materialize/fonts/roboto/Roboto-Medium.eot
+#	deleted:    bower_components/materialize/fonts/roboto/Roboto-Medium.ttf
+#	deleted:    bower_components/materialize/fonts/roboto/Roboto-Medium.woff
+#	deleted:    bower_components/materialize/fonts/roboto/Roboto-Medium.woff2
+#	deleted:    bower_components/materialize/fonts/roboto/Roboto-Regular.ttf
+#	deleted:    bower_components/materialize/fonts/roboto/Roboto-Thin.eot
+#	deleted:    bower_components/materialize/fonts/roboto/Roboto-Thin.woff
+#	deleted:    bower_components/materialize/fonts/roboto/Roboto-Thin.woff2
+#	deleted:    bower_components/materialize/js/animation.js
+#	deleted:    bower_components/materialize/js/buttons.js
+#	deleted:    bower_components/materialize/js/cards.js
+#	deleted:    bower_components/materialize/js/carousel.js
+#	deleted:    bower_components/materialize/js/chips.js
+#	deleted:    bower_components/materialize/js/date_picker/picker.date.js
+#	deleted:    bower_components/materialize/js/date_picker/picker.js
+#	deleted:    bower_components/materialize/js/dropdown.js
+#	deleted:    bower_components/materialize/js/forms.js
+#	deleted:    bower_components/materialize/js/initial.js
+#	deleted:    bower_components/materialize/js/jquery.hammer.js
+#	deleted:    bower_components/materialize/js/jquery.timeago.min.js
+#	deleted:    bower_components/materialize/js/leanModal.js
+#	deleted:    bower_components/materialize/js/pushpin.js
+#	deleted:    bower_components/materialize/js/scrollFire.js
+#	deleted:    bower_components/materialize/js/sideNav.js
+#	deleted:    bower_components/materialize/js/tabs.js
+#	deleted:    bower_components/materialize/js/toasts.js
+#	deleted:    bower_components/materialize/js/transitions.js
+#	deleted:    bower_components/materialize/js/waves.js
+#	deleted:    bower_components/materialize/package.js
+#	deleted:    bower_components/materialize/sass/components/_cards.scss
+#	deleted:    bower_components/materialize/sass/components/_chips.scss
+#	deleted:    bower_components/materialize/sass/components/_collapsible.scss
+#	deleted:    bower_components/materialize/sass/components/_global.scss
+#	deleted:    bower_components/materialize/sass/components/_grid.scss
+#	deleted:    bower_components/materialize/sass/components/_icons-material-design.scss
+#	deleted:    bower_components/materialize/sass/components/_materialbox.scss
+#	deleted:    bower_components/materialize/sass/components/_mixins.scss
+#	deleted:    bower_components/materialize/sass/components/_modal.scss
+#	deleted:    bower_components/materialize/sass/components/_navbar.scss
+#	deleted:    bower_components/materialize/sass/components/_preloader.scss
+#	deleted:    bower_components/materialize/sass/components/_slider.scss
+#	deleted:    bower_components/materialize/sass/components/_table_of_contents.scss
+#	deleted:    bower_components/materialize/sass/components/_tabs.scss
+#	deleted:    bower_components/materialize/sass/components/_waves.scss
+#	deleted:    bower_components/materialize/sass/components/date_picker/_default.date.scss
+#	deleted:    bower_components/materialize/sass/components/date_picker/_default.time.scss
+#	deleted:    bower_components/materialize/sass/components/forms/_file-input.scss
+#	deleted:    bower_components/materialize/sass/components/forms/_forms.scss
+#	deleted:    bower_components/materialize/sass/components/forms/_radio-buttons.scss
+#	deleted:    bower_components/materialize/sass/components/forms/_select.scss
+#	deleted:    bower_components/materialize/sass/components/forms/_switches.scss
+#	deleted:    bower_components/materialize/sass/materialize.scss
+#	deleted:    bower_components/materialize/templates/masonry-template/LICENSE
+#	deleted:    bower_components/materialize/templates/masonry-template/background1.jpg
+#	deleted:    bower_components/materialize/templates/masonry-template/background2.jpg
+#	deleted:    bower_components/materialize/templates/masonry-template/background3.jpg
+#	deleted:    bower_components/materialize/templates/masonry-template/css/style.css
+#	deleted:    bower_components/materialize/templates/masonry-template/js/masonry.pkgd.min.js
+#	deleted:    bower_components/materialize/templates/parallax-template/LICENSE
+#	deleted:    bower_components/materialize/templates/parallax-template/background1.jpg
+#	deleted:    bower_components/materialize/templates/parallax-template/background2.jpg
+#	deleted:    bower_components/materialize/templates/parallax-template/css/style.css
+#	deleted:    bower_components/materialize/templates/starter-template/LICENSE
+#	deleted:    bower_components/materialize/templates/starter-template/css/style.css
+#	deleted:    bower_components/materialize/tests/spec/cards/cardsSpec.js
+#	deleted:    bower_components/materialize/tests/spec/collapsible/collapsibleSpec.js
+#	deleted:    bower_components/materialize/tests/spec/scrollFire/scrollFireSpec.js
+#	deleted:    bower_components/materialize/tests/spec/toast/toastSpec.js
+#	deleted:    bower_components/materialize/tests/spec/tooltip/tooltipSpec.js
+#
+
