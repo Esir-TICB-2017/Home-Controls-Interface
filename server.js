@@ -7,8 +7,8 @@ var automation = require('./AlgoNools/Functions.js');
 var session = nools.session;
 var express = require('express');
 var app = express();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+var http = require('http').Server(app); //Instanciate HTTP server
+var io = require('socket.io')(http).listen(1338); // init socket.io
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
 var mongoose = require('mongoose');
@@ -45,7 +45,7 @@ mongoose.connection.on('error', function(err) {
 mongoose.connect(config.database); // Connexion à la base de données (URI dans le fichier config.js)
 //----------------------------------------------------------------
 app.set('superSecret', config.secret); //secret variable
-app.use(morgan('dev')); // permet d'afficher les requêtes dans la console
+//app.use(morgan('dev')); // permet d'afficher les requêtes dans la console
 // use body parser so we can get info from POST and/or URL parameters
 app.use(bodyParser.urlencoded({
     extended: false
@@ -64,13 +64,13 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
+apiObjects.init();
 app.use(grant);
 app.get('/handle_facebook_callback', function(req, res, next) {
         console.log(req.query);
         res.sendFile('index.html', {
             root: __dirname
         });
-        apiObjects.init();
         //res.end(JSON.stringify(req.query, null, 2))
     })
     // var oauth2 = require('simple-oauth2')({
@@ -640,6 +640,41 @@ io.sockets.on('connection', function(socket) {
             }
         });
     });
+    socket.on('login', function(data) {
+        User.findOne({ //On cherche l'utilisateur en utilisant mongoose
+            username: data.username
+        }, function(err, user) {
+            if (err) throw err;
+            //On regarde si l'utilisateur existe
+            if (!user) {
+                socket.emit('loginResponse', {
+                    success: false,
+                    message: 'Authentication failed. User not found.'
+                })
+            } else if (user) {
+                // Si l'utilisateur existe, on check son mot de passe
+                if (user.password != data.password) {
+                    socket.emit('loginResponse', {
+                        success: false,
+                        message: 'Authentication failed. Wrong password.'
+                    })
+                } else {
+                    // Si on a trouvé l'utilisateur et que son mot de passe est correct : 
+                    // on créé un token
+                    var token = jwt.sign(user, app.get('superSecret'), {
+                        expiresIn: 3600 // Expire dans 24h
+                    });
+                    // return the information including token as JSON
+                    socket.emit('loginResponse', {
+                        user: user,
+                        success: true,
+                        message: 'Logged ! ' + 'hello ' + data.username,
+                        token: token
+                    })
+                }
+            }
+        });
+    })
     socket.on('registration', function(data) {
         User.findOne({
             username: data.username,
@@ -681,9 +716,10 @@ io.sockets.on('connection', function(socket) {
             console.log(data);
         });
     })
-
     socket.on('automation', function(data) {
-        automation.react(data, function(nom,data){socket.emit(nom,data)});
+        automation.react(data, function(nom, data) {
+            socket.emit(nom, data)
+        });
     })
     socket.on('disconnect', function() {});
 });
@@ -712,9 +748,6 @@ http.listen(1337, function() {
 });
 // Fonction pour lancer l'algorithme d'aide à la décision
 nools.Nools();
-//MATHIEU ET DANN : C'EST QUOI CA ???
-// c'est un truc super cool ! en fait quand tu quites ton serveur , ca execute cette fonction avant de vraiment le fermer . 
-// du coup ca me permet de faire la deconnexion du KnX quand je quite le server ;) 
 process.on('SIGINT', function() {
     if (fonctionKNX.connection.connected) {
         console.log('deconnection du tunel KNX');

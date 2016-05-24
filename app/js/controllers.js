@@ -324,7 +324,7 @@ homeCIController.controller('objectsCtrl', ['UserService', '$scope', '$http', '$
         $scope.listObjects = objectList;
     });
 }]);
-homeCIController.controller('loginCtrl', function($scope, $http, $rootScope, $location, $state, LoginService, UserService) {
+homeCIController.controller('loginCtrl', function($scope, $http, $rootScope, $location, $state, LoginService, UserService, socket) {
     document.getElementById("myButton").onclick = function() {
         location.href = "http://localhost:1337/connect/facebook";
     };
@@ -343,21 +343,15 @@ homeCIController.controller('loginCtrl', function($scope, $http, $rootScope, $lo
                 access_token: null
             }
             //Create the data that will be send to the server
-        var data = $.param({
+        var data = {
             username: loginID.username,
             password: loginID.password
-        });
+        };
         //Send the request to the server
-        $http({
-            method: 'POST',
-            url: '/login',
-            data: data,
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        }).
-        success(function(data, status, headers, config) {
-            if (data.success) {
+        
+        socket.emit('login', data);
+        socket.on('loginResponse', function(data){
+            if(data.success){
                 //The user is now logged in
                 //Save the token in the user object
                 user.access_token = data.token;
@@ -368,15 +362,43 @@ homeCIController.controller('loginCtrl', function($scope, $http, $rootScope, $lo
                 Materialize.toast('Bienvenue ' + String(UserService.getCurrentUser().username) + ' ! ', 2000);
                 //Redirect to the home view automatically
                 $state.go('home');
-            } else {
+            }else{
+                console.log(data);
                 console.log('Error: Invalid user or password');
                 Materialize.toast('Identifiants invalides !', 2000);
             }
-        }).
-        error(function(data, status, headers, config) {
-            console.log('Network Error');
-            // Handle login errors here
-        });
+        })
+
+        // $http({
+        //     method: 'POST',
+        //     url: '/login',
+        //     data: data,
+        //     headers: {
+        //         'Content-Type': 'application/x-www-form-urlencoded'
+        //     }
+        // }).
+        // success(function(data, status, headers, config) {
+        //     if (data.success) {
+        //         //The user is now logged in
+        //         //Save the token in the user object
+        //         user.access_token = data.token;
+        //         user.isAuthenticated = true;
+        //         UserService.setCurrentUser(user);
+        //         $rootScope.username = UserService.getCurrentUser().username;
+        //         $rootScope.$broadcast('authorized');
+        //         Materialize.toast('Bienvenue ' + String(UserService.getCurrentUser().username) + ' ! ', 2000);
+        //         //Redirect to the home view automatically
+        //         $state.go('home');
+        //     } else {
+        //         console.log(data);
+        //         console.log('Error: Invalid user or password');
+        //         Materialize.toast('Identifiants invalides !', 2000);
+        //     }
+        // }).
+        // error(function(data, status, headers, config) {
+        //     console.log('Network Error');
+        //     // Handle login errors here
+        // });
     }
 });
 homeCIController.controller('registerCtrl', ['$scope', '$http', function($scope, $http) {
