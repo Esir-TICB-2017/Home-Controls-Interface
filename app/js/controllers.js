@@ -1,8 +1,19 @@
 'use strict'
 var homeCIController = angular.module('homeCIController', []);
 homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$state', 'socket', function(UserService, $scope, $http, $state, socket) {
+    if (UserService.getCurrentUser() === null) {
+        $state.go('login');
+    }
     var mySocketId = null;
     socket.on('connected', onConnected);
+    socket.on('sensorData', function(data) {
+        console.log();
+        for (var i = 0; i < $scope.listObjects.length; i++) {
+            if (data.nom == $scope.listObjects[i].nom) {
+                $scope.listObjects[i].valeur = data.value;
+            }
+        }
+    })
     var objectList = {};
     var activeMenu = $('#menu');
     $scope.titleView = 'Home';
@@ -57,6 +68,9 @@ homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$sta
     };
 }]);
 homeCIController.controller('scenariosCtrl', ['UserService', '$scope', '$http', '$state', 'newScenario', function(UserService, $scope, $http, $state, newScenario) {
+    if (UserService.getCurrentUser() === null) {
+        $state.go('login');
+    }
     $scope.isAuthorized = UserService.isAuthorized;
     //If logged in, recover the user
     if (UserService.getCurrentUser()) {
@@ -287,6 +301,9 @@ homeCIController.controller('scenariosCtrl', ['UserService', '$scope', '$http', 
     };
 }]);
 homeCIController.controller('objectsCtrl', ['UserService', '$scope', '$http', '$state', 'USER_ROLES', 'socket', function(UserService, $scope, $http, $state, USER_ROLES, socket) {
+    if (UserService.getCurrentUser() === null) {
+        $state.go('login');
+    }
     //Verify the user autorization to access the datas
     $scope.isAuthorized = UserService.isAuthorized;
     if (UserService.getCurrentUser()) {
@@ -348,57 +365,55 @@ homeCIController.controller('loginCtrl', function($scope, $http, $rootScope, $lo
             password: loginID.password
         };
         //Send the request to the server
-        
         socket.emit('login', data);
-        socket.on('loginResponse', function(data){
-            if(data.success){
-                //The user is now logged in
-                //Save the token in the user object
-                user.access_token = data.token;
-                user.isAuthenticated = true;
-                UserService.setCurrentUser(user);
-                $rootScope.username = UserService.getCurrentUser().username;
-                $rootScope.$broadcast('authorized');
-                Materialize.toast('Bienvenue ' + String(UserService.getCurrentUser().username) + ' ! ', 2000);
-                //Redirect to the home view automatically
-                $state.go('home');
-            }else{
-                console.log(data);
-                console.log('Error: Invalid user or password');
-                Materialize.toast('Identifiants invalides !', 2000);
-            }
-        })
-
-        // $http({
-        //     method: 'POST',
-        //     url: '/login',
-        //     data: data,
-        //     headers: {
-        //         'Content-Type': 'application/x-www-form-urlencoded'
-        //     }
-        // }).
-        // success(function(data, status, headers, config) {
-        //     if (data.success) {
-        //         //The user is now logged in
-        //         //Save the token in the user object
-        //         user.access_token = data.token;
-        //         user.isAuthenticated = true;
-        //         UserService.setCurrentUser(user);
-        //         $rootScope.username = UserService.getCurrentUser().username;
-        //         $rootScope.$broadcast('authorized');
-        //         Materialize.toast('Bienvenue ' + String(UserService.getCurrentUser().username) + ' ! ', 2000);
-        //         //Redirect to the home view automatically
-        //         $state.go('home');
-        //     } else {
-        //         console.log(data);
-        //         console.log('Error: Invalid user or password');
-        //         Materialize.toast('Identifiants invalides !', 2000);
-        //     }
-        // }).
-        // error(function(data, status, headers, config) {
-        //     console.log('Network Error');
-        //     // Handle login errors here
-        // });
+        socket.on('loginResponse', function(data) {
+                if (data.success) {
+                    //The user is now logged in
+                    //Save the token in the user object
+                    user.access_token = data.token;
+                    user.isAuthenticated = true;
+                    UserService.setCurrentUser(user);
+                    $rootScope.username = UserService.getCurrentUser().username;
+                    $rootScope.$broadcast('authorized');
+                    Materialize.toast('Bienvenue ' + String(UserService.getCurrentUser().username) + ' ! ', 2000);
+                    //Redirect to the home view automatically
+                    $state.go('home');
+                } else {
+                    console.log(data);
+                    console.log('Error: Invalid user or password');
+                    Materialize.toast('Identifiants invalides !', 2000);
+                }
+            })
+            // $http({
+            //     method: 'POST',
+            //     url: '/login',
+            //     data: data,
+            //     headers: {
+            //         'Content-Type': 'application/x-www-form-urlencoded'
+            //     }
+            // }).
+            // success(function(data, status, headers, config) {
+            //     if (data.success) {
+            //         //The user is now logged in
+            //         //Save the token in the user object
+            //         user.access_token = data.token;
+            //         user.isAuthenticated = true;
+            //         UserService.setCurrentUser(user);
+            //         $rootScope.username = UserService.getCurrentUser().username;
+            //         $rootScope.$broadcast('authorized');
+            //         Materialize.toast('Bienvenue ' + String(UserService.getCurrentUser().username) + ' ! ', 2000);
+            //         //Redirect to the home view automatically
+            //         $state.go('home');
+            //     } else {
+            //         console.log(data);
+            //         console.log('Error: Invalid user or password');
+            //         Materialize.toast('Identifiants invalides !', 2000);
+            //     }
+            // }).
+            // error(function(data, status, headers, config) {
+            //     console.log('Network Error');
+            //     // Handle login errors here
+            // });
     }
 });
 homeCIController.controller('registerCtrl', ['$scope', '$http', function($scope, $http) {

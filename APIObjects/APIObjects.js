@@ -1,3 +1,4 @@
+var fonctionSocketServer = require('../server.js');
 var fonctionKNX = require("./fonctionKNX.js");
 var fonctionRest = require("./fonctionRest.js");
 var monMongo = require("./monMongo.js");
@@ -23,6 +24,7 @@ var pingSensor = function(id){
             if(rep!='error'){
                 monMongo.updateValueObject(id,rep,function(){
                     console.log('valeur mise à jour pour '+id);
+                    fonctionSocketServer.sensorValues(data);
                     setTimeout(function(){pingSensor(id)},10000);
 
                 });

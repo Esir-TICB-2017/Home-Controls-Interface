@@ -65,25 +65,36 @@ homeControlsInterfaceApp.run(function($state, $rootScope, UserService, $location
         var currentUrl = $location.path();
         var authorizedRoles = next.data.authorizedRoles;
         if (!UserService.isAuthenticated() && (currentUrl != "/login")) {
-            event.preventDefault;
-            //$location.path("/login");
+            event.preventDefault();
+            console.log('utilisateur pas authentifié');
+            //Fais les deux pour doubler les chances que ça fonctionne
+            $location.path("/login");
             $state.go('login');
-            console.log('pas authentifié ou pas sur la bonne page');
         }
-        if (!UserService.isAuthorized(authorizedRoles) && (currentUrl != "/login")) {
-            if (UserService.isAuthenticated) {
+        else if (!UserService.isAuthorized(authorizedRoles) && (currentUrl != "/login")) {
+            if (UserService.isAuthenticated()) {
                 //User is not allowed
                 $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);
                 console.log("user is not allowed");
-                Materialize.toast("Vous n'êtes pas autorisé a accéder à cette page", 3000);
+                Materialize.toast("Vous n'êtes pas autorisé a accéder à cette page, redirection vers la page home", 3000);
+                $location.path('/home');
+                //Deuxième essai
+                event.preventDefault();
+                $state.go('home');
             } else {
                 //User is not logged in
                 $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
-                $state.go('login');
                 console.log("user is not logged in");
+                $location.path('/login');
+                //Deuxième essai
+                event.preventDefault();
+                $state.go('login');
             }
         }
         if(UserService.isAuthenticated() && next.name == "login"){
+            $location.path('/home');
+            //Deuxième essai
+            event.preventDefault();
             $state.go('home');
         }
         if (UserService.isAuthenticated()) {

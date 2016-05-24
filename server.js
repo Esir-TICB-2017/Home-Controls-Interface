@@ -760,3 +760,11 @@ process.on('SIGINT', function() {
         process.exit();
     }
 });
+
+
+var sensorValues = function(data){
+    console.log(data.values);
+    io.sockets.emit('sensorData', data)
+}
+
+exports.sensorValues = sensorValues; 
