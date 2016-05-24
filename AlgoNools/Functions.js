@@ -8,10 +8,6 @@ var main = require('./Main.js');
 
 	react = function(obj, callback){
 		
-		if(obj.consigneTemp==null || obj.consigneLum==null || obj.consigneCo2==null || obj.captTemperatureExt==null || obj.captTemperatureIntSalle==null || obj.captTemperatureIntChambre==null || obj.captTemperatureIntSdb==null || obj.captLuminositeIntSalle==null || obj.captLuminositeIntChambre==null || obj.captLuminositeExt==null || obj.captCO2==null || obj.moment==null){
-			callback('actionneurs',{err:"Il manque un paramètre"});
-		}
-		else{
 		var session = main.session;
 
 		consigneTemp.setValue(obj.consigneTemp);
@@ -48,7 +44,7 @@ var main = require('./Main.js');
 
 				callback('actionneurs',{chauffageSdb:chauffageSdb.getValue(),chauffageChambre:chauffageChambre.getValue(),chauffageSalle:chauffageSalle.getValue(),lumiereChambre:lumiereChambre.getValue(),lumiereSalle:lumiereSalle.getValue(),voletSalle:voletSalle.getValue(),voletChambre:voletChambre.getValue(),vmc:vmc.getValue()});
 				},1000);
-		}
+		
 	}
 
 exports.react = react;
