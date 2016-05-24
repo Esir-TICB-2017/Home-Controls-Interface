@@ -14,12 +14,11 @@ homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$sta
     $('.collapsible').collapsible({
         accordion: false
     });
-        socket.on('actionneurs',function(data){
-            $scope.nools = true;
-            $scope.noolsData = data;
-            console.log(data);
+    socket.on('actionneurs', function(data) {
+        $scope.nools = true;
+        $scope.noolsData = data;
+        console.log(data);
     });
-        
     //Recover the objects in the home and put them in a list in the widget
     $http.get('/getObjects').success(function(data) {
         //types d'objets : lampe, volet, temperature, humidite, luminosite, co2
@@ -320,7 +319,6 @@ homeCIController.controller('objectsCtrl', ['UserService', '$scope', '$http', '$
             } else if (object.type == "humidite") {
                 object.icon = "opacity";
             }
-            
         });
         console.log(objectList);
         $scope.listObjects = objectList;
