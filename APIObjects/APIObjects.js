@@ -29,7 +29,7 @@ var pingSensor = function(id){
             }
             else{
                 console.log('error');
-                 setTimeout(function(){test(id)},10000);
+                 setTimeout(function(){pingSensor(id)},10000);
             }
            
         });
