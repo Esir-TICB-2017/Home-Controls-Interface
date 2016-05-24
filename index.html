@@ -5,90 +5,167 @@
         Function and variables in English to be understood by most people
     -->
     <head>
-        <meta name="viewport" charset="utf-8" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0">
-        <title>Contrôles de la maison</title>
-        <!-- Frameworks add-->
-
-        <link rel="stylesheet" href="bower_components/materialize/dist/css/materialize.min.css"/>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
-        
-        <script type="text/javascript" src="bower_components/jquery/dist/jquery.min.js"></script>
-        <script src="/socket.io/socket.io.js">
-        </script>
-        <script src="bower_components/materialize/bin/materialize.js"></script>
-        <script src="bower_components/angular/angular.min.js"></script>
-        <script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
-        <script src="bower_components/jquery.ui.touch-punch.min.js"></script>
-        <script src="bower_components/angular-route/angular-route.min.js"></script>
-        <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>-->
-        <script type="text/javascript" src="bower_components/a0-angular-storage/dist/angular-storage.min.js"></script>
-        <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
-        <script src="bower_components/angular-materialize/src/angular-materialize.js"></script>
-
-        <!-- Addition of our own JS files -->
-        <script type="text/javascript" src="js/app.js"></script>
-        <script type="text/javascript" src="js/controllers.js"></script>
-        <script type="text/javascript" src="js/application-controller.js"></script>
-        <script type="text/javascript" src="js/directives.js"></script>
-        <script type="text/javascript" src="js/service.js"></script>
-        <link rel="stylesheet" href="css/style.css"/>
+        <meta charset="utf-8" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0" name="viewport">
+            <title>
+                Contrôles de la maison
+            </title>
+            <!-- Frameworks add-->
+            <link href="bower_components/materialize/dist/css/materialize.min.css" rel="stylesheet"/>
+            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+            <script src="bower_components/jquery/dist/jquery.min.js" type="text/javascript">
+            </script>
+            <script src="http://localhost:1337/socket.io/socket.io.js" type="text/javascript">
+            </script>
+            <script src="bower_components/materialize/bin/materialize.js">
+            </script>
+            <script src="bower_components/angular/angular.min.js">
+            </script>
+            <script src="bower_components/jquery-ui/jquery-ui.min.js">
+            </script>
+            <script src="bower_components/jquery.ui.touch-punch.min.js">
+            </script>
+            <script src="bower_components/angular-route/angular-route.min.js">
+            </script>
+            <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>-->
+            <script src="bower_components/a0-angular-storage/dist/angular-storage.min.js" type="text/javascript">
+            </script>
+            <script src="bower_components/angular-ui-router/release/angular-ui-router.min.js">
+            </script>
+            <script src="bower_components/angular-materialize/src/angular-materialize.js">
+            </script>
+            <!-- Addition of our own JS files -->
+            <script src="js/app.js" type="text/javascript">
+            </script>
+            <script src="js/controllers.js" type="text/javascript">
+            </script>
+            <script src="js/application-controller.js" type="text/javascript">
+            </script>
+            <script src="js/directives.js" type="text/javascript">
+            </script>
+            <script src="js/service.js" type="text/javascript">
+            </script>
+            <link href="css/style.css" rel="stylesheet"/>
+        </meta>
     </head>
-
-    <body ng-controller="applicationController" class="blue-grey lighten-5">
-
+    <body class="blue-grey lighten-5" ng-controller="applicationController">
         <!-- Navbar on the top -->
-
         <!-- Dropdown contents used in the  navabr-->
-        <ul id="Notifications" class="dropdown-content">
-            <li><a href="{{activePage}}"><span class="red-text">Important</span> <span class="new badge ">2</span></a></li>
-            <li><a href="{{activePage}}"><span class="yellow-text text-darken-2">News</span></a></li>
+        <ul class="dropdown-content" id="Notifications">
+            <li>
+                <a href="{{activePage}}">
+                    <span class="red-text">
+                        Important
+                    </span>
+                    <span class="new badge ">
+                        2
+                    </span>
+                </a>
+            </li>
+            <li>
+                <a href="{{activePage}}">
+                    <span class="yellow-text text-darken-2">
+                        News
+                    </span>
+                </a>
+            </li>
         </ul>
-
-        <ul id="User" class="dropdown-content">
-            <li><a class="teal-text text-lighten2">Paramètres</a></li>
-            <li ng-if="canAccessAdmin" ui-sref="administration"><a href="#/administration" class="teal-text text-lighten2">Administration</a></li>
-            <li><a ng-click="logout()">Déconnexion</a></li>
+        <ul class="dropdown-content" id="User">
+            <li>
+                <a class="teal-text text-lighten2">
+                    Paramètres
+                </a>
+            </li>
+            <li ng-if="canAccessAdmin" ui-sref="administration">
+                <a class="teal-text text-lighten2" href="#/administration">
+                    Administration
+                </a>
+            </li>
+            <li>
+                <a ng-click="logout()">
+                    Déconnexion
+                </a>
+            </li>
         </ul>
-
         <!-- Navbar declaration -->
         <div class="navbar-fixed">
             <nav class="blue-grey darken-3">
-
                 <div class="nav-wrapper">
-                    <a ng-href="activePage" data-activates="mobileMenu" class="button-collapse" ng-click="reload('activePage')"><i class="material-icons">menu</i></a>
-                    <a href="#/home" class="brand-logo center hide-on-small-only"><img src="img/home.png" alt="logo" style="width : 60px; height : 60px;"></a>
-                    <ul id="nav-mobile" class="left hide-on-med-and-down">
-                        <li ui-sref='home' ng-class="activeHome"><a href="#/home" ng-click="reload('#/home')">Home</a></li>
-                        <li ui-sref='scenarios' ng-class="activeScenarios"><a href="#/scenarios" ng-click="reload('#/scenarios')">Scénarios</a></li>
-                        <li ui-sref='objets' ng-class="activeObjets"><a href="#/objets" ng-click="reload('#/objets')">Objets</a></li>
-                        <li><div>{{currentRole}}</div></li>
-                    </ul>
-
-                    <ul id="nav-mobile" class="right">
-                        <li>
-                            <a class="dropdown-button" data-beloworigin="true" data-activates="Notifications">
-                            Notifications <i class="material-icons right" style="line-height: 2;">arrow_drop_down</i>
+                    <a class="button-collapse" data-activates="mobileMenu" ng-click="reload('activePage')" ng-href="activePage">
+                        <i class="material-icons">
+                            menu
+                        </i>
+                    </a>
+                    <a class="brand-logo center hide-on-small-only" href="#/home">
+                        <img alt="logo" src="img/home.png" style="width : 60px; height : 60px;"/>
+                    </a>
+                    <ul class="left hide-on-med-and-down" id="nav-mobile">
+                        <li ng-class="activeHome" ui-sref="home">
+                            <a href="#/home" ng-click="reload('#/home')">
+                                Home
+                            </a>
+                        </li>
+                        <li ng-class="activeScenarios" ui-sref="scenarios">
+                            <a href="#/scenarios" ng-click="reload('#/scenarios')">
+                                Scénarios
+                            </a>
+                        </li>
+                        <li ng-class="activeObjets" ui-sref="objets">
+                            <a href="#/objets" ng-click="reload('#/objets')">
+                                Objets
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-button" data-beloworigin="true" data-activates="User"><div >Welcome {{ username }} ! <i class="material-icons right" style="line-height: 2;">arrow_drop_down</i></div></a>
+                            <div>
+                                {{currentRole}}
+                            </div>
                         </li>
-
+                    </ul>
+                    <ul class="right" id="nav-mobile">
+                        <li>
+                            <a class="dropdown-button" data-activates="Notifications" data-beloworigin="true">
+                                Notifications
+                                <i class="material-icons right" style="line-height: 2;">
+                                    arrow_drop_down
+                                </i>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-button" data-activates="User" data-beloworigin="true">
+                                <div>
+                                    Welcome {{ username }} !
+                                    <i class="material-icons right" style="line-height: 2;">
+                                        arrow_drop_down
+                                    </i>
+                                </div>
+                            </a>
+                        </li>
                     </ul>
                     <ul class="side-nav" id="mobileMenu">
-                        <li ng-class="activeHome" ng-click="reload('#/home')"><a href="#/home">Home</a></li>
-                        <li ng-class="activeScenarios" ng-click="reload('#/scenarios')"><a href="#/scenarios">Scénarios</a></li>
-                        <li ng-class="activeObjets" ng-click="reload('#/objets')"><a href="#/objets">Objets</a></li>
-                        <a href="#/home" class="brand-logo center"><img src="img/home.png" alt="logo" style="width : 80px; height : 80px; margin-top: 25chvw;"></a>
+                        <li ng-class="activeHome" ng-click="reload('#/home')">
+                            <a href="#/home">
+                                Home
+                            </a>
+                        </li>
+                        <li ng-class="activeScenarios" ng-click="reload('#/scenarios')">
+                            <a href="#/scenarios">
+                                Scénarios
+                            </a>
+                        </li>
+                        <li ng-class="activeObjets" ng-click="reload('#/objets')">
+                            <a href="#/objets">
+                                Objets
+                            </a>
+                        </li>
+                        <a class="brand-logo center" href="#/home">
+                            <img alt="logo" src="img/home.png" style="width : 80px; height : 80px; margin-top: 25chvw;"/>
+                        </a>
                     </ul>
                 </div>
             </nav>
         </div>
-
         <!-- Page's content -->
-        <div ui-view></div>
-
-
+        <div ui-view="">
+        </div>
         <!-- JQuery effects initialisation-->
         <script>
             $(document).ready(function(){});
@@ -102,6 +179,5 @@
                 constrain_width: false
             });
         </script>
-
     </body>
 </html>
