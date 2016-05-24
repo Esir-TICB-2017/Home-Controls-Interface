@@ -8,7 +8,7 @@ var session = nools.session;
 var express = require('express');
 var app = express();
 var http = require('http').Server(app); //Instanciate HTTP server
-var io = require('socket.io')(http); // init socket.io
+var io = require('socket.io')(http).listen(1338); // init socket.io
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
 var mongoose = require('mongoose');
@@ -64,7 +64,7 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
-//apiObjects.init();
+apiObjects.init();
 app.use(grant);
 app.get('/handle_facebook_callback', function(req, res, next) {
         console.log(req.query);

@@ -66,7 +66,8 @@ homeControlsInterfaceApp.run(function($state, $rootScope, UserService, $location
         var authorizedRoles = next.data.authorizedRoles;
         if (!UserService.isAuthenticated() && (currentUrl != "/login")) {
             event.preventDefault;
-            $location.path("/login");
+            //$location.path("/login");
+            $state.go('login');
             console.log('pas authentifié ou pas sur la bonne page');
         }
         if (!UserService.isAuthorized(authorizedRoles) && (currentUrl != "/login")) {
@@ -78,12 +79,12 @@ homeControlsInterfaceApp.run(function($state, $rootScope, UserService, $location
             } else {
                 //User is not logged in
                 $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
-                $location.path('/login');
+                $state.go('login');
                 console.log("user is not logged in");
             }
         }
         if(UserService.isAuthenticated() && next.name == "login"){
-            $location.path('/home');
+            $state.go('home');
         }
         if (UserService.isAuthenticated()) {
             $rootScope.$broadcast(AUTH_EVENTS.loginSucces);
