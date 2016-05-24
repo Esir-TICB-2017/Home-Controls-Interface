@@ -38,24 +38,25 @@ exports.ruleFilePath = ruleFilePath;
 /* ==> Changer les id des objets <== */
 Nools = function(){
 	var Chauffage                            = flow.getDefined('chauffage');
-	session.assert(chauffageSdb              = new Chauffage (consigne_temperature, 'id', 'sdb'));
-	session.assert(chauffageSalle            = new Chauffage (consigne_temperature, 'id', 'salle'));
-	session.assert(chauffageChambre          = new Chauffage (consigne_temperature, 'id', 'chambre'));
+	session.assert(chauffageSdb              = new Chauffage (null, 'id', 'sdb'));
+	session.assert(chauffageSalle            = new Chauffage (null, 'id', 'salle'));
+	session.assert(chauffageChambre          = new Chauffage (null, 'id', 'chambre'));
 	
 	var Lumiere                              = flow.getDefined('lumiere');
-	session.assert(lumiereSalle              = new Lumiere ('down', '573f2c9ff2763a101b8abffc', 'salle'));
 	session.assert(lumiereChambre            = new Lumiere ('down', '573f2c9ff2763a101b8ac009', 'chambre'));
+	session.assert(lumiereSalle              = new Lumiere ('down', '573f2c9ff2763a101b8abffc', 'salle'));
+	
 
 	var CaptTemperature                      = flow.getDefined('captTemperature');
-	session.assert(captTemperatureIntSdb     = new CaptTemperature(consigne_temperature, 'sdb'));
-	session.assert(captTemperatureIntSalle   = new CaptTemperature(consigne_temperature, 'salle'));
-	session.assert(captTemperatureIntChambre = new CaptTemperature(consigne_temperature, 'chambre'));
-	session.assert(captTemperatureExt        = new CaptTemperature(consigne_temperature, 'exterieur'));
+	session.assert(captTemperatureIntSdb     = new CaptTemperature(null, 'sdb'));
+	session.assert(captTemperatureIntSalle   = new CaptTemperature(null, 'salle'));
+	session.assert(captTemperatureIntChambre = new CaptTemperature(null, 'chambre'));
+	session.assert(captTemperatureExt        = new CaptTemperature(null, 'exterieur'));
 
 	var CaptLuminosite                       = flow.getDefined('captLuminosite');
 	session.assert(captLuminositeExt         = new CaptLuminosite(50, 'exterieur'));
-	session.assert(captLuminositeIntSalle    = new CaptLuminosite(consigne_luminosite, 'salle'));
-	session.assert(captLuminositeIntChambre  = new CaptLuminosite(consigne_luminosite, 'chambre'));
+	session.assert(captLuminositeIntSalle    = new CaptLuminosite(null, 'salle'));
+	session.assert(captLuminositeIntChambre  = new CaptLuminosite(null, 'chambre'));
 
 	var Volet                                = flow.getDefined('volet');
 	session.assert(voletSalle                = new Volet('down', '573f2c9ff2763a101b8abfff', 'salle'));
