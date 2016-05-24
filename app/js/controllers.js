@@ -15,7 +15,9 @@ homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$sta
         accordion: false
     });
         socket.on('actionneurs',function(data){
-        console.log(data);
+            $scope.nools = true;
+            $scope.noolsData = data;
+            console.log(data);
     });
         
     //Recover the objects in the home and put them in a list in the widget
