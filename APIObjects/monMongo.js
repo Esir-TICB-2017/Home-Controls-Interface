@@ -8,7 +8,19 @@ var findByOneId = function(id, callback) {
         }
     })
 }
-
+var findBy = function(name, value , callback){
+    //a modif pour pas que ce soit codé en dur ------------------------------------
+    var param= '{"'+name+'":"'+value+'"}';
+    param = JSON.parse(param);
+    ObjectModel.find(param,function(err,object){
+        if(err){
+            callback(err);
+        }
+        else{
+            callback(object);
+        }
+    })
+}
 var addObject = function(name, protocol, capteur, funct, link,type,valeur, callback) {
     var newObject = new ObjectModel({
         nom: name
@@ -51,4 +63,5 @@ var connectionBDD = function(callback) {
 exports.findByOneId = findByOneId;
 exports.addObject = addObject;
 exports.updateValueObject = updateValueObject;
-exports.connectionBDD=connectionBDD;
+exports.connectionBDD = connectionBDD;
+exports.findBy = findBy;
