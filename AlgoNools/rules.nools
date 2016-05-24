@@ -12,6 +12,8 @@
 //			-> Soir dans salle de bain, salle, chambre
 //			-> Nuit dans salle de bain, salle, chambre
 //		============================================================
+
+//Permet d'accèder aux fonctions de APIObjects tel que objectchangestate
 global api = require('api.js');
 
 
