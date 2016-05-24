@@ -23,7 +23,7 @@ var pingSensor = function(id){
             if(rep!='error'){
                 monMongo.updateValueObject(id,rep,function(){
                     console.log('valeur mise à jour pour '+id);
-                    setTimeout(function(){test(id)},10000);
+                    setTimeout(function(){pingSensor(id)},10000);
 
                 });
             }

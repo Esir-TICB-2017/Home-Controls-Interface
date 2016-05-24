@@ -25,7 +25,7 @@ BDD.connectionBDD(function(){
     API.init();
     API.objectChangeState('down','573f2c9ff2763a101b8abffc',function(rep){
         console.log('c est fait'+rep);
-    })
+    });
 });
 
 
