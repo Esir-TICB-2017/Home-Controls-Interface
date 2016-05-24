@@ -38,7 +38,7 @@ define Consigne {
 	lumSuf       : 500,
 	tempFort     : 25,
 	lumFort      : 1000,
-	jourSuf      : 100,
+	jourSuf      : 200,
 	co2 		 : 300,
 
 	constructor : function(val1, val2, val3, mesure){
