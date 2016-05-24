@@ -8,23 +8,30 @@ var http = require('http').Server(app);
 //|===================================================================================|
 //|==================================== server =======================================|
 //|===================================================================================|
-/*fonctionKNX.connectionKNX(function() {
+/*
+fonctionKNX.connectionKNX(function() {
     if (fonctionKNX.connection.connected == true) {
         fonctionKNX.socketListenerKNX();
         console.log('vous etes connecté a KNX');
     }
 });*/
-var BDD = require("./monMongo.js");
-var tabIdCapteur = ["573f0e18f8e098a827075b17","573f0e18f8e098a827075b18","573f0e18f8e098a827075b19","573f0e18f8e098a827075b1a"];
-BDD.connectionBDD(function(){
-    API.init(tabIdCapteur);
 
+
+var BDD = require("./monMongo.js");
+
+
+
+BDD.connectionBDD(function(){
+    API.init();
+    API.objectChangeState('down','573f2c9ff2763a101b8abffc',function(rep){
+        console.log('c est fait'+rep);
+    })
 });
 
 
 
 
-
+/*
 
 var BDD = require("./monMongo.js");
 BDD.connectionBDD(function(){
@@ -40,7 +47,7 @@ BDD.connectionBDD(function(){
 
 })
 
-
+*/
 
 //API.down('573998dd1b0f602c50933cbf');
 //|===================================================================================|
