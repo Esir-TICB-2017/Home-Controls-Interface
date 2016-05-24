@@ -271,7 +271,7 @@ homeCIService.service('LoginService', function($http) {
     };
 });
 homeCIService.factory('socket', function($rootScope) {
-    var socket = io.connect();
+    var socket = io.connect('http://148.60.19.201:8087');
     return {
         dataSocket: function() {
             return socket;

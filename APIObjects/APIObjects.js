@@ -1,7 +1,7 @@
 var fonctionKNX = require("./fonctionKNX.js");
 var fonctionRest = require("./fonctionRest.js");
 var monMongo = require("./monMongo.js");
-var init = function(tabIdCapteur) {
+var init = function() {
     //---- connection aux équipements KNX
     fonctionKNX.connectionKNX(function() {
         if (fonctionKNX.connection.connected == true) {
@@ -10,29 +10,36 @@ var init = function(tabIdCapteur) {
         }
     });
     //-- création de la routine pour relever les valeurs .
-    var rep;
-    setInterval(function() {
-        for (var i = 0; i < tabIdCapteur.lenght; i) {
-            var encour = tabIdCapteur[i];
-            monMongo.findByOneId(encour, function(data) {
-                fonctionRest.getEtat(data.lien, function(rep) {
-                    console.log(rep);
-                    if (rep != 'error') {
-                        monMongo.updateValueObject(encour, rep, function() {
-                            console.log('valeur mise à jour pour ' + encour);
-                            i++;
-                        });
-                    } else {
-                        console.log('error');
-                    }
-                });
-            });
+    monMongo.findBy("capteur", true , function(data){
+        for (i in data){
+            pingSensor(data[i].id)
         }
-    }, 3000);
+    });
+}
+//infite boucle query to sensors 
+var pingSensor = function(id){
+    monMongo.findByOneId(id, function(data){
+        fonctionRest.getEtat(data.lien,function(rep){
+            if(rep!='error'){
+                monMongo.updateValueObject(id,rep,function(){
+                    console.log('valeur mise à jour pour '+id);
+                    setTimeout(function(){test(id)},10000);
+
+                });
+            }
+            else{
+                console.log('error');
+                 setTimeout(function(){test(id)},10000);
+            }
+           
+        });
+
+    });
 }
 
-var objectChangeState = function(action, id, callback) {
-   
+var objectChangeState = function(action, id, callback){
+    
+    if(callback!=undefined){
     var data = monMongo.findByOneId(id, function(data) {
         for (i in data.fonction) {
             if (data.fonction[i].name == action) {
@@ -52,6 +59,25 @@ var objectChangeState = function(action, id, callback) {
             callback('error on objectChangeState');
         }
     });
+    }
+    else{
+    var data = monMongo.findByOneId(id, function(data) {
+            for (i in data.fonction) {
+                if (data.fonction[i].name == action) {
+                    var parametre = data.fonction[i].param;
+                }
+            }
+            //en fonction du protocole selectionné 
+            if (data.protocole == 'knx') {
+                fonctionKNX.setknx(data.lien, parametre);
+            } else if (data.protocole == 'Rest') {
+                var restParametre = '<str val="' + parametre + '"/>';
+                var rep = fonctionRest.changerEtat(data.lien, restParametre, function(data) {
+                });
+            } else {
+            }
+        });
+    }
 }
 exports.init = init;
 exports.objectChangeState = objectChangeState;
