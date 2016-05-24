@@ -12,6 +12,8 @@
 //			-> Soir dans salle de bain, salle, chambre
 //			-> Nuit dans salle de bain, salle, chambre
 //		============================================================
+
+//Permet d'accèder aux fonctions de APIObjects tel que objectchangestate
 global api = require('api.js');
 
 
@@ -186,12 +188,12 @@ define Volet {
 
 	up : function(){
 		this.value = 'up';
-		//api.objectChangeState('up', this.id, function(data){console.log("volet up :" + data);});
+		api.objectChangeState('up', this.id);
 	},
 
 	down : function(){
 		this.value = 'down';
-		//api.objectChangeState('down',this.id, function(data){console.log("volet down :" + data);});
+		api.objectChangeState('down',this.id);
 	}
 }
 
@@ -243,12 +245,12 @@ define Lumiere {
 
 	up : function(){
 		this.value = 'up';
-		//api.objectChangeState('up', this.id, function(data){console.log("lumiere up :" + data);});
+		api.objectChangeState('up', this.id);
 	},
 
 	down : function(){
 		this.value = 'down';
-		//api.objectChangeState('down', this.id, function(data){console.log("lumiere down :" + data);});
+		api.objectChangeState('down', this.id);
 	}
 }
 

@@ -1,7 +1,7 @@
 <div class="row">
     <div class="chip" ng-repeat="object in listObjects track by $index" ng-show="object.capteur == true" style="margin-top : 20px;margin-left:30px;">
         <img alt="Contact Person" src="../img/noun_381031_cc.png">
-            {{object.nom}}
+            {{object.nom}} : {{object.valeur}}
         </img>
     </div>
 </div>
