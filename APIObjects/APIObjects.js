@@ -31,8 +31,9 @@ var init = function(tabIdCapteur) {
     }, 3000);
 }
 
-var objectChangeState = function(action, id, callback) {
-   
+var objectChangeState = function(action, id, callback){
+    
+    if(callback!=undefined){
     var data = monMongo.findByOneId(id, function(data) {
         for (i in data.fonction) {
             if (data.fonction[i].name == action) {
@@ -52,6 +53,25 @@ var objectChangeState = function(action, id, callback) {
             callback('error on objectChangeState');
         }
     });
+    }
+    else{
+    var data = monMongo.findByOneId(id, function(data) {
+            for (i in data.fonction) {
+                if (data.fonction[i].name == action) {
+                    var parametre = data.fonction[i].param;
+                }
+            }
+            //en fonction du protocole selectionné 
+            if (data.protocole == 'knx') {
+                fonctionKNX.setknx(data.lien, parametre);
+            } else if (data.protocole == 'Rest') {
+                var restParametre = '<str val="' + parametre + '"/>';
+                var rep = fonctionRest.changerEtat(data.lien, restParametre, function(data) {
+                });
+            } else {
+            }
+        });
+    }
 }
 exports.init = init;
 exports.objectChangeState = objectChangeState;

@@ -188,12 +188,12 @@ define Volet {
 
 	up : function(){
 		this.value = 'up';
-		api.objectChangeState('up', this.id);
+		//api.objectChangeState('up', this.id);
 	},
 
 	down : function(){
 		this.value = 'down';
-		api.objectChangeState('down',this.id);
+		//api.objectChangeState('down',this.id);
 	}
 }
 
@@ -245,12 +245,12 @@ define Lumiere {
 
 	up : function(){
 		this.value = 'up';
-		api.objectChangeState('up', this.id);
+		//api.objectChangeState('up', this.id);
 	},
 
 	down : function(){
 		this.value = 'down';
-		api.objectChangeState('down', this.id);
+		//api.objectChangeState('down', this.id);
 	}
 }
 
@@ -395,7 +395,7 @@ rule ChambreChauffageUp1 {
 	}
 	then {
 		modify(volet, function(){volet.up();});
-		api.objectChangeState('up', volet.getId(), function(data){console.log("volet up :" + data);});
+		api.objectChangeState('up', volet.getId());
 	}
 }
 
@@ -436,7 +436,7 @@ rule ChambreChauffageDown2 {
 	}
 	then {
 		modify(volet, function(){volet.down();});
-		api.objectChangeState('down', volet.getId(), function(data){console.log("volet down :" + data);});
+		api.objectChangeState('down', volet.getId());
 	}
 }
 
@@ -450,7 +450,7 @@ rule ChambreLuminositeUp1 {
 	}
 	then {
 		modify(lumiere, function(){lumiere.up();});
-		api.objectChangeState('up', lumiere.getId(), function(data){console.log("lumiere up :" + data);});
+		api.objectChangeState('up', lumiere.getId());
 	}
 }
 
@@ -463,7 +463,7 @@ rule ChambreLuminositeUp2 {
 	}
 	then {
 		modify(volet, function(){volet.up();});
-		api.objectChangeState('up', volet.getId(), function(data){console.log("volet up :" + data);});
+		api.objectChangeState('up', volet.getId());
 	}
 }
 
@@ -475,7 +475,7 @@ rule ChambreLuminositeDown {
 		}
 	then {
 		modify(lumiere, function(){lumiere.down();});
-		api.objectChangeState('down', lumiere.getId(), function(data){console.log("lumiere down :" + data);});
+		api.objectChangeState('down', lumiere.getId());
 	}
 }
 
@@ -499,7 +499,7 @@ rule SalleChauffageUp1 {
 	}
 	then {
 		modify(volet, function(){volet.up();});
-		api.objectChangeState('up', volet.getId(), function(data){console.log("volet up :" + data);});
+		api.objectChangeState('up', volet.getId());
 	}
 }
 
@@ -540,7 +540,7 @@ rule SalleChauffageDown2 {
 	}
 	then {
 		modify(volet, function(){volet.down();});
-		api.objectChangeState('down', volet.getId(), function(data){console.log("volet down :" + data);});
+		api.objectChangeState('down', volet.getId());
 	}
 }
 
@@ -555,7 +555,7 @@ rule SalleLuminositeUp1 {
 	}
 	then {
 		modify(lumiere, function(){lumiere.up();});
-		api.objectChangeState('up', lumiere.getId(), function(data){console.log("lumiere up :" + data);});
+		api.objectChangeState('up', lumiere.getId());
 	}
 }
 
@@ -568,7 +568,7 @@ rule SalleLuminositeUp2 {
 	}
 	then {
 		modify(volet, function(){volet.up();});
-		api.objectChangeState('up', volet.getId(), function(data){console.log("volet up :" + data);});
+		api.objectChangeState('up', volet.getId());
 	}
 }
 
@@ -580,7 +580,7 @@ rule SalleLuminositeDown {
 		}
 	then {
 		modify(lumiere, function(){lumiere.down();});
-		api.objectChangeState('down', lumiere.getId(), function(data){console.log("lumiere down :" + data);});
+		api.objectChangeState('down', lumiere.getId());
 	}
 }
 
@@ -620,6 +620,6 @@ rule VoletNuitDown {
 	}
 	then {
 		modify(volet, function(){volet.down();});
-		api.objectChangeState('down', volet.getId(), function(data){console.log("volet down :" + data);});
+		api.objectChangeState('down', volet.getId());
 	}
 }
