@@ -7,9 +7,8 @@ var automation = require('./AlgoNools/Functions.js');
 var session = nools.session;
 var express = require('express');
 var app = express();
-http = require('http');
-var server = http.createServer(app);
-var io = require('socket.io').listen(1338);
+var http = require('http').Server(app); //Instanciate HTTP server
+var io = require('socket.io')(http); // init socket.io
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
 var mongoose = require('mongoose');
@@ -744,7 +743,7 @@ app.get('/users', function(req, res) {
 app.post('/uploadjson/listepieces.json', function(req, res) {
     console.log(req.body);
 });
-server.listen(app.get('port'), function() {
+http.listen(1337, function() {
     console.log('Server is running on port 1337');
 });
 // Fonction pour lancer l'algorithme d'aide à la décision
