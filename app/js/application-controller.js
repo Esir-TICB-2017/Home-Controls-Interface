@@ -52,6 +52,8 @@ applicationController.controller('applicationController', function($scope, $loca
             else $scope.activeScenarios = "";
             if (link == "#/objets") $scope.activeObjets = "active";
             else $scope.activeObjets = "";
+            if (link == "#/automation") $scope.activeAutomation = "active";
+            else $scope.activeAutomation = "";
         }
         //Log the user out
     $scope.logout = function() {

@@ -17,28 +17,25 @@ homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$sta
     var objectList = {};
     var activeMenu = $('#menu');
     $scope.titleView = 'Home';
-    $scope.sendToAutomation = function(smart) {
-        socket.emit('automation', smart);
-    };
     //Recover the function used to check whether the user is authorized to access this page
     $scope.isAuthorized = UserService.isAuthorized;
     $('.collapsible').collapsible({
         accordion: false
     });
-    socket.on('actionneurs', function(data) {
-        $scope.nools = true;
-        $scope.noolsData = data;
-        console.log(data);
-    });
     //Recover the objects in the home and put them in a list in the widget
     $http.get('/getObjects').success(function(data) {
+        $scope.collapsibleElements = [];
+        $scope.lightArray = [];
+        $scope.storeArray = [];
         //types d'objets : lampe, volet, temperature, humidite, luminosite, co2
         console.log(data);
         var objectList = data;
         angular.forEach(objectList, function(object, key) {
             if (object.type == "lampe") {
+                $scope.lightArray.push(object);
                 object.icon = "lightbulb_outline";
             } else if (object.type == "volet") {
+                $scope.storeArray.push(object);
                 object.icon = "reorder";
             } else if (object.type == "temperature") {
                 object.icon = "";
@@ -57,6 +54,21 @@ homeCIController.controller('homeCtrl', ['UserService', '$scope', '$http', '$sta
         mySocketId = data.socketId;
         console.log("You are connected !");
         console.log(mySocketId);
+    };
+    
+}]);
+homeCIController.controller('automationCtrl', ['UserService', '$scope', '$http', 'socket', '$state', function(UserService, $scope, $http, socket, $state) {
+    $scope.test = 'sokrvon';
+    if (UserService.getCurrentUser() === null) {
+        $state.go('login');
+    }
+    socket.on('actionneurs', function(data) {
+        $scope.nools = true;
+        $scope.noolsData = data;
+        console.log(data);
+    });
+    $scope.sendToAutomation = function(smart) {
+        socket.emit('automation', smart);
     };
     $scope.sendSmartData = function(data) {
         console.log('ici');

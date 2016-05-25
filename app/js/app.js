@@ -31,6 +31,13 @@ homeControlsInterfaceApp.config(['$stateProvider', '$httpProvider', '$urlRouterP
         data: {
             authorizedRoles: [USER_ROLES.parents, USER_ROLES.guest]
         }
+    }).state('automation', {
+        url: '/automation',
+        templateUrl: 'views/automation.html',
+        controller: 'automationCtrl',
+        data: {
+            authorizedRoles: [USER_ROLES.parents, USER_ROLES.child, USER_ROLES.guest]
+        }
     }).state('auth', {
         url: '/auth',
         template: '<h1>Récupération du token</h1>'
